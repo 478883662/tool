@@ -1,5 +1,6 @@
 package com.zhangb.tool.doctorReimbursement.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.zhangb.tool.common.dao.BaseDao;
 import com.zhangb.tool.doctorReimbursement.entity.ReimbDealResult;
 import com.zhangb.tool.doctorReimbursement.service.IReimbDealResultService;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 public class ReimbDealResultServiceImpl implements IReimbDealResultService {
     @Override
     public synchronized Integer saveDealResult(ReimbDealResult reimbDealResult) throws SQLException, IllegalAccessException {
+        reimbDealResult.setDealResult("【"+DateUtil.today()+"】"+reimbDealResult.getDealResult());
         ReimbDealResult where  = new ReimbDealResult();
         where.setYlCard(reimbDealResult.getYlCard());
         where.setName(reimbDealResult.getName());

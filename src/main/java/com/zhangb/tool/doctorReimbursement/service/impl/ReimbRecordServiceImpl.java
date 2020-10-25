@@ -35,18 +35,15 @@ public class ReimbRecordServiceImpl implements IReimbRecordService {
     @Autowired
     private IReimbSyncService syncService;
     @Override
-    public String syncRecord(String selfNo) throws Exception {
+    public synchronized String syncRecord(String selfNo) throws Exception {
         String resultStr = remoteService.executeRemote(ReimbRemoteStrategyKeyConstants.REIMB_GET_RECORD_STRATEGY,selfNo);
         List<ReimbDealRecord> resultList = parseResult(resultStr);
+        ReimbDealRecord where = new ReimbDealRecord();
+        where.setSelfNo(selfNo);
+        BaseDao.delete(where);
+        //先删除此人的所有记录，重新全量同步到db
         for(ReimbDealRecord reimbDealRecord:resultList){
-            ReimbDealRecord where = new ReimbDealRecord();
-            where.setReimbNo(reimbDealRecord.getReimbNo());
-            int count = BaseDao.count(where);
-            if (count>0){
-                BaseDao.update(reimbDealRecord,where);
-            }else {
-                BaseDao.insert(reimbDealRecord);
-            }
+            BaseDao.insert(reimbDealRecord);
         }
         if (!CollectionUtil.isEmpty(resultList)){
             ReimbSyncInfo recordSyncInfo  = new ReimbSyncInfo();

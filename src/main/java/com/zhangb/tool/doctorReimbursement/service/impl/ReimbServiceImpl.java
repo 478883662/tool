@@ -106,7 +106,7 @@ public class ReimbServiceImpl implements IReimbService {
         } else { //2、今年来在泥家湖卫生室报销过
             //1、如果是今天就不能在报销了
             if (StrUtil.equals(DateUtil.today(), DateUtil.formatDate(record.getReimbDate()))) {
-                throw new Exception(String.format("用户%s今日已报销过\r\n", user.getName()));
+                throw new Exception(String.format("今日已报销过\r\n", user.getName()));
             }
             String illnessNo = record.getIllNessNo();
             String illnessName = record.getIllNessName();
@@ -130,8 +130,10 @@ public class ReimbServiceImpl implements IReimbService {
                 ReimbIllness reimbIllness = illnessService.getRandomIllness(user,illnessNo);
                 reimbIllnessBo.setIllnessName(reimbIllness.getIllnessName());
                 reimbIllnessBo.setIllnessNo(reimbIllness.getIllnessNo());
-                //出院时间为上次报销的出院时间+30
-                reimbIllnessBo.setOutDate(DateUtil.offsetDay(rOutDate,ReimbConstants.DEFUALT_ILLNESS_BETWEEN));
+                //取第一种病之后30天到今天之间的随机一天
+                int randomDay = NumberUtil.generateRandomNumber(ReimbConstants.DEFUALT_ILLNESS_BETWEEN,Integer.valueOf(dayBetween+""),1)[0];;
+                //出院时间为上次报销的出院时间+30+n
+                reimbIllnessBo.setOutDate(DateUtil.offsetDay(rOutDate,randomDay));
                 //从本地库里获取病例的用药列表
                 reimbIllnessBo.setReimbDrugBoList(illnessDrugService.getIllnessDrugList(reimbIllness.getIllnessNo()));
             }else{
@@ -234,6 +236,9 @@ public class ReimbServiceImpl implements IReimbService {
 
         String result4 = remoteService.executeRemote(ReimbRemoteStrategyKeyConstants.REIMB_TRY_SAVE3_STRATEGY,
                 bizId);
+        if (StrUtil.isBlank(result4)){
+            throw new Exception("试算失败，须登陆客户端操作");
+        }
         BigDecimal tryResult = parseResultTrySave(result4);
         if(tryResult.compareTo(BigDecimal.ZERO)>0){
             //正式补偿
@@ -242,11 +247,11 @@ public class ReimbServiceImpl implements IReimbService {
             if(StrUtil.equals("0@!@!0@!0@!0@!0@!0@!0@!0@!0@!0@$@$",result)){
                 return "报销成功\r\n";
             }
-            return result;
+            throw new Exception("正式补偿失败:"+result);
         }else if(tryResult.compareTo(BigDecimal.ZERO) == 0){
-            return "今日可报销额度为0";
+            throw new Exception("今日可报销额度为0");
         }else{
-            return "试算失败:"+result4;
+            throw new Exception("试算失败:"+result4);
         }
 
     }

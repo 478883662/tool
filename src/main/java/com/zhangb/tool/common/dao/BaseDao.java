@@ -192,4 +192,31 @@ public class BaseDao {
         return Db.use().findAll(entity, clazz);
     }
 
+
+    /**
+     * 条件删除
+     *
+     * @param t
+     * @return
+     * @throws SQLException
+     * @throws IllegalAccessException
+     */
+    public static <T> int delete(T t) throws SQLException, IllegalAccessException {
+        if (t == null || !t.getClass().isAnnotationPresent(DbTableAnnotation.class)) {
+            throw new IllegalArgumentException("未被DbTableAnnotation注解的类");
+        }
+        String tableName = AnnotationUtil.getAnnotationValue(t.getClass(), DbTableAnnotation.class);
+        Field[] fields = t.getClass().getDeclaredFields();
+        Entity entity = Entity.create(tableName);
+        for (Field field : fields) {
+            Object value = ReflectUtil.getFieldValue(t, field);
+            if (value == null) {
+                continue;
+            }
+            String colName = AnnotationUtil.getAnnotationValue(field, DbFeildAnnotation.class);
+            entity.set(colName, value);
+        }
+        return Db.use().del(entity);
+    }
+
 }

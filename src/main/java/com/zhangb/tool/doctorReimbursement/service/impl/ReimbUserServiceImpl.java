@@ -57,6 +57,7 @@ public class ReimbUserServiceImpl implements IReimbUserService {
     public String syncUserByYlCard(String ylCard) throws Exception {
         //远程调用长信农合获取用户信息
         String result = remoteService.executeRemote(ReimbRemoteStrategyKeyConstants.REIMB_GET_USER_BY_YLCARD_STRATEGY,ylCard);
+        System.out.println("同步医疗账号【"+ylCard+"】:"+result);
         if(StrUtil.hasBlank(result)){
             return "获取长信农合用户信息为空";
         }
@@ -105,19 +106,49 @@ public class ReimbUserServiceImpl implements IReimbUserService {
     @Override
     public List<ReimbUserBo> getUserBoList() throws SQLException {
         String today = DateUtil.today();
-        String sql ="select t1.YL_CARD,t1.`NAME`,t1.MASTER_NAME, \n" +
-                "IFNULL((select t2.sync_Date from tool_sync_record_t t2 \n" +
-                "where t2.id = t1.SELF_NO and t2.sync_type='REIMB_RECORD' \n" +
-                "and t2.sync_Date=? order by t2.create_date desc limit 0,1),'') sync_Date,\n" +
-                "IFNULL((select t3.REIMB_DATE from tool_deal_record_t t3\n" +
-                "where t1.YL_CARD =t3.YL_CARD and t1.`NAME` = t3.`NAME`  \n" +
-                "order by t3.REIMB_DATE desc limit 0,1),'') REIMB_DATE,\n" +
-                "IFNULL(t4.deal_result,'') deal_result," +
-                "IFNULL(t4.deal_time,'') deal_time" +
-                " from  tool_patient_t t1 left join tool_deal_result_t t4 " +
-                "on (t1.yl_card = t4.yl_card and t1.name = t4.name) order by t1.yl_card";
+        int year = DateUtil.thisYear();
+        String sql ="select\n" +
+                "        t1.YL_CARD,\n" +
+                "        t1.`NAME`,\n" +
+                "        t1.MASTER_NAME,\n" +
+                "        IFNULL((select\n" +
+                "            t2.sync_Date \n" +
+                "        from\n" +
+                "            tool_sync_record_t t2  \n" +
+                "        where\n" +
+                "            t2.id = t1.SELF_NO \n" +
+                "            and t2.sync_type='REIMB_RECORD'  \n" +
+                "            and t2.sync_Date=? \n" +
+                "        order by\n" +
+                "            t2.create_date desc limit 0,\n" +
+                "            1),\n" +
+                "        '') sync_Date,\n" +
+                "        IFNULL((select\n" +
+                "            t3.REIMB_DATE \n" +
+                "        from\n" +
+                "            tool_deal_record_t t3 \n" +
+                "        where\n" +
+                "            t1.YL_CARD =t3.YL_CARD \n" +
+                "            and t1.`NAME` = t3.`NAME`  \n" +
+                "        order by\n" +
+                "            t3.REIMB_DATE desc limit 0,\n" +
+                "            1),\n" +
+                "        '') REIMB_DATE,\n" +
+                "        IFNULL(t4.deal_result,\n" +
+                "        '') deal_result,\n" +
+                "      (select sum(MONEY) from tool_deal_record_t where self_no = t1.SELF_NO and YL_CARD=t1.YL_CARD and REIMB_YEAR = ? AND REIMB_TYPE='1101') remib_total\n" +
+                "     from\n" +
+                "        tool_patient_t t1 \n" +
+                "    left join\n" +
+                "        tool_deal_result_t t4 \n" +
+                "            on (\n" +
+                "                t1.yl_card = t4.yl_card \n" +
+                "                and t1.name = t4.name\n" +
+                "            ) \n" +
+                "    order by\n" +
+                "        t1.yl_card";
         return Db.use().query(  sql,
-                ReimbUserBo.class,today);
+                ReimbUserBo.class,today,year);
     }
 
 

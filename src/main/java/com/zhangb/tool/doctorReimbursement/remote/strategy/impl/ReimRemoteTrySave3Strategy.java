@@ -51,6 +51,7 @@ public class ReimRemoteTrySave3Strategy extends ICxnhRemoteAdapter implements IR
     @Override
     public String execute(String... param) {
         String respStr = super.sendHttp(reqStr,param);
+        System.out.println("报销试算结果："+respStr);
         return respStr;
     }
 }

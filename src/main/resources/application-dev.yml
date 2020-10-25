@@ -1,0 +1,7 @@
+server:
+  port: 8085
+
+logging:
+  level:
+    com:
+      zhangb: debug

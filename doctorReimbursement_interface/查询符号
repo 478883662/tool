@@ -1,0 +1,71 @@
+http://222.247.54.146:8086/yy_interface/ny_interface.asmx
+
+Host: 222.247.54.146:8086
+Connection: Keep-Alive
+User-Agent: EasySoap++/0.6
+Content-Type: text/xml; charset="UTF-8"
+SOAPAction: "http://tempuri.org/nh_interface"
+Content-Length: 1379
+
+
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#100000033@$6588@!0Of4&lt;;;3:6@!刘庆团@!|tceles a.hospital_id,&#xd;
+       a.ywid,&#xd;
+       a.id,&#xd;
+       b.hospital_name,&#xd;
+       a.ywlb_son,&#xd;
+       a.grmc,&#xd;
+       a.djrdm,&#xd;
+       a.djrmc,&#xd;
+       a.djsj,&#xd;
+       a.rysj,&#xd;
+       a.icd_ry,&#xd;
+       a.zyh,&#xd;
+       a.zyksbh,&#xd;
+       a.zyksmc,&#xd;
+       a.bcbh,&#xd;
+       a.zje,&#xd;
+       a.kbxfy,&#xd;
+       a.mxshsj,&#xd;
+       a.mxshbz,&#xd;
+       a.mxshr,&#xd;
+       a.mxshrxm,&#xd;
+       a.ylzh,&#xd;
+       a.grbm,&#xd;
+       a.sdbz,&#xd;
+       a.cyrq,&#xd;
+       a.tczf,&#xd;
+       a.zyshbz,&#xd;
+       a.jsbz&#xd;
+  from yw_dyywb_temp a, bs_hospital b&#xd;
+ |erehw a.hospital_id = b.hospital_id(+)&#xd;
+   and (a.hospital_id like :as_hospital_id || &apos;%&apos; or&#xd;
+       a.bcddm like :as_hospital_id || &apos;%&apos;)&#xd;
+   and a.grbm = :as_grbm@!:as_hospital_id#:as_grbm@!430621556588#723053649</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+
+
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Length: 365
+Content-Type: text/xml; charset=utf-8
+SS: s
+XX: a
+XX: p
+Date: Mon, 21 Sep 2020 14:59:05 GMT
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@$</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>

@@ -1,0 +1,272 @@
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#020202100@$6588@!0Of4&lt;;;3:6@!刘庆团@!1@!430621556588@!32007126@!1@!1101@!0@!@!722749724@!刘强勇@!4306210102010495@!@!@!@!30221@!无@!6588@!刘庆团@!2020-05-14@!@!1@!@!1@!@!@!@!@!@!@!@!0@!2020-05-14@!2@!1@!430621556588@!@!20200101@!0</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@!1</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>
+
+
+
+
+
+
+
+
+
+
+
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#000000042@$6588@!0Of4&lt;;;3:6@!刘庆团@!up_bcjs_scyw_jcsj@!&lt;?xml version=&quot;1.0&quot; encoding=&quot;gb2312&quot; standalone=&quot;no&quot;?&gt;
+
+&lt;dw_bcgl_grxx_lr&gt;&lt;dw_bcgl_grxx_lr_row&gt;&lt;zklsh&gt;0102010495&lt;/zklsh&gt;&lt;ylzh&gt;4306210102010495&lt;/ylzh&gt;&lt;hzxm&gt;刘庆春&lt;/hzxm&gt;&lt;znhbh/&gt;&lt;hnrbh/&gt;&lt;yhzgx&gt;2&lt;/yhzgx&gt;&lt;xm&gt;刘强勇&lt;/xm&gt;&lt;xb&gt;1&lt;/xb&gt;&lt;csrq&gt;1983-09-05 00:00:00&lt;/csrq&gt;&lt;sfzhm&gt;430621198309050411&lt;/sfzhm&gt;&lt;nl&gt;37&lt;/nl&gt;&lt;grbm&gt;722749724&lt;/grbm&gt;&lt;xxdz&gt;城关镇-&amp;gt;跃进村-&amp;gt;1组&lt;/xxdz&gt;&lt;hsx&gt;1&lt;/hsx&gt;&lt;jtzhye&gt;0&lt;/jtzhye&gt;&lt;grzhye/&gt;&lt;hospital_id&gt;&lt;/hospital_id&gt;&lt;hospital_name&gt;&lt;/hospital_name&gt;&lt;ybkh&gt;&lt;/ybkh&gt;&lt;yxbz&gt;1&lt;/yxbz&gt;&lt;fkbz&gt;0&lt;/fkbz&gt;&lt;lxdh&gt;&lt;/lxdh&gt;&lt;zycs&gt;0&lt;/zycs&gt;&lt;tczflj&gt;&lt;/tczflj&gt;&lt;mztcye/&gt;&lt;cbnd&gt;2020&lt;/cbnd&gt;&lt;jzfp&gt;0&lt;/jzfp&gt;&lt;/dw_bcgl_grxx_lr_row&gt;&lt;/dw_bcgl_grxx_lr&gt;
+@!&lt;?xml version=&quot;1.0&quot; encoding=&quot;gb2312&quot; standalone=&quot;no&quot;?&gt;
+
+&lt;dw_bcgl_zlxx_temp&gt;&lt;dw_bcgl_zlxx_temp_row&gt;&lt;ylbm&gt;430621556588&lt;/ylbm&gt;&lt;yljg&gt;城关镇泥家湖村卫生室&lt;/yljg&gt;&lt;yljgjb&gt;1&lt;/yljgjb&gt;&lt;zyh&gt; &lt;/zyh&gt;&lt;jsdh&gt; &lt;/jsdh&gt;&lt;ryzdbm&gt;30221&lt;/ryzdbm&gt;&lt;ryzd_icd&gt;无&lt;/ryzd_icd&gt;&lt;ssdm&gt; &lt;/ssdm&gt;&lt;ssmc&gt;&lt;/ssmc&gt;&lt;rysj&gt;2020-05-14 00:00:00&lt;/rysj&gt;&lt;cysj&gt;&lt;/cysj&gt;&lt;zyts&gt;0&lt;/zyts&gt;&lt;ks&gt; &lt;/ks&gt;&lt;ysdm&gt; &lt;/ysdm&gt;&lt;ysmc&gt; &lt;/ysmc&gt;&lt;bclb&gt;1101&lt;/bclb&gt;&lt;bclbbm&gt;11&lt;/bclbbm&gt;&lt;ryzdxh&gt;0&lt;/ryzdxh&gt;&lt;ksbm&gt; &lt;/ksbm&gt;&lt;wdyymc&gt; &lt;/wdyymc&gt;&lt;ywid&gt;32007126&lt;/ywid&gt;&lt;id&gt;1&lt;/id&gt;&lt;bcddm&gt;430621556588&lt;/bcddm&gt;&lt;jsbz&gt;1&lt;/jsbz&gt;&lt;tckj&gt;0&lt;/tckj&gt;&lt;kfly&gt;&lt;/kfly&gt;&lt;zbbz&gt;0&lt;/zbbz&gt;&lt;jzdh&gt;&lt;/jzdh&gt;&lt;weight&gt;0&lt;/weight&gt;&lt;blood&gt;0&lt;/blood&gt;&lt;tczf_other&gt;&lt;/tczf_other&gt;&lt;zlfs&gt;0&lt;/zlfs&gt;&lt;zlfs_name&gt;0&lt;/zlfs_name&gt;&lt;ryzdmc&gt;上呼吸道感染&lt;/ryzdmc&gt;&lt;bczcsj&gt;20200101&lt;/bczcsj&gt;&lt;bclb_son&gt;1101&lt;/bclb_son&gt;&lt;bllx&gt;&lt;/bllx&gt;&lt;/dw_bcgl_zlxx_temp_row&gt;&lt;/dw_bcgl_zlxx_temp&gt;
+</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@!0@!</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#020202103@$6588@!0Of4&lt;;;3:6@!刘庆团@!0@!430621556588@!32007126@!1</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@!0@!0@!0@!0@!0@!0@!0@!0@!0@$@$</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#100000033@$6588@!0Of4&lt;;;3:6@!刘庆团@!|tceles *&#xd;
+  from (|tceles a.jjlbbm, b.jjzhmc, a.ywid, a.id, a.je&#xd;
+          from yw_jsjgb a, jbxx_jjzhdyb b&#xd;
+         |erehw a.jjlbbm = b.jjzhdm&#xd;
+           and a.hospital_id = :ls_hospital_id&#xd;
+           and a.ywid = :ls_ywid&#xd;
+           and a.id = :ls_id&#xd;
+           and je &gt; 0&#xd;
+        union&#xd;
+        |tceles a.jjlbbm, b.jjzhmc, a.ywid, a.id, a.je&#xd;
+          from yw_jsjgb_temp a, jbxx_jjzhdyb b&#xd;
+         |erehw a.jjlbbm = b.jjzhdm&#xd;
+           and a.hospital_id = :ls_hospital_id&#xd;
+           and a.ywid = :ls_ywid&#xd;
+           and a.id = :ls_id&#xd;
+           and je &gt; 0)&#xd;
+ order by jjlbbm asc&#xd;
+@!:ls_hospital_id#:ls_ywid#:ls_id@!430621556588#32007126#1</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@$031	门诊统筹帐户	32007126	1	35</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#100000033@$6588@!0Of4&lt;;;3:6@!刘庆团@!|tceles zje,&#xd;
+       kbxfy,&#xd;
+       zfbf,&#xd;
+       jsfs,&#xd;
+       tczf,&#xd;
+       tcsjzf, &#xd;
+       bczcsj,&#xd;
+       jsrxm, &#xd;
+       tckj,&#xd;
+       jsszxh,&#xd;
+       a.bcdbhgfy,&#xd;
+       a.bcdbqfx,&#xd;
+       a.dbbcje,&#xd;
+       a.thbbcje,&#xd;
+       a.czddje,&#xd;
+       a.mzjzzf as mzbzje,&#xd;
+       a.yyjmje&#xd;
+  from yw_dyywb a&#xd;
+ |erehw (hospital_id = :as_hospital_id)&#xd;
+   and (ywid = :as_ywid)&#xd;
+   and (id = :as_id)&#xd;
+union all&#xd;
+|tceles zje,&#xd;
+       kbxfy,&#xd;
+       zfbf,&#xd;
+       jsfs,&#xd;
+       tczf,&#xd;
+       tcsjzf, &#xd;
+       bczcsj,&#xd;
+       jsrxm, &#xd;
+       tckj,&#xd;
+       jsszxh,&#xd;
+       a.bcdbhgfy,&#xd;
+       a.bcdbqfx,&#xd;
+       a.dbbcje,&#xd;
+       a.thbbcje,&#xd;
+       a.czddje,&#xd;
+       a.mzjzzf as mzbzje,&#xd;
+       a.yyjmje&#xd;
+  from yw_dyywb_temp a&#xd;
+ |erehw (hospital_id = :as_hospital_id)&#xd;
+   and (ywid = :as_ywid)&#xd;
+   and (id = :as_id)&#xd;
+@!:as_hospital_id#:as_ywid#:as_id@!430621556588#32007126#1</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@$50.89	50.21	15.89	2	35	35	20200101	刘庆团	0	20011104	0	0	0	0	0	0	0</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#100000033@$6588@!0Of4&lt;;;3:6@!刘庆团@!|tceles FDH, FDMC, QSJE, JSJE, TCZFBL, KBXFY, JSTCZF, SJTCZF&#xd;
+  FROM YW_FDJSB_TEMP&#xd;
+ |erehw (HOSPITAL_ID = :as_hospital_id)&#xd;
+   AND (YWID = :as_ywid)&#xd;
+   AND (ID = :as_id)&#xd;
+ union all&#xd;
+|tceles FDH, FDMC, QSJE, JSJE, TCZFBL, KBXFY, JSTCZF, SJTCZF&#xd;
+  FROM YW_FDJSB&#xd;
+ |erehw (HOSPITAL_ID = :as_hospital_id)&#xd;
+   AND (YWID = :as_ywid)&#xd;
+   AND (ID = :as_id)@!:as_hospital_id#:as_ywid#:as_id@!430621556588#32007126#1</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@$1	补偿段	0	999999	0.70	50.21	35	35</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>
+
+
+
+
+
+
+
+
+
+
+

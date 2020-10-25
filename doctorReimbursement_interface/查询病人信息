@@ -1,0 +1,126 @@
+POST
+http://222.247.54.146:8086/yy_interface/ny_interface.asmx
+
+请求头：
+Host: 222.247.54.146:8086
+Connection: Keep-Alive
+User-Agent: EasySoap++/0.6
+Content-Type: text/xml; charset="UTF-8"
+SOAPAction: "http://tempuri.org/nh_interface"
+Content-Length: 1992
+
+请求体：
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#100000033@$6588@!0Of4&lt;;;3:6@!刘庆团@!|tceles a.zklsh,&#xd;
+       a.ylzh,&#xd;
+       b.hzxm,&#xd;
+       b.znhbh,&#xd;
+       a.hnrbh,&#xd;
+       a.yhzgx,&#xd;
+       a.xm,&#xd;
+       a.xb,&#xd;
+       a.csrq,&#xd;
+       a.sfzhm,&#xd;
+       round((months_between(sysdate, a.csrq) + 1) / 12, 0) nl,&#xd;
+       a.grbm,&#xd;
+       b.xxdz,&#xd;
+       a.hsx,&#xd;
+       a.hospital_id,&#xd;
+       a.ybkh,&#xd;
+       a.yxbz,&#xd;
+       a.hbm,&#xd;
+       a.lxdh,&#xd;
+       a.cbnd,&#xd;
+       a.chxzjgdm,&#xd;
+       a.fkbz,&#xd;
+       uf_get_jtgrzh(a.grbm, &apos;0&apos;) jtzhye,&#xd;
+       uf_get_jtgrzh(a.grbm, &apos;1&apos;) grzhye,&#xd;
+       to_number(uf_get_tczfljz(a.grbm, &apos;MZ&apos;)) mztcye,&#xd;
+       0 zycs,&#xd;
+       uf_bcjs_get_mbzflj(a.grbm, a.cbnd) tczflj,&#xd;
+       a.jzfp,&#xd;
+       |rahc_ot(a.startdate, &apos;yyyymmdd&apos;) || &apos;-&apos; ||&#xd;
+       |rahc_ot(a.enddate, &apos;yyyymmdd&apos;) bzsj&#xd;
+  from jbxx_ryxx a, jbxx_hxx b&#xd;
+ |erehw a.hbm = b.hbm&#xd;
+   and a.yxbz = &apos;1&apos;&#xd;
+   and a.chsx &lt;&gt; &apos;A&apos;&#xd;
+   and a.dqzt = &apos;1&apos; &#xd;
+   and a.cbnd = :ls_nd&#xd;
+   and a.xm like :ls_xm || &apos;%&apos;&#xd;
+   and a.ylzh like :ls_ylzh || &apos;%&apos;&#xd;
+   and nvl(a.ybkh, &apos; &apos;) like :ls_ybkh || &apos;%&apos;&#xd;
+   and nvl(a.zklsh, &apos; &apos;) like :ls_zklsh || &apos;%&apos;&#xd;
+   and nvl(a.sfzhm, &apos; &apos;) like :ls_sfzhm || &apos;%&apos;&#xd;
+@!:ls_nd#:ls_xm#:ls_ylzh#:ls_ybkh#:ls_zklsh#:ls_sfzhm@!2020#章婧####</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+响应头：
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Length: 574
+Content-Type: text/xml; charset=utf-8
+SS: s
+XX: a
+XX: p
+Date: Mon, 21 Sep 2020 14:44:53 GMT
+
+
+响应体：
+<?xml version="1.0" encoding="utf-8"?>
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Body>
+    <nh_interfaceResponse xmlns="http://tempuri.org/">
+      <nh_interfaceResult>0@!@$0121011214 4306210121011214 欧凤华 1214 04 4 章婧 2 2020/5/25 0:00:00 430621202005250042 0 723053649 城关镇-&gt;荣站居委会-&gt;1组 1 1 93630709 2020 430621012101 0 0 0 0 0 0 20200525-20201231</nh_interfaceResult>
+    </nh_interfaceResponse>
+  </soap:Body>
+</soap:Envelope>
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>
+0@!@$
+0121011214	4306210121011214	欧凤华	1214	04	4	章婧	2	2020/5/25 0:00:00	430621202005250042	0	723053649	城关镇-&gt;荣站居委会-&gt;1组	1			1	93630709		2020	430621012101	0	0	0	0	0		0	20200525-20201231
+0121011214	4306210121011214	欧凤华	1214	03	3	章怡	2	2000/5/9 0:00:00	430621200005090043	20	721666685	城关镇-&gt;荣站居委会-&gt;1组	1			1	93630709		2020	430621012101	0	0	0	0	0		0	20170101-20201231
+0121011214	4306210121011214	欧凤华	1214	01	0	欧凤华	2	1972/11/3 0:00:00	43062119721103008X	48	721666683	城关镇-&gt;荣站居委会-&gt;1组	1			1	93630709		2020	430621012101	0	0	0	0	0		0	20170101-20201231</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>
+
+0121011214                            证编号
+4306210121011214                      医疗账号  = 430621+证编号
+欧凤华                                户主姓名
+1214                                  后缀id
+04                                    在医疗账号组里的人编号
+4                                     与户主关系(4:孙)
+章婧                                  报销用户
+2
+2020/5/25 0:00:00                     出身日期
+430621202005250042                    身份证号
+0                                     年龄
+723053649                             个人编码
+城关镇-&gt;荣站居委会-&gt;1组         详细地址
+1                                     有效标志、户属性
+
+
+1                                     有效标志、户属性
+93630709
+
+2020                                   参保年度
+430621012101                           前缀编码  （前缀编码+后缀id = 医疗账号）
+0
+0
+0
+0
+0
+
+0
+20200525-20201231                       保障起止时间

@@ -1,0 +1,70 @@
+
+
+
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#100000033@$6588@!0Of4&lt;;;3:6@!刘庆团@!|tceles rownum as hs,&#xd;
+       a.hospital_id,&#xd;
+       a.ywid,&#xd;
+       a.id,&#xd;
+       a.fyxh,&#xd;
+       a.medi_item_type,&#xd;
+       a.item_code,&#xd;
+       a.item_name,&#xd;
+       a.model_name,&#xd;
+       a.hosp_code,&#xd;
+       a.hosp_name,&#xd;
+       a.hosp_model,&#xd;
+       a.stat_type,&#xd;
+       a.dj,&#xd;
+       a.yl,&#xd;
+       a.jldw,&#xd;
+       a.gg,&#xd;
+       a.je,&#xd;
+       a.jrbxje,&#xd;
+       a.jrbxje as jrbxje_temp,&#xd;
+       a.lrrdm,&#xd;
+       a.lrrxm,&#xd;
+       a.lrsj,&#xd;
+       a.jsbcfw,&#xd;
+       a.zjbcfw,&#xd;
+       a.zjbcly,&#xd;
+       a.zxshrxm,&#xd;
+       a.zjbcly as zjbcly_temp,&#xd;
+       a.yzcfh,&#xd;
+       a.shbz,&#xd;
+       a.shbz as shbz_temp,&#xd;
+       a.tckj,&#xd;
+       a.kfly,&#xd;
+       a.self_scale, &#xd;
+       a.fyfssj,&#xd;
+       a.gdzfje&#xd;
+  from yw_fymxb a, bs_hospital e&#xd;
+ |erehw a.hospital_id = e.hospital_id&#xd;
+   and a.hospital_id = :as_hospital_id&#xd;
+   and a.ywid = :as_ywid&#xd;
+   and a.id = :as_id&#xd;
+ order by fyxh&#xd;
+@!:as_hospital_id#:as_ywid#:as_id@!430621556588#31967933#1</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@$
+1	430621556588	31967933	1	81868172	1	X-R05CB-A198-B002	氨溴索		X-R05CB-A198-B002	氨溴索	注射液	003	4.56	3	 		13.68	13	13	6588	刘庆团	2020/9/22 15:36:04	0	0					9	9			0.05	2020/7/3 0:00:00	0.68
+2	430621556588	31967933	1	81868179	1	X-B05BB-P072-B002	葡萄糖		X-B05BB-P072-B002	葡萄糖	注射液	003	1.57	1	 		1.57	1.57	1.57	6588	刘庆团	2020/9/22 15:36:17	0	0					9	9			0	2020/7/3 0:00:00	0
+3	430621556588	31967933	1	81875786	1	X-J01MA-Z074-B002	左氧氟沙星		X-J01MA-Z074-B002	左氧氟沙星	注射液	003	4.85	2	 		9.70	9.70	9.70	6588	刘庆团	2020/9/22 17:07:20	0	0					9	9			0	2020/7/3 0:00:00	0
+4	430621556588	31967933	1	81875812	1	X-B05XA-L211-B002	氯化钠		X-B05XA-L211-B002	氯化钠	注射液	003	1.27	2	 		2.54	2.54	2.54	6588	刘庆团	2020/9/22 17:07:33	0	0					9	9			0	2020/7/3 0:00:00	0
+5	430621556588	31967933	1	81875833	1	X-J01DC-T070-B011	头孢呋辛		X-J01DC-T070-B011	头孢呋辛	粉针剂	003	2.10	4	 		8.40	8.40	8.40	6588	刘庆团	2020/9/22 17:07:45	0	0					9	9			0	2020/7/3 0:00:00	0
+6	430621556588	31967933	1	81875856	0	N110100002_00	门诊一般诊疗费（基层医疗机构）		N110100002_00	门诊一般诊疗费（基层医疗机构）		006	15	1	1	0	15	15	15	6588	刘庆团	2020/9/22 17:08:04	0	0					9	9			0	2020/7/3 0:00:00	0</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>

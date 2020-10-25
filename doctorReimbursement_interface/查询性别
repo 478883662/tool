@@ -1,0 +1,48 @@
+http://222.247.54.146:8086/yy_interface/ny_interface.asmx
+
+Host: 222.247.54.146:8086
+Connection: Keep-Alive
+User-Agent: EasySoap++/0.6
+Content-Type: text/xml; charset="UTF-8"
+SOAPAction: "http://tempuri.org/nh_interface"
+Content-Length: 654
+
+
+
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#000000033@$6588@!0Of4&lt;;;3:6@!刘庆团@!  |tceles xt_dmb.dmbh,   &#xd;
+         xt_dmb.dmmc  &#xd;
+    FROM xt_dmb  &#xd;
+   |erehw xt_dmb.dmlbbh = &apos;S101-01&apos;   &#xd;
+ORDER BY xt_dmb.dmbh ASC</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+
+
+
+
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Length: 387
+Content-Type: text/xml; charset=utf-8
+SS: s
+XX: a
+XX: p
+Date: Mon, 21 Sep 2020 15:01:57 GMT
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@$1	男
+2	女
+9	其他</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>

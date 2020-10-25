@@ -1,0 +1,20 @@
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#020202103@$6588@!0Of4&lt;;;3:6@!刘庆团@!1@!430621556588@!32007126@!1</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@!0@!0@!0@!0@!0@!0@!0@!0@!0@$@$</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>

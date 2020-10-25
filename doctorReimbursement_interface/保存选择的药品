@@ -1,0 +1,115 @@
+获取业务单号：
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#000100002@$6588@!0Of4&lt;;;3:6@!刘庆团@!430621556588</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@!32000158</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>
+
+绑定业务单号与用户的关系:
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#020202100@$6588@!0Of4&lt;;;3:6@!刘庆团@!1@!430621556588@!32000221@!1@!1101@!0@!@!721502048@!蔡娥美@!4306210102010497@!@!@!@!3449@!I63.801@!6588@!刘庆团@!2020-06-24@!@!1@!@!1@!@!@!@!@!@!@!@!0@!2020-06-24@!2@!1@!430621556588@!@!20200101@!0</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@!1</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>
+
+
+
+
+
+
+
+
+
+
+
+保存选择的药品
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#020202101@$6588@!0Of4&lt;;;3:6@!刘庆团@!430621556588@!31999987@!1@$1	X-N02BA-A056-A012	阿司匹林	肠溶片	003				2020-06-24	15.5000	1	15.50		0		0	6588	刘庆团	0	1	0</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@!8.244938E+07@!15.5</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>
+
+
+
+
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#020202101@$6588@!0Of4&lt;;;3:6@!刘庆团@!430621556588@!31999987@!1@$2	Z-A12AA-N0052	脑心通胶囊	无	004				2020-06-24	32.2100	1	32.21		0		0	6588	刘庆团	0	1	0</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@!8.244936E+07@!32.21</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>
+
+
+
+
+
+
+
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#020202101@$6588@!0Of4&lt;;;3:6@!刘庆团@!430621556588@!32000316@!1@$1	X-R05CB-A198-B002	氨溴索	注射液	003				2020-10-01	4.5600	3	13.68		0		0	6588	刘庆团	0	1	0</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@!8.245109E+07@!13</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>

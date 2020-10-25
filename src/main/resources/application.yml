@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+    cache: false
+  resources:
+        static-locations: classpath:/templates/,classpath:/static/
+
+
+logging:
+  config: classpath:log4j2.xml

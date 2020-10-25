@@ -1,0 +1,68 @@
+POST
+
+http://222.247.54.146:8086/yy_interface/ny_interface.asmx
+
+请求头：
+Host: 222.247.54.146:8086
+Connection: Keep-Alive
+User-Agent: EasySoap++/0.6
+Content-Type: text/xml; charset="UTF-8"
+SOAPAction: "http://tempuri.org/nh_interface"
+Content-Length: 784
+
+请求体：
+<E:Envelope
+	xmlns:E="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:A="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:y="http://www.w3.org/2001/XMLSchema"
+	E:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<E:Body>
+<m:nh_interface
+	xmlns:m="http://tempuri.org/">
+<m:String_input
+	s:type="y:string">yy_yyx@#100000033@$6588@!0Of4&lt;;;3:6@!刘庆团@!|tceles B.DMBH, B.DMMC, A.SFYXBCLR SFYXBCLR &#xd;
+  FROM XT_DMB B, XT_HOSPITAL_BCLB A&#xd;
+ |erehw B.DMLBBH = &apos;S301-06&apos;&#xd;
+   AND A.YWLB = B.DMBH&#xd;
+   AND A.HOSPITAL_ID = :AS_HOSPITAL_ID	&#xd;
+   AND B.DMBH&lt;&gt;B.SJDMBH&#xd;
+ ORDER BY B.DMBH@!:AS_HOSPITAL_ID@!430621556588</m:String_input>
+</m:nh_interface>
+</E:Body>
+</E:Envelope>
+
+
+
+响应头：
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Length: 909
+Content-Type: text/xml; charset=utf-8
+SS: s
+XX: a
+XX: p
+Date: Mon, 21 Sep 2020 14:53:54 GMT
+
+
+响应体：
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nh_interfaceResponse xmlns="http://tempuri.org/"><nh_interfaceResult>0@!@$1101	一般门诊	1
+1104	家庭账户	1
+1188	门诊两病	0
+1199	家庭医生签约服务	0
+1201	常见慢性病门诊	0
+1202	特殊慢性病门诊	0
+1298	特药支付(特殊门诊)	0
+1299	特药支付	0
+2101	普通住院	0
+2102	省定重大疾病单病种付费住院	0
+2104	县定单病种付费住院	0
+2106	按病种付费	0
+2201	平产（定额补偿）	0
+2202	剖宫产（定额补偿）	0
+9902	意外伤害（无责任方）	0
+9905	二次补偿	0
+990598	大病保险追补	0
+990599	一站式追补	0
+9998	二次补偿	0</nh_interfaceResult></nh_interfaceResponse></soap:Body></soap:Envelope>

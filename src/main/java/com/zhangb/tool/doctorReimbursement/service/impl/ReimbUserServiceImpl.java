@@ -146,7 +146,7 @@ public class ReimbUserServiceImpl implements IReimbUserService {
                 "                and t1.name = t4.name\n" +
                 "            ) \n" +
                 "    order by\n" +
-                "        t1.yl_card";
+                "        t1.yl_card,t1.`NAME`";
         return Db.use().query(  sql,
                 ReimbUserBo.class,today,year);
     }

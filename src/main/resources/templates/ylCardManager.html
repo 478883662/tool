@@ -52,9 +52,40 @@
     </style>
 
     <script>
+        window.onload = function () {
+            $.ajax({
+                type: 'GET',
+                url: "/reimbUser/getAllYlCard",
+                contentType: "application/json;cherset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $('.table_node').empty()
+                    //取出后端传过来的list值
+                    var chargeRuleLogs = data;
+                    //对list值进行便利
+                    $.each(chargeRuleLogs, function (index, n) {
+                        var rowTr = document.createElement('tr')
+                        //找到html的tr节点
+                        rowTr.className = "tr_node";
+                        rowTr.style = "border: 2px solid ;";
+                        var child='';
+                        child = child + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].ylCard + '</td>'
+                            + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].masterName + '</td>'
+                            + '<td style="border: 1px solid ; ">' + new Date(chargeRuleLogs[index].createdDate).Format("yyyy-MM-dd") + '</td>';
+
+                        //将要展示的信息写入页面
+                        rowTr.innerHTML = child
+                        //将信息追加
+                        $(".table_node").append(rowTr)
+                    });
+                }
+            });
+        }
 
         //新增医疗账号
         function addYlCard() {
+            $("#btn_addYlCard").attr("disabled", true);
+            $("#btn_addYlCard").val("添加中")
             var ylCard = $("#ylCard").val();
             //使遮罩层显示方法
             $.get("/reimbUser/addYlCard?ylCard=" + ylCard, function (data) {
@@ -63,16 +94,28 @@
             });
         }
 
-        //全量同步所有人的所有信息
-        function syncAll() {
-            $("#btn_syncAll").attr("disabled", true);
-            $("#btn_syncAll").val("同步中，请稍等...");
-            $.get("/reimbUser/syncAll", function (data) {
-                alert(data);
-                window.location.reload();
-            });
-        }
+        //日期格式化，将毫秒转为 XXXX-XX-XX 的格式
+        Date.prototype.Format = function(fmt) {
+            var o = {
+                "M+" : this.getMonth() + 1, // 月份
+                "d+" : this.getDate(), // 日
+                "h+" : this.getHours(), // 小时
+                "m+" : this.getMinutes(), // 分
+                "s+" : this.getSeconds(), // 秒
+                "q+" : Math.floor((this.getMonth() + 3) / 3), // 季度
+                "S" : this.getMilliseconds()
+// 毫秒
+            };
+            if (/(y+)/.test(fmt))
+                fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "")
+                    .substr(4 - RegExp.$1.length));
+            for ( var k in o)
+                if (new RegExp("(" + k + ")").test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k])
+                        : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
 
+        };
     </script>
 </head>
 <body>
@@ -81,23 +124,48 @@
     <header class="header">
     </header>
     <div class="page-content d-flex align-items-stretch">
-        <div class="left" id="left_menu" style="width: 150px;"></div>
-        <div class="content-inner" style="width: 100%;">
+        <div class="left" id="left_menu" style="width: 12%;"></div>
+        <div class="content-inner" style="width: 88%;">
             <div>
                 <fieldset class="northbtn" style="margin-left:8px; border: 1px solid ; padding:20px;">
                     <legend>添加医疗账号</legend>
                     <table  style="width: 100%;">
                         <tr>
                             <td>医疗账号: <input type="text" id="ylCard"/>
-                                <input type="button" value="添加" onclick="addYlCard()"/>
+                                <input type="button" id="btn_addYlCard" value="添加" onclick="addYlCard()"/>
                             </td>
                         </tr>
 
                     </table>
                 </fieldset>
             </div>
+            <div>
+                <fieldset class="northbtn" style="margin-left:8px; border: 1px solid ; padding:20px;">
+                    <legend>医疗账号列表</legend>
+                    <div id="kuang">
+                        <table class="table table-striped table-bordered" id="dataTables"
+                               style="white-space: nowrap;width: 100%;">
+                            <thead>
+                            <tr style="border: 2px solid ;">
+                                <th style="border: 1px solid ;">医疗账号</th>
+                                <th style="border: 1px solid ;">户主姓名</th>
+                                <th style="border: 1px solid ;">添加时间</th>
+                            </tr>
+                            </thead>
+
+                            <tbody class="table_node">
+                            <tr class="tr_node">
+                                <!--动态载入数据-->
+                            </tr>
+                            <!-- more data -->
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+            </div>
         </div>
     </div>
+
 </div>
 
 </body>

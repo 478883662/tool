@@ -60,11 +60,13 @@ public class ReimbUserServiceImpl implements IReimbUserService {
         String result = remoteService.executeRemote(ReimbRemoteStrategyKeyConstants.REIMB_GET_USER_BY_YLCARD_STRATEGY,ylCard);
         System.out.println("同步医疗账号【"+ylCard+"】:"+result);
         if(StrUtil.hasBlank(result)){
-            return "同步失败，医疗账号错误!";
+            return "FAIL:同步失败，医疗账号错误!";
         }
         List<ReimbUserInfo> resultList = parseResult(result);
+        String master = null;
         for(ReimbUserInfo reimbUserInfo:resultList){
             try{
+                master=reimbUserInfo.getMasterName();
                 //先查询数量
                 ReimbUserInfo where = new ReimbUserInfo();
                 where.setIdCard(reimbUserInfo.getIdCard());
@@ -79,7 +81,7 @@ public class ReimbUserServiceImpl implements IReimbUserService {
                 e.printStackTrace();
             }
         }
-        return null;
+        return master;
     }
 
     @Override

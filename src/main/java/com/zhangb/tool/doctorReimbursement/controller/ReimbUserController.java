@@ -39,6 +39,14 @@ public class ReimbUserController {
     @Value("${print.name}")
     private String printName;
 
+    @RequestMapping("/getAllYlCard")
+    @ResponseBody
+    public List<ReimbYlCard> getAllYlCard() throws Exception {
+        List<ReimbYlCard> ylCardList = userService.getAllYlCard();
+        return ylCardList;
+    }
+
+
     @RequestMapping("/getAllUser")
     @ResponseBody
     public List<ReimbUserBo> getAllUser() throws Exception {
@@ -76,14 +84,17 @@ public class ReimbUserController {
     @ResponseBody
     public String addYlCard(@RequestParam(value = "ylCard", required = true) String ylCard) throws Exception {
         if (StrUtil.hasBlank(ylCard)) {
-            return "医疗账号不能为空";
+            return "FAIL:医疗账号不能为空";
         }
         ReimbYlCard reimbYlCard = new ReimbYlCard();
         reimbYlCard.setYlCard(ylCard);
         String result = syncService.syncUserInfo(ylCard);
-        if(StrUtil.isNotBlank(result)){
+        syncService.syncRecordInfo(ylCard,null);
+        if(StrUtil.startWith(result,"FAIL")){
             return result;
         }
+        //只要不是FAIL开头就是正常业务返回
+        reimbYlCard.setMasterName(result);
         userService.addYlCard(reimbYlCard);
         return "保存医疗账户成功";
     }
@@ -148,10 +159,10 @@ public class ReimbUserController {
             syncService.syncUserInfo(ylCard);
             syncService.syncRecordInfo(ylCard,name);
             //校验医疗机构今年报销总额是否已超
-            BigDecimal ylTotal = recordService.getYlReimbTotal(RemoteConstants.YL_LOCATION_NO);
-            if (ReimbConstants.YL_TOTAL_YEAR.compareTo(ylTotal) < 0) {
-                return "泥家湖卫生室报销总额已达上线无法继续报销，当前报销总额为：" + ylTotal;
-            }
+//            BigDecimal ylTotal = recordService.getYlReimbTotal(RemoteConstants.YL_LOCATION_NO);
+//            if (ReimbConstants.YL_TOTAL_YEAR.compareTo(ylTotal) < 0) {
+//                return "泥家湖卫生室报销总额已达上线无法继续报销，当前报销总额为：" + ylTotal;
+//            }
 
             Map<String, String> resultMap = CollectionUtil.newHashMap();
             //获取医疗账户下要报销的人

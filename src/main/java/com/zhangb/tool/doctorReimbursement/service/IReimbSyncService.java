@@ -30,7 +30,7 @@ public interface IReimbSyncService {
      * 同步用户信息
      * @param ylCard
      */
-    void syncUserInfo(String ylCard) throws Exception;
+    String syncUserInfo(String ylCard) throws Exception;
 
     /**
      * 同步报销记录信息
@@ -38,4 +38,7 @@ public interface IReimbSyncService {
      * @param name
      */
     void syncRecordInfo(String ylCard, String name) throws Exception;
+
+    String syncAll() throws SQLException, IllegalAccessException;
+
 }

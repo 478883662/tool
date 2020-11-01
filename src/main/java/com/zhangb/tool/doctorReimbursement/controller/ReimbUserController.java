@@ -1,6 +1,5 @@
 package com.zhangb.tool.doctorReimbursement.controller;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
@@ -9,13 +8,16 @@ import com.zhangb.tool.doctorReimbursement.bo.ReimbUserBo;
 import com.zhangb.tool.doctorReimbursement.common.constants.ReimbConstants;
 import com.zhangb.tool.doctorReimbursement.common.constants.RemoteConstants;
 import com.zhangb.tool.doctorReimbursement.entity.ReimbDealResult;
+import com.zhangb.tool.doctorReimbursement.entity.ReimbPrintInfo;
 import com.zhangb.tool.doctorReimbursement.entity.ReimbUserInfo;
 import com.zhangb.tool.doctorReimbursement.entity.ReimbYlCard;
 import com.zhangb.tool.doctorReimbursement.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,13 +30,14 @@ public class ReimbUserController {
     @Autowired
     private IReimbRecordService recordService;
     @Autowired
-    private IReimbIllnessService illnessService;
-    @Autowired
     private IReimbSyncService syncService;
     @Autowired
     private IReimbService reimbService;
     @Autowired
     private IReimbDealResultService dealResultService;
+    // 打印机名称
+    @Value("${print.name}")
+    private String printName;
 
     @RequestMapping("/getAllUser")
     @ResponseBody
@@ -51,13 +54,14 @@ public class ReimbUserController {
         return resultMap;
     }
 
-    @RequestMapping("/print")
+    /**
+     * 全量同步所有信息，一天只允许同步一次
+     * @throws Exception
+     */
+    @RequestMapping("/syncAll")
     @ResponseBody
-    public void print() throws Exception {
-        //TODO 打印所有未打印的记录
-
-
-        return;
+    public String syncAll() throws Exception {
+        return syncService.syncAll();
     }
 
     /**
@@ -65,22 +69,22 @@ public class ReimbUserController {
      * http://localhost:8085/reimbUser/addYlCard?ylCard=4306210121011214&masterName=欧凤华
      *
      * @param ylCard
-     * @param masterName
      * @return
      * @throws Exception
      */
     @RequestMapping("/addYlCard")
     @ResponseBody
-    public String addYlCard(@RequestParam(value = "ylCard", required = true) String ylCard,
-                            @RequestParam(value = "masterName", required = true) String masterName) throws Exception {
+    public String addYlCard(@RequestParam(value = "ylCard", required = true) String ylCard) throws Exception {
         if (StrUtil.hasBlank(ylCard)) {
             return "医疗账号不能为空";
         }
         ReimbYlCard reimbYlCard = new ReimbYlCard();
         reimbYlCard.setYlCard(ylCard);
-        reimbYlCard.setMasterName(masterName);
+        String result = syncService.syncUserInfo(ylCard);
+        if(StrUtil.isNotBlank(result)){
+            return result;
+        }
         userService.addYlCard(reimbYlCard);
-        syncService.syncUserInfo(ylCard);
         return "保存医疗账户成功";
     }
 
@@ -173,7 +177,16 @@ public class ReimbUserController {
                     String result = reimbService.reimb(reimbIllnessBo);
                     resultMap.put(user.getName(),result+"\r\n");
                     //报销结束了就同步一次远端报销记录到本地库
-                    recordService.syncRecord(user.getSelfNo());
+                    String bizId = recordService.syncRecord(user.getSelfNo());
+                    if (bizId==null){
+                        System.out.println("本地仍没有报销记录");
+                        continue;
+                    }
+                    ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
+                    reimbPrintInfo.setBizId(bizId);
+                    reimbPrintInfo.setCreatedDate(new Date());
+                    reimbPrintInfo.setPrintState("1001");
+                    reimbService.savePrintInfo(reimbPrintInfo);
                     reimbDealResult.setDealResult("报销成功");
                 }catch (Exception e){
                     e.printStackTrace();

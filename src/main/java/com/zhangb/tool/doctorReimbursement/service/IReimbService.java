@@ -2,6 +2,10 @@ package com.zhangb.tool.doctorReimbursement.service;
 
 import com.zhangb.tool.doctorReimbursement.bo.ReimbDrugBo;
 import com.zhangb.tool.doctorReimbursement.bo.ReimbIllnessBo;
+import com.zhangb.tool.doctorReimbursement.bo.ReimbPrintBo;
+import com.zhangb.tool.doctorReimbursement.bo.ReimbUnPrintRecordBo;
+import com.zhangb.tool.doctorReimbursement.entity.ReimbDealRecord;
+import com.zhangb.tool.doctorReimbursement.entity.ReimbPrintInfo;
 import com.zhangb.tool.doctorReimbursement.entity.ReimbUserInfo;
 
 import java.math.BigDecimal;
@@ -58,4 +62,15 @@ public interface IReimbService {
      * @return
      */
     String reimb(ReimbIllnessBo reimbIllnessBo) throws Exception;
+
+    /**
+     * 获取打印信息
+     * @param bizId 入参
+     * @return
+     */
+    ReimbPrintBo getPrintInfo(String bizId) throws Exception;
+
+    void savePrintInfo(ReimbPrintInfo reimbPrintInfo) throws SQLException, IllegalAccessException;
+
+    List<ReimbUnPrintRecordBo> getAllUnPrintInfo() throws SQLException;
 }

@@ -53,8 +53,13 @@ public class ReimbRecordServiceImpl implements IReimbRecordService {
             recordSyncInfo.setCreateDate(new Date());
             syncService.insertSyncRecord(recordSyncInfo);
         }
+        if (resultList.size()>1){
+            //取最后一个的bizid
+            return resultList.get(resultList.size()-1).getBizId();
+        }else{
+            return null;
+        }
 
-        return resultStr;
     }
 
     @Override

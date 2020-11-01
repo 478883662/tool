@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Home</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <!-- JavaScript files-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper.js/umd/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/jquery.cookie/jquery.cookie.js"></script>
+    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+    <script src="js/charts-home.js"></script>
+    <!-- Main File-->
+    <script src="js/front.js"></script>
+    <script src="js/index.js"></script>
+
+    <style>
+        img:hover{
+            /*鼠标悬浮时，生成阴影轮廓*/
+            box-shadow: 0px 0px 0px 1px red;
+        }
+        img{
+            border-radius:5px;
+            margin-top:10px;
+        }
+        div{
+            /*设置内部嵌套的div宽度（大于外部div宽度）*/
+            width: 100%;
+        }
+    </style>
+
+    <script>
+
+        //新增医疗账号
+        function addYlCard() {
+            var ylCard = $("#ylCard").val();
+            //使遮罩层显示方法
+            $.get("/reimbUser/addYlCard?ylCard=" + ylCard, function (data) {
+                alert(data);
+                window.location.reload();
+            });
+        }
+
+        //全量同步所有人的所有信息
+        function syncAll() {
+            $("#btn_syncAll").attr("disabled", true);
+            $("#btn_syncAll").val("同步中，请稍等...");
+            $.get("/reimbUser/syncAll", function (data) {
+                alert(data);
+                window.location.reload();
+            });
+        }
+
+    </script>
+</head>
+<body>
+<div class="page">
+    <!-- Main Navbar-->
+    <header class="header">
+    </header>
+    <div class="page-content d-flex align-items-stretch">
+        <div class="left" id="left_menu" style="width: 150px;"></div>
+        <div class="content-inner" style="width: 100%;">
+            <div>
+                <fieldset class="northbtn" style="margin-left:8px; border: 1px solid ; padding:20px;">
+                    <legend>添加医疗账号</legend>
+                    <table  style="width: 100%;">
+                        <tr>
+                            <td>医疗账号: <input type="text" id="ylCard"/>
+                                <input type="button" value="添加" onclick="addYlCard()"/>
+                            </td>
+                        </tr>
+
+                    </table>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

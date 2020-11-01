@@ -52,4 +52,7 @@ public class ReimbUserInfo {
     /**性别*/
     @DbFeildAnnotation("SEX")
     private String sex;
+    /**家庭住址*/
+    @DbFeildAnnotation("family_location")
+    private String familyLocation;
 }

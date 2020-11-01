@@ -4,4 +4,10 @@ spring:
   thymeleaf:
     cache: false
   resources:
-        static-locations: classpath:/templates/,classpath:/static/
+    static-locations: classpath:/templates/,classpath:/static/
+  freemarker:
+    settings:
+      classic_compatible: true
+
+print:
+  name: HP MFP M436 PCL6

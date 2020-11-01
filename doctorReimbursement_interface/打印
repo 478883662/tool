@@ -24,37 +24,37 @@
          decode(JBXX_RYXX_LS.XB,&apos;1&apos;,&apos;男&apos;,&apos;2&apos;,&apos;女&apos;,&apos;其他&apos;) as xb,   &#xd;
          JBXX_RYXX_LS.CSRQ,   &#xd;
          JBXX_RYXX_LS.SFZHM,   &#xd;
-         YW_DYYWB_LS.YLZH,   &#xd;
+         YW_DYYWB_LS.YLZH,   &#xd; 【6-医疗账号】
          JBXX_RYXX_LS.HNRBH,   &#xd;
-         YW_DYYWB_LS.ZYH,   &#xd;
+         YW_DYYWB_LS.ZYH,   &#xd;【8-住院号】
          YW_DYYWB_LS.BCZHLB_ID,   &#xd;
-         YW_DYYWB_LS.CYRQ,   &#xd;
-         YW_DYYWB_LS.RYSJ,   &#xd;
-         cy_jbmc DISEASE,   &#xd;
-         BS_OPERATION.OPERATION_NAME,   &#xd;
-         BS_HOSPITAL.HOSPITAL_NAME,   &#xd;
-         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;001&apos;) as lyzfy_cwf ,&#xd;
-         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;002&apos;) as lyzfy_hlf ,&#xd;
-         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;003&apos;) as lyzfy_xyf ,&#xd;
-         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;004&apos;) as lyzfy_zyf ,&#xd;
-         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;005&apos;) as lyzfy_hyf ,&#xd;
-         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;006&apos;) as lyzfy_zlf ,&#xd;
-         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;007&apos;) as lyzfy_ssf , &#xd;
-         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;008&apos;) as lyzfy_jcf , &#xd;
-         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;009&apos;) as lyzfy_qtf ,  &#xd;
-         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;001&apos;) as kbxfy_cwf ,&#xd;
-         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;002&apos;) as kbxfy_hlf ,&#xd;
-         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;003&apos;) as kbxfy_xyf ,&#xd;
-         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;004&apos;) as kbxfy_zyf ,&#xd;
-         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;005&apos;) as kbxfy_hyf ,&#xd;
-         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;006&apos;) as kbxfy_zlf ,&#xd;
-         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;007&apos;) as kbxfy_ssf , &#xd;
-         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;008&apos;) as kbxfy_jcf , &#xd;
-         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;009&apos;) as kbxfy_qtf ,&#xd;
-         NVL(YW_DYYWB_LS.JSRXM,YW_DYYWB_LS.DJRMC) AS JSR,  &#xd;
-         YW_DYYWB_LS.KBXFY,&#xd;
-			YW_DYYWB_LS.BCDDM,   &#xd;
-         YW_DYYWB_LS.SHJG_ID,   &#xd;
+         YW_DYYWB_LS.CYRQ,   &#xd; 【10-出院日期】
+         YW_DYYWB_LS.RYSJ,   &#xd;  【11-入院日期】
+         cy_jbmc DISEASE,   &#xd; 【12-出院诊断】
+         BS_OPERATION.OPERATION_NAME,   &#xd; 【13-】
+         BS_HOSPITAL.HOSPITAL_NAME,   &#xd;    【14-就诊医疗机构】
+         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;001&apos;) as lyzfy_cwf ,&#xd; 【15--医疗-床位费】
+         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;002&apos;) as lyzfy_hlf ,&#xd;【16--医疗-护理费】
+         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;003&apos;) as lyzfy_xyf ,&#xd;【17--医疗-西药费】
+         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;004&apos;) as lyzfy_zyf ,&#xd;【18--医疗-中药费】
+         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;005&apos;) as lyzfy_hyf ,&#xd;【19--医疗-化验费】
+         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;006&apos;) as lyzfy_zlf ,&#xd;【20--医疗-诊疗费】
+         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;007&apos;) as lyzfy_ssf , &#xd;【21--医疗-手术费】
+         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;008&apos;) as lyzfy_jcf , &#xd;【22--医疗-检查费】
+         (|tceles nvl(sum(zfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;009&apos;) as lyzfy_qtf ,  &#xd;【23--医疗-其他费】
+         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;001&apos;) as kbxfy_cwf ,&#xd;【24--可报销-床位费】
+         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;002&apos;) as kbxfy_hlf ,&#xd;【25--可报销-护理费】
+         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;003&apos;) as kbxfy_xyf ,&#xd;【26--可报销-西药费】
+         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;004&apos;) as kbxfy_zyf ,&#xd;【27--可报销-中药费】
+         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;005&apos;) as kbxfy_hyf ,&#xd;【28--可报销-化验费】
+         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;006&apos;) as kbxfy_zlf ,&#xd;【29--可报销-诊疗费】
+         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;007&apos;) as kbxfy_ssf , &#xd;【30--可报销-手术费】
+         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;008&apos;) as kbxfy_jcf , &#xd;【31--可报销-检查费】
+         (|tceles nvl(sum(YW_FYFLMXB_LS.kbxfy),0) from YW_FYFLMXB_LS |erehw YW_FYFLMXB_LS.HOSPITAL_ID = YW_DYYWB_LS.HOSPITAL_ID and YW_FYFLMXB_LS.YWID = YW_DYYWB_LS.YWID and YW_FYFLMXB_LS.ID = YW_DYYWB_LS.ID and stat_type = &apos;009&apos;) as kbxfy_qtf ,&#xd;【32--可报销-其他费】
+         NVL(YW_DYYWB_LS.JSRXM,YW_DYYWB_LS.DJRMC) AS JSR,  &#xd;【33-核算人】
+         YW_DYYWB_LS.KBXFY,&#xd; 【34-可报费用-总计】
+			YW_DYYWB_LS.BCDDM,   &#xd; 【35---430621556523】
+         YW_DYYWB_LS.SHJG_ID,   &#xd;  【36---审核机构】
          YW_DYYWB_LS.KJSHR,   &#xd;
          YW_DYYWB_LS.TCKJ,   &#xd;
          YW_DYYWB_LS.KFLY,&#xd;

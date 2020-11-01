@@ -4,8 +4,10 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhangb.tool.common.dao.BaseDao;
 import com.zhangb.tool.doctorReimbursement.common.enums.ReimbSyncTypeEnum;
+import com.zhangb.tool.doctorReimbursement.controller.ReimbUserController;
 import com.zhangb.tool.doctorReimbursement.entity.ReimbSyncInfo;
 import com.zhangb.tool.doctorReimbursement.entity.ReimbUserInfo;
+import com.zhangb.tool.doctorReimbursement.entity.ReimbYlCard;
 import com.zhangb.tool.doctorReimbursement.service.IReimbIllnessService;
 import com.zhangb.tool.doctorReimbursement.service.IReimbRecordService;
 import com.zhangb.tool.doctorReimbursement.service.IReimbSyncService;
@@ -54,20 +56,21 @@ public class ReimbSyncServiceImpl implements IReimbSyncService {
     }
 
     @Override
-    public void syncUserInfo(String ylCard) throws Exception {
+    public String syncUserInfo(String ylCard) throws Exception {
         //同步医疗账户下的人员信息
         if(checkSync(ylCard, ReimbSyncTypeEnum.YL_CARD_SYNC.getType())){
-            System.out.println(ylCard+":医疗账号已同步过了");
-            return;
+            System.out.println("医疗账号["+ylCard+"]今日已同步过了");
+            return "医疗账号["+ylCard+"]今日已同步过了";
         }
         //没有同步过，就同步更新下账户下所有人，看是否有新增的人
-        userService.syncUserByYlCard(ylCard);
+        String result = userService.syncUserByYlCard(ylCard);
         ReimbSyncInfo ylCardSyncInfo  = new ReimbSyncInfo();
         ylCardSyncInfo.setSyncType(ReimbSyncTypeEnum.YL_CARD_SYNC.getType());
         ylCardSyncInfo.setSyncDate(DateUtil.today());
         ylCardSyncInfo.setId(ylCard);
         ylCardSyncInfo.setCreateDate(new Date());
         syncService.insertSyncRecord(ylCardSyncInfo);
+        return result;
     }
 
     @Override
@@ -96,7 +99,32 @@ public class ReimbSyncServiceImpl implements IReimbSyncService {
             //同步病例信息(病例住院天数与间隔天数需要人工维护)
             illnessService.syncIllnessFromRecord();
         }
+    }
 
+    @Override
+    public String syncAll() throws SQLException, IllegalAccessException {
+        if(checkSync("ALL",ReimbSyncTypeEnum.SYNC_ALL.getType())){
+            return "今日已全量同步过了!";
+        }
+        List<ReimbYlCard> ylCardList = userService.getAllYlCard();
+        ReimbSyncInfo ylCardSyncInfo  = new ReimbSyncInfo();
+        ylCardSyncInfo.setSyncType(ReimbSyncTypeEnum.SYNC_ALL.getType());
+        ylCardSyncInfo.setSyncDate(DateUtil.today());
+        ylCardSyncInfo.setId("ALL");
+        ylCardSyncInfo.setCreateDate(new Date());
+        insertSyncRecord(ylCardSyncInfo);
+        synchronized (ReimbUserController.class){
+            ylCardList.forEach(e->{
+                //报销前先同步
+                try {
+                    syncService.syncUserInfo(e.getYlCard());
+                    syncService.syncRecordInfo(e.getYlCard(),null);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            });
+        }
+        return "同步完成";
     }
 
 

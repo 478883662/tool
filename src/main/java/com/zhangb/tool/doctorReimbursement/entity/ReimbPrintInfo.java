@@ -7,24 +7,22 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * Created by z9104 on 2020/9/26.
+ * Created by z9104 on 2020/10/31.
  */
 @Data
-@DbTableAnnotation("tool_yl_card_t")
-public class ReimbYlCard {
+@DbTableAnnotation("tool_reimb_print_t")
+public class ReimbPrintInfo {
 
     @DbFeildAnnotation(value = "OID",isPrimary = true)
     private Long oid;
-    /**医疗账号，手工录入*/
-    @DbFeildAnnotation("yl_card")
-    private String ylCard;
-    /**户主姓名，手工录入*/
-    @DbFeildAnnotation("master_name")
-    private String masterName;
+    /**业务id，用于打印*/
+    @DbFeildAnnotation("biz_id")
+    private String bizId;
+    /**打印状态,1001：待打印，1002：已打印*/
+    @DbFeildAnnotation("print_state")
+    private String printState;
     /**创建时间*/
     @DbFeildAnnotation("created_date")
     private Date createdDate;
-
-
 
 }

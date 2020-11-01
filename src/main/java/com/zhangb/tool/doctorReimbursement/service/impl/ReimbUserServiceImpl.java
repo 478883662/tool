@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,7 +60,7 @@ public class ReimbUserServiceImpl implements IReimbUserService {
         String result = remoteService.executeRemote(ReimbRemoteStrategyKeyConstants.REIMB_GET_USER_BY_YLCARD_STRATEGY,ylCard);
         System.out.println("同步医疗账号【"+ylCard+"】:"+result);
         if(StrUtil.hasBlank(result)){
-            return "获取长信农合用户信息为空";
+            return "同步失败，医疗账号错误!";
         }
         List<ReimbUserInfo> resultList = parseResult(result);
         for(ReimbUserInfo reimbUserInfo:resultList){
@@ -78,7 +79,7 @@ public class ReimbUserServiceImpl implements IReimbUserService {
                 e.printStackTrace();
             }
         }
-        return "同步用户信息完成";
+        return null;
     }
 
     @Override
@@ -97,8 +98,10 @@ public class ReimbUserServiceImpl implements IReimbUserService {
         where.setYlCard(reimbYlCard.getYlCard());
         int count = BaseDao.count(where);
         if(count>0){
-            BaseDao.update(reimbYlCard,where);
+            BaseDao.updateForValue(reimbYlCard,where);
         }else{
+            //设置创建时间为当前时间
+            reimbYlCard.setCreatedDate(new Date());
             BaseDao.insert(reimbYlCard);
         }
     }
@@ -138,7 +141,7 @@ public class ReimbUserServiceImpl implements IReimbUserService {
                 "        '') deal_result,\n" +
                 "      (select sum(MONEY) from tool_deal_record_t where self_no = t1.SELF_NO and YL_CARD=t1.YL_CARD and REIMB_YEAR = ? AND REIMB_TYPE='1101') remib_total\n" +
                 "     from\n" +
-                "        tool_patient_t t1 \n" +
+                "        tool_patient_t t1 left join tool_yl_card_t t5 on t1.yl_card = t5.yl_card\n" +
                 "    left join\n" +
                 "        tool_deal_result_t t4 \n" +
                 "            on (\n" +
@@ -146,7 +149,7 @@ public class ReimbUserServiceImpl implements IReimbUserService {
                 "                and t1.name = t4.name\n" +
                 "            ) \n" +
                 "    order by\n" +
-                "        t1.yl_card,t1.`NAME`";
+                "        t5.created_date desc ,t1.yl_card,t1.`NAME`";
         return Db.use().query(  sql,
                 ReimbUserBo.class,today,year);
     }
@@ -173,6 +176,8 @@ public class ReimbUserServiceImpl implements IReimbUserService {
             reimbUserInfo.setAge(resultList[10]);
             reimbUserInfo.setSelfNo(resultList[11]);
             reimbUserInfo.setPreId(resultList[17]);
+            reimbUserInfo.setFamilyLocation(StrUtil.replace(resultList[12],"-","")
+                                                    .replace("&gt;",""));
             reimbUserInfoList.add(reimbUserInfo);
         }
         return reimbUserInfoList;

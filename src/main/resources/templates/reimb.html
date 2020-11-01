@@ -37,21 +37,23 @@
     <script src="js/index.js"></script>
 
     <style>
-        #kuang{
-            border:1px solid #000;
+        #kuang {
+            border: 1px solid #000;
             width: 100%;
-            height: 2000px;
-            overflow:auto;
+            overflow-x: scroll;
         }
-        img:hover{
+
+        img:hover {
             /*鼠标悬浮时，生成阴影轮廓*/
             box-shadow: 0px 0px 0px 1px red;
         }
-        img{
-            border-radius:5px;
-            margin-top:10px;
+
+        img {
+            border-radius: 5px;
+            margin-top: 10px;
         }
-        div{
+
+        div {
             /*设置内部嵌套的div宽度（大于外部div宽度）*/
             width: 100%;
         }
@@ -65,7 +67,7 @@
                 contentType: "application/json;cherset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    $("#ylTotal").text("今年累计报销额："+data.ylTotal);
+                    $("#ylTotal").text("今年累计报销额：" + data.ylTotal);
                 }
             });
 
@@ -80,35 +82,35 @@
                     var chargeRuleLogs = data;
                     var maxMoneyYear = 400;
                     var today = getToday();
-                    console.log("今日时间："+today);
+                    console.log("今日时间：" + today);
                     //对list值进行便利
                     $.each(chargeRuleLogs, function (index, n) {
                         var rowTr = document.createElement('tr')
                         //找到html的tr节点
                         rowTr.className = "tr_node";
                         rowTr.style = "border: 2px solid ;";
-                        var child='';
+                        var child = '';
 
-                        if(today == chargeRuleLogs[index].reimbDate || chargeRuleLogs[index].remibTotal >=maxMoneyYear){
-                            child =child+ '<td style="border: 1px solid ; "><input type="checkbox" name="box" disabled="disabled" id="box" value="'
+                        if (today == chargeRuleLogs[index].reimbDate || chargeRuleLogs[index].remibTotal >= maxMoneyYear) {
+                            child = child + '<td style="border: 1px solid ; "><input type="checkbox" name="box" disabled="disabled" id="box" value="'
                                 + chargeRuleLogs[index].ylCard + '_' + chargeRuleLogs[index].name + '"/> </td>';
-                            child = child + '<td style="border: 1px solid ; "> <input type="button" disabled="disabled" id="btn_'+chargeRuleLogs[index].ylCard+chargeRuleLogs[index].name+'" value="不能报销" onclick="reimb(\'' + chargeRuleLogs[index].ylCard + '\',\'' + chargeRuleLogs[index].name + '\')"/></td>'
-                        }else{
-                            child =child+ '<td  style="border: 1px solid ; "><input  type="checkbox" name="box" id="box" value="'
+                            child = child + '<td style="border: 1px solid ; "> <input type="button" disabled="disabled" id="btn_' + chargeRuleLogs[index].ylCard + chargeRuleLogs[index].name + '" value="不能报销" onclick="reimb(\'' + chargeRuleLogs[index].ylCard + '\',\'' + chargeRuleLogs[index].name + '\')"/></td>'
+                        } else {
+                            child = child + '<td  style="border: 1px solid ; "><input  type="checkbox" name="box" id="box" value="'
                                 + chargeRuleLogs[index].ylCard + '_' + chargeRuleLogs[index].name + '"/> </td>';
-                            child = child + '<td  style="border: 1px solid ; "> <input  type="button" id="btn_'+chargeRuleLogs[index].ylCard+chargeRuleLogs[index].name+'" value="报销" onclick="reimb(\'' + chargeRuleLogs[index].ylCard + '\',\'' + chargeRuleLogs[index].name + '\')"/></td>'
+                            child = child + '<td  style="border: 1px solid ; "> <input  type="button" id="btn_' + chargeRuleLogs[index].ylCard + chargeRuleLogs[index].name + '" value="报销" onclick="reimb(\'' + chargeRuleLogs[index].ylCard + '\',\'' + chargeRuleLogs[index].name + '\')"/></td>'
                         }
 
                         child = child + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].name + '</td>'
                             + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].ylCard + '</td>'
                             + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].masterName + '</td>';
-                        if(chargeRuleLogs[index].remibTotal >=maxMoneyYear){
+                        if (chargeRuleLogs[index].remibTotal >= maxMoneyYear) {
                             child = child + '<td style="border: 1px solid ; "><font color="#FF0000">' + chargeRuleLogs[index].remibTotal + '</font></td>';
-                        }else{
+                        } else {
                             child = child + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].remibTotal + '</td>';
                         }
 
-                        child = child  + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].reimbDate + '</td>'
+                        child = child + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].reimbDate + '</td>'
                             + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].dealResult + '</td>'
 
                         //将要展示的信息写入页面
@@ -120,9 +122,28 @@
             });
         }
 
+        //新增医疗账号
+        function addYlCard() {
+            var ylCard = $("#ylCard").val();
+            //使遮罩层显示方法
+            $.get("/reimbUser/addYlCard?ylCard=" + ylCard, function (data) {
+                alert(data);
+                window.location.reload();
+            });
+        }
+
+        //全量同步所有人的所有信息
+        function syncAll() {
+            $("#btn_syncAll").attr("disabled", true);
+            $("#btn_syncAll").val("同步中，请稍等...");
+            $.get("/reimbUser/syncAll", function (data) {
+                alert(data);
+                window.location.reload();
+            });
+        }
         function reimb(ylCard, name) {
-            $("#btn_"+ylCard+name).attr("disabled", true);
-            $("#btn_"+ylCard+name).val("报销中");
+            $("#btn_" + ylCard + name).attr("disabled", true);
+            $("#btn_" + ylCard + name).val("报销中");
             //使遮罩层显示方法
             $.get("/reimbUser/reimbursement?ylCard=" + ylCard + "&name=" + name, function (data) {
                 console.log(data);
@@ -159,8 +180,8 @@
                 }
             });
         }
-        
-        
+
+
         function getToday() {
             var date = new Date();
             var year = date.getFullYear();
@@ -172,7 +193,7 @@
             if (day < 10) {
                 day = "0" + day;
             }
-            return year + "-" + month + "-"  + day;
+            return year + "-" + month + "-" + day;
         }
     </script>
 </head>
@@ -182,51 +203,51 @@
     <header class="header">
     </header>
     <div class="page-content d-flex align-items-stretch">
-        <div  >
-            <div>
-                <fieldset class="northbtn" style="margin-left:8px; border: 1px solid ; padding:20px;">
-                    <legend>添加医疗账号</legend>
-                    <form action="reimbUser/addYlCard" method="get">
-                        医疗账号: <input type="text" name="ylCard"/>
-                        户主姓名: <input type="text" name="masterName"/>
-                        <input type="submit" value="添加"/>
-                    </form>
-                </fieldset>
-            </div>
+        <div class="left" id="left_menu" style="width: 150px;"></div>
+        <div class="content-inner" style="width: 100%;">
             <div>
                 <fieldset class="northbtn" style="margin-left:8px; border: 1px solid ; padding:20px;">
                     <legend>报销</legend>
-                    <div><H1 id="ylTotal"></H1></div>
+                    <div>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td><H1 id="ylTotal"></H1></td>
+                                <td>
+                                    <input type="button" value="一键全量同步" id="btn_syncAll" onclick="syncAll()"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                     <div id="kuang">
-                    <table class="table table-striped table-bordered" id="dataTables"
-                           style="white-space: nowrap;width: 100%;">
-                        <thead>
-                        <tr style="border: 2px solid ;">
-                            <th style="border: 1px solid ;">多选</th>
-                            <th style="border: 1px solid ;">操作</th>
-                            <th style="border: 1px solid ;">姓名</th>
-                            <th style="border: 1px solid ;">医疗账号</th>
-                            <th style="border: 1px solid ;">户主</th>
-                            <th style="border: 1px solid ;">今年已报销额</th>
-                            <th style="border: 1px solid ;">最近报销</th>
-                            <th style="border: 1px solid ;">操作结果</th>
-                        </tr>
-                        </thead>
+                        <table class="table table-striped table-bordered" id="dataTables"
+                               style="white-space: nowrap;width: 100%;">
+                            <thead>
+                            <tr style="border: 2px solid ;">
+                                <th style="border: 1px solid ;">多选</th>
+                                <th style="border: 1px solid ;">操作</th>
+                                <th style="border: 1px solid ;">姓名</th>
+                                <th style="border: 1px solid ;">医疗账号</th>
+                                <th style="border: 1px solid ;">户主</th>
+                                <th style="border: 1px solid ;">今年已报销额</th>
+                                <th style="border: 1px solid ;">最近报销</th>
+                                <th style="border: 1px solid ;">操作结果</th>
+                            </tr>
+                            </thead>
 
-                        <tbody class="table_node">
-                        <tr class="tr_node">
-                            <!--动态载入数据-->
-                        </tr>
-                        <!-- more data -->
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td colspan="6">
-                                <input id="batchDealBtn" type="button" value="批量报销" onclick="batchDeal()"/>
-                            </td>
-                        </tr>
-                        </tfoot>
-                    </table>
+                            <tbody class="table_node">
+                            <tr class="tr_node">
+                                <!--动态载入数据-->
+                            </tr>
+                            <!-- more data -->
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="6">
+                                    <input id="batchDealBtn" type="button" value="批量报销" onclick="batchDeal()"/>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </fieldset>
             </div>

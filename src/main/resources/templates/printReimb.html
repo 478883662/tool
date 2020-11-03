@@ -74,11 +74,15 @@
                         rowTr.className = "tr_node";
                         rowTr.style = "border: 2px solid ;";
                         var child='';
+                        child = child + '<td  style="border: 1px solid ; "> <input  type="button" id="btn_' + chargeRuleLogs[index].bizId + '" value="打印" onclick="printOne(\'' + chargeRuleLogs[index].bizId + '\')"/></td>';
+
                         child = child + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].bizId + '</td>'
+                            + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].ylLocation + '</td>'
+                            + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].ylCard + '</td>'
                             + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].name + '</td>'
                             + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].illNessName + '</td>'
                             + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].money + '</td>'
-                            + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].reimbDate + '</td>';
+                            + '<td style="border: 1px solid ; ">' + new Date(chargeRuleLogs[index].createdDate).Format("yyyy-MM-dd")  + '</td>';
 
                         //将要展示的信息写入页面
                         rowTr.innerHTML = child
@@ -100,6 +104,12 @@
             });
         }
 
+        function printOne(bizId) {
+            $.get("/print/printOne?bizId="+bizId, function (data) {
+                alert(data);
+                window.location.reload();
+            });
+        }
     </script>
 </head>
 <body>
@@ -128,7 +138,10 @@
                            style="white-space: nowrap;width: 100%;">
                         <thead>
                         <tr style="border: 2px solid ;">
+                            <th style="border: 1px solid ;">操作</th>
                             <th style="border: 1px solid ;">业务id</th>
+                            <th style="border: 1px solid ;">报销机构</th>
+                            <th style="border: 1px solid ;">医疗账号</th>
                             <th style="border: 1px solid ;">姓名</th>
                             <th style="border: 1px solid ;">诊断名称</th>
                             <th style="border: 1px solid ;">报销金额</th>

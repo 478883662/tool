@@ -10,4 +10,4 @@ spring:
       classic_compatible: true
 
 print:
-  name: HP MFP M436 PCL6
+  name: Samsung SCX-3400 Series

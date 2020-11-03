@@ -15,9 +15,11 @@ public class ReimbUnPrintRecordBo {
 
     private String bizId;
     private String name;
-    private Date reimbDate;
+    private Date createdDate;
     private String illNessName;
     private BigDecimal money;
     private String familyLocation;
+    private String ylCard;
+    private String ylLocation;
 
 }

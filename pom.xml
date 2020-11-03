@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.zhangb</groupId>
 	<artifactId>tool</artifactId>
-	<version>V1.0.4</version>
+	<version>V1.0.5</version>
 	<name>tool</name>
 	<description>Demo project for Spring Boot</description>
 

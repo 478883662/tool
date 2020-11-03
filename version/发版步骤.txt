@@ -1,0 +1,6 @@
+1、删除原来的V1.0.4.jar包，替换上V1.0.5.jar
+2、将同层级文件夹下的print_template.ftl文件替换成新的
+3、修改start.bat里的命令为V1.0.5.jar
+4、点击桌面上有个启动数据库的命令文件会弹出一个dos命令框，然后在输入use doctorreimbursement go按回车，
+然后输入source   V1.0.5.sql文件的绝对路径执行sql。
+5、以上都做完就可以启动项目了。

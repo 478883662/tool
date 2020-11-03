@@ -1,5 +1,6 @@
 package com.zhangb.tool.doctorReimbursement.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
@@ -282,12 +283,31 @@ public class ReimbServiceImpl implements IReimbService {
 
     @Override
     public List<ReimbUnPrintRecordBo> getAllUnPrintInfo() throws SQLException {
-        List<ReimbUnPrintRecordBo> reimbPrintInfoList = Db.use().query("select t1.BIZ_ID,t1.`NAME`,t1.REIMB_DATE,t1.ILLNESS_NAME,t1.MONEY ,t3.family_location\n" +
-                        "from tool_deal_record_t t1,tool_reimb_print_t t2 , tool_patient_t t3 WHERE\n" +
-                        "t1.BIZ_ID = t2.biz_id and t1.SELF_NO = t3.SELF_NO and t2.print_state='1001' and t1.MONEY>0\n" +
+        List<ReimbUnPrintRecordBo> reimbPrintInfoList = Db.use().query("select t1.BIZ_ID," +
+                        "t1.`NAME`,t2.created_date,t1.ILLNESS_NAME,t1.MONEY ," +
+                        "t3.family_location,t1.yl_card,t1.yl_location\n" +
+                        "from tool_reimb_print_t t2 left join tool_deal_record_t t1 on (t1.BIZ_ID = t2.biz_id)" +
+                        "left join tool_patient_t t3 on (  t1.SELF_NO = t3.SELF_NO) WHERE\n" +
+                        "    t2.print_state='1001' and t1.MONEY>0\n" +
                         "ORDER BY t2.created_date  ",
                 ReimbUnPrintRecordBo.class);
         return reimbPrintInfoList;
+    }
+
+    @Override
+    public ReimbUnPrintRecordBo getUnPrintInfo(String bizId) throws SQLException {
+        List<ReimbUnPrintRecordBo> reimbPrintInfoList = Db.use().query("select t1.BIZ_ID," +
+                        "t1.`NAME`,t2.created_date,t1.ILLNESS_NAME,t1.MONEY ," +
+                        "t3.family_location,t1.yl_card,t1.yl_location\n" +
+                        "from tool_reimb_print_t t2 left join tool_deal_record_t t1 on (t1.BIZ_ID = t2.biz_id)" +
+                        "left join tool_patient_t t3 on (  t1.SELF_NO = t3.SELF_NO) WHERE\n" +
+                        "    t2.print_state='1001' and t1.MONEY>0 \n" +
+                        "and t1.biz_id = ? ",
+                ReimbUnPrintRecordBo.class,bizId);
+        if (CollectionUtil.isEmpty(reimbPrintInfoList)){
+            return null;
+        }
+        return reimbPrintInfoList.get(0);
     }
 
     /**
@@ -316,37 +336,62 @@ public class ReimbServiceImpl implements IReimbService {
         reimbPrintBo.setZhuYuanDay(cols[1]);
         //出院诊断
         reimbPrintBo.setIllnessName(StrUtil.sub(cols[12],0,12));
+
         reimbPrintBo.setChuangWeiYlFee(NumberUtil.round(cols[15],2).toString());
-        reimbPrintBo.setChuangWeiCanFee(NumberUtil.round(cols[24],2).toString());
         reimbPrintBo.setHuLiYlFee(NumberUtil.round(cols[16],2).toString());
-        reimbPrintBo.setHuLiCanFee(NumberUtil.round(cols[25],2).toString());
         reimbPrintBo.setXiYaoYlFee(NumberUtil.round(cols[17],2).toString());
-        reimbPrintBo.setXiYaoCanFee(NumberUtil.round(cols[26],2).toString());
         reimbPrintBo.setZhongYaoYlFee(NumberUtil.round(cols[18],2).toString());
-        reimbPrintBo.setZhongYaoCanFee(NumberUtil.round(cols[27],2).toString());
         reimbPrintBo.setHuaYanYlFee(NumberUtil.round(cols[19],2).toString());
-        reimbPrintBo.setHuaYanCanFee(NumberUtil.round(cols[28],2).toString());
         reimbPrintBo.setZhenLiaoYlFee(NumberUtil.round(cols[20],2).toString());
-        reimbPrintBo.setZhenLiaoCanFee(NumberUtil.round(cols[29],2).toString());
         reimbPrintBo.setShouShuYlFee(NumberUtil.round(cols[21],2).toString());
-        reimbPrintBo.setShouShuCanFee(NumberUtil.round(cols[30],2).toString());
         reimbPrintBo.setJianChaYlFee(NumberUtil.round(cols[22],2).toString());
-        reimbPrintBo.setJianChaCanFee(NumberUtil.round(cols[31],2).toString());
         reimbPrintBo.setOthterYlFee(NumberUtil.round(cols[23],2).toString());
+        //计算医疗总计费用
+        BigDecimal totalYlFee = BigDecimal.ZERO.add(NumberUtil.round(cols[15],2))
+                                                .add(NumberUtil.round(cols[16],2))
+                                                .add(NumberUtil.round(cols[17],2))
+                                                .add(NumberUtil.round(cols[18],2))
+                                                .add(NumberUtil.round(cols[19],2))
+                                                .add(NumberUtil.round(cols[20],2))
+                                                .add(NumberUtil.round(cols[21],2))
+                                                .add(NumberUtil.round(cols[22],2))
+                                                .add(NumberUtil.round(cols[23],2)) ;
+        reimbPrintBo.setTotalYlFee(totalYlFee.toString());
+
+
+        reimbPrintBo.setChuangWeiCanFee(NumberUtil.round(cols[24],2).toString());
+        reimbPrintBo.setHuLiCanFee(NumberUtil.round(cols[25],2).toString());
+        reimbPrintBo.setXiYaoCanFee(NumberUtil.round(cols[26],2).toString());
+        reimbPrintBo.setZhongYaoCanFee(NumberUtil.round(cols[27],2).toString());
+        reimbPrintBo.setHuaYanCanFee(NumberUtil.round(cols[28],2).toString());
+        reimbPrintBo.setZhenLiaoCanFee(NumberUtil.round(cols[29],2).toString());
+        reimbPrintBo.setShouShuCanFee(NumberUtil.round(cols[30],2).toString());
+        reimbPrintBo.setJianChaCanFee(NumberUtil.round(cols[31],2).toString());
         reimbPrintBo.setOtherCanFee(NumberUtil.round(cols[32],2).toString());
-        reimbPrintBo.setTotalYlFee(NumberUtil.round(cols[34],2).toString());
-        reimbPrintBo.setTotalCanFee(NumberUtil.round(cols[34],2).toString());
+
+        //计算可报销总计
+        BigDecimal totalCanFee = BigDecimal.ZERO.add(NumberUtil.round(cols[24],2))
+                .add(NumberUtil.round(cols[25],2))
+                .add(NumberUtil.round(cols[26],2))
+                .add(NumberUtil.round(cols[27],2))
+                .add(NumberUtil.round(cols[28],2))
+                .add(NumberUtil.round(cols[29],2))
+                .add(NumberUtil.round(cols[30],2))
+                .add(NumberUtil.round(cols[31],2))
+                .add(NumberUtil.round(cols[32],2)) ;
+        reimbPrintBo.setTotalCanFee(totalCanFee.toString());
         reimbPrintBo.setHeSuanLocation(cols[51]);
         reimbPrintBo.setHeSuanPerson(cols[33]);
         reimbPrintBo.setHeSuanMoney(NumberUtil.round(cols[40],2).toString());
         reimbPrintBo.setZengJianReimbMoney(NumberUtil.round(cols[47],2).toString());
         reimbPrintBo.setActualReimbMoney(NumberUtil.round(cols[40],2).toString());
         reimbPrintBo.setActualReimbMoneyCn(ChineseNumberUtil.getChineseNumber(cols[40]));
-        reimbPrintBo.setIsTopTotal(StrUtil.equals(cols[50],"0")?"未达":"已达");
+        reimbPrintBo.setIsTopTotal(cols[53]);
         reimbPrintBo.setHeSuanDate(DateUtil.formatDate(DateUtil.parseDate(cols[50])));
         reimbPrintBo.setReimbNo(cols[41]);
         reimbPrintBo.setJgLevel(cols[42]);
         reimbPrintBo.setYlJg(cols[14]);
+        reimbPrintBo.setHuAttr(cols[59]);
         return reimbPrintBo;
     }
 

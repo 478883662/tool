@@ -142,6 +142,18 @@ public class ReimbPrintBo {
     private String jgLevel;
     @ExportFeildAnnotation("ylJg")
     private String ylJg;
+    //户属性
+    @ExportFeildAnnotation("huAttr")
+    private String huAttr;
+
+
+    public String getHuAttr() {
+        return huAttr;
+    }
+
+    public void setHuAttr(String huAttr) {
+        this.huAttr = huAttr;
+    }
 
     public String getYlJg() {
         return ylJg;

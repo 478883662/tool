@@ -73,4 +73,11 @@ public interface IReimbService {
     void savePrintInfo(ReimbPrintInfo reimbPrintInfo) throws SQLException, IllegalAccessException;
 
     List<ReimbUnPrintRecordBo> getAllUnPrintInfo() throws SQLException;
+
+    /**
+     * 根据bizId获取打印对象
+     * @param bizId
+     * @return
+     */
+    ReimbUnPrintRecordBo getUnPrintInfo(String bizId) throws SQLException;
 }

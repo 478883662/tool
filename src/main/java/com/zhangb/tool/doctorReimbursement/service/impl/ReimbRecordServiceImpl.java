@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -54,8 +55,13 @@ public class ReimbRecordServiceImpl implements IReimbRecordService {
             syncService.insertSyncRecord(recordSyncInfo);
         }
         if (resultList.size()>1){
-            //取最后一个的bizid
-            return resultList.get(resultList.size()-1).getBizId();
+            //取最近报销的记录
+            return resultList.stream().max(new Comparator<ReimbDealRecord>() {
+                @Override
+                public int compare(ReimbDealRecord o1, ReimbDealRecord o2) {
+                    return o1.getReimbDate().compareTo(o2.getReimbDate());
+                }
+            }).map(ReimbDealRecord::getBizId).get();
         }else{
             return null;
         }

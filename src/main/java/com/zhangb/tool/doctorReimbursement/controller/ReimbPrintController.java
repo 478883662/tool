@@ -76,7 +76,7 @@ public class ReimbPrintController {
         //调用打印机打印word文档
         PrintUtil.printWord(filePath,printName);
         //删除临时文件
-        FileUtil.del(filePath);
+     //   FileUtil.del(filePath);
         //更新状态为已打印
         ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
         reimbPrintInfo.setBizId(reimbDealRecord.getBizId());

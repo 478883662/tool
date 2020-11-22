@@ -5,9 +5,11 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhangb.tool.common.util.ExportWordUtil;
 import com.zhangb.tool.common.util.PrintUtil;
+import com.zhangb.tool.common.util.WordImgUtil;
 import com.zhangb.tool.doctorReimbursement.bo.ReimbPrintBo;
 import com.zhangb.tool.doctorReimbursement.bo.ReimbUnPrintRecordBo;
 import com.zhangb.tool.doctorReimbursement.bo.ReimbUserBo;
+import com.zhangb.tool.doctorReimbursement.common.constants.ReimbConstants;
 import com.zhangb.tool.doctorReimbursement.entity.ReimbPrintInfo;
 import com.zhangb.tool.doctorReimbursement.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.util.List;
 
 @RestController
@@ -71,8 +74,19 @@ public class ReimbPrintController {
         ReimbPrintBo reimbPrintBo =reimbService.getPrintInfo(reimbDealRecord.getBizId());
         reimbPrintBo.setFamilyLocation(reimbDealRecord.getFamilyLocation());
         //套入模版生成临时word文档   文件名为报销日期+姓名+bizid
-        String filePath ="D:\\temp\\"+ DateUtil.formatDate(reimbDealRecord.getCreatedDate())+reimbDealRecord.getName()+reimbDealRecord.getBizId()+".doc";
+        String filePath ="D:"+File.separator+"temp"+File.separator+ DateUtil.formatDate(reimbDealRecord.getCreatedDate())+reimbDealRecord.getName()+reimbDealRecord.getBizId()+".doc";
         ExportWordUtil.exportWord(reimbPrintBo,filePath);
+        //将图片插入到word文档中
+        File targetFile =  FileUtil.getWebRoot();
+        String parent = targetFile.getParentFile().getAbsolutePath();
+        String chuFangImgFileName = parent+File.separator+"tool_config"+File.separator+"处方"+File.separator+reimbDealRecord.getIllNessName()+".jpg";
+        String ylCardImgFileName = parent+File.separator+"tool_config"+File.separator+"病人医疗账号"+File.separator+reimbDealRecord.getYlCard()+reimbDealRecord.getName()+".jpg";
+        if(FileUtil.exist(chuFangImgFileName)){
+            WordImgUtil.insertImgToWord(filePath,chuFangImgFileName, ReimbConstants.CHUFANG_IMG_IN_WORD_STR,520,260);
+        }
+        if(FileUtil.exist(ylCardImgFileName)){
+            WordImgUtil.insertImgToWord(filePath,ylCardImgFileName,ReimbConstants.YLCARD_IMG_IN_WORD_STR,520,170);
+        }
         //调用打印机打印word文档
         PrintUtil.printWord(filePath,printName);
         //删除临时文件

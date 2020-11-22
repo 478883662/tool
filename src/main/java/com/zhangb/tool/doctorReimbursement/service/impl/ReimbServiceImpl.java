@@ -289,7 +289,7 @@ public class ReimbServiceImpl implements IReimbService {
                         "from tool_reimb_print_t t2 left join tool_deal_record_t t1 on (t1.BIZ_ID = t2.biz_id)" +
                         "left join tool_patient_t t3 on (  t1.SELF_NO = t3.SELF_NO) WHERE\n" +
                         "    t2.print_state='1001' and t1.MONEY>0\n" +
-                        "ORDER BY t2.created_date  ",
+                        "ORDER BY t1.`NAME`,t2.created_date  ",
                 ReimbUnPrintRecordBo.class);
         return reimbPrintInfoList;
     }

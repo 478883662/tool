@@ -89,8 +89,7 @@ public class ReimbRecordServiceImpl implements IReimbRecordService {
     }
 
     @Override
-    public BigDecimal getYlReimbTotal(String ylLocationNo) throws SQLException {
-        int year = DateUtil.thisYear();
+    public BigDecimal getYlReimbTotal(String ylLocationNo,int year) throws SQLException {
         Number number = Db.use().queryNumber("select sum(MONEY) from tool_deal_record_t where YL_LOCATION_NO = ? and REIMB_YEAR = ? AND REIMB_TYPE='1101'",ylLocationNo,year);
         return number == null? BigDecimal.ZERO:new BigDecimal(number.doubleValue());
     }

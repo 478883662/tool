@@ -74,7 +74,7 @@
                         rowTr.className = "tr_node";
                         rowTr.style = "border: 2px solid ;";
                         var child='';
-                        child = child + '<td  style="border: 1px solid ; "> <input  type="button" id="btn_' + chargeRuleLogs[index].bizId + '" value="打印" onclick="printOne(\'' + chargeRuleLogs[index].bizId + '\')"/></td>';
+                        child = child + '<td  style="border: 1px solid ; ">'+(index+1)+'_<input  type="button" id="btn_' + chargeRuleLogs[index].bizId + '" value="打印" onclick="printOne(\'' + chargeRuleLogs[index].bizId + '\')"/></td>';
 
                         child = child + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].bizId + '</td>'
                             + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].ylLocation + '</td>'

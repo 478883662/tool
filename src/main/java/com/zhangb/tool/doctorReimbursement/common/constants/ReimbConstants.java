@@ -17,4 +17,5 @@ public interface ReimbConstants {
     /**图片在word文档中的位置标识码*/
     String CHUFANG_IMG_IN_WORD_STR="__";
     String YLCARD_IMG_IN_WORD_STR="_-";
+    String PIC_TYPE="png";
 }

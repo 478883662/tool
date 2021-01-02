@@ -67,7 +67,9 @@
                 contentType: "application/json;cherset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    $("#ylTotal").text("今年累计报销额：" + data.ylTotal);
+                    $("#ylTotal").html("2020年累计报销额：" + data.ylTotal_2020
+                    +"<br/>今年累计报销额：" + data.ylTotal_2021
+                    );
                 }
             });
 
@@ -93,11 +95,11 @@
 
                         if (today == chargeRuleLogs[index].reimbDate || chargeRuleLogs[index].remibTotal >= maxMoneyYear) {
                             child = child + '<td style="border: 1px solid ; "><input type="checkbox" name="box" disabled="disabled" id="box" value="'
-                                + chargeRuleLogs[index].ylCard + '_' + chargeRuleLogs[index].name + '"/> </td>';
+                                + chargeRuleLogs[index].ylCard + '_' + chargeRuleLogs[index].name + '"/>_'+(index+1)+' </td>';
                             child = child + '<td style="border: 1px solid ; "> <input type="button" disabled="disabled" id="btn_' + chargeRuleLogs[index].ylCard + chargeRuleLogs[index].name + '" value="不能报销" onclick="reimb(\'' + chargeRuleLogs[index].ylCard + '\',\'' + chargeRuleLogs[index].name + '\')"/></td>'
                         } else {
                             child = child + '<td  style="border: 1px solid ; "><input  type="checkbox" name="box" id="box" value="'
-                                + chargeRuleLogs[index].ylCard + '_' + chargeRuleLogs[index].name + '"/> </td>';
+                                + chargeRuleLogs[index].ylCard + '_' + chargeRuleLogs[index].name + '"/>_'+(index+1)+' </td>';
                             child = child + '<td  style="border: 1px solid ; "> <input  type="button" id="btn_' + chargeRuleLogs[index].ylCard + chargeRuleLogs[index].name + '" value="报销" onclick="reimb(\'' + chargeRuleLogs[index].ylCard + '\',\'' + chargeRuleLogs[index].name + '\')"/></td>'
                         }
 
@@ -112,6 +114,7 @@
 
                         child = child + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].reimbDate + '</td>'
                             + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].dealResult + '</td>'
+                            + '<td style="border: 1px solid ; "><input  type="button" id="btn_upLoad_' + chargeRuleLogs[index].ylCard + chargeRuleLogs[index].name + '" value="上传" onclick="upload(\'' + chargeRuleLogs[index].ylCard + '\',\'' + chargeRuleLogs[index].name + '\')"/></td>'
 
                         //将要展示的信息写入页面
                         rowTr.innerHTML = child
@@ -150,6 +153,12 @@
                 alert(data);
                 window.location.reload();
             });
+        }
+
+        function upload(ylCard, name) {
+            alert(ylCard+"---"+name);
+            //使遮罩层显示方法
+            window.open("http://localhost:8085/upload.html?ylCard="+ylCard+"&name="+encodeURIComponent(encodeURIComponent (name)));
         }
 
         function batchDeal() {
@@ -231,6 +240,7 @@
                                 <th style="border: 1px solid ;">今年已报销额</th>
                                 <th style="border: 1px solid ;">最近报销</th>
                                 <th style="border: 1px solid ;">操作结果</th>
+                                <th style="border: 1px solid ;">上传医疗账户图</th>
                             </tr>
                             </thead>
 

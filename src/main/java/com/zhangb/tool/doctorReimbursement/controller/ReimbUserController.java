@@ -14,8 +14,12 @@ import com.zhangb.tool.doctorReimbursement.entity.ReimbYlCard;
 import com.zhangb.tool.doctorReimbursement.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -57,8 +61,10 @@ public class ReimbUserController {
     @ResponseBody
     public Map<String,BigDecimal> getReimbTotal() throws Exception {
         Map<String,BigDecimal> resultMap = CollectionUtil.newHashMap();
-        BigDecimal ylTotal = recordService.getYlReimbTotal(RemoteConstants.YL_LOCATION_NO);
-        resultMap.put("ylTotal",ylTotal);
+        BigDecimal ylTotal_2020 = recordService.getYlReimbTotal(RemoteConstants.YL_LOCATION_NO,2020);
+        BigDecimal ylTotal_2021 = recordService.getYlReimbTotal(RemoteConstants.YL_LOCATION_NO,2021);
+        resultMap.put("ylTotal_2020",ylTotal_2020);
+        resultMap.put("ylTotal_2021",ylTotal_2021);
         return resultMap;
     }
 
@@ -117,6 +123,38 @@ public class ReimbUserController {
         return reimbOneUser(ylCard, name);
     }
 
+    /**
+     * 按最近一次报销记录给用户报销
+     * http://localhost:8085/reimbUser/upload.jsp?ylCard=4306210121011214&name=欧凤华
+     *
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/upload")
+    @ResponseBody
+    public String upload(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) throws Exception {
+        String fileName = request.getParameter("fileName");
+        if (file.isEmpty()) {
+            throw new Exception("上传文件为空");
+        }
+        String srcFileName = file.getOriginalFilename();
+        String fileType = srcFileName.substring(srcFileName.lastIndexOf(".")+1);
+        if (!StrUtil.equals(fileType,ReimbConstants.PIC_TYPE)){
+            throw new Exception("文件类型只能是png");
+        }
+        String filePath = "D://temp//ylCardPic//"; // 上传后的路径
+        File dest = new File(filePath + fileName+"."+ReimbConstants.PIC_TYPE);
+        if (!dest.getParentFile().exists()) {
+            dest.getParentFile().mkdirs();
+        }
+        try {
+            file.transferTo(dest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String filename = "/temp/" + fileName;
+        return filename;
+    }
     /**
      * 按最近一次报销记录给用户报销
      * http://localhost:8085/reimbUser/reimbursement?ylCard=4306210121011214&name=欧凤华

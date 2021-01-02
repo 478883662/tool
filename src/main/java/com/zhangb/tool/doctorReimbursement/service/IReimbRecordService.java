@@ -36,9 +36,10 @@ public interface IReimbRecordService {
     /**
      * 查询医疗机构今年已报销总额
      * @param ylLocationNo 医疗机构编码
+     * @param year 年份
      * @return
      */
-    BigDecimal getYlReimbTotal(String ylLocationNo) throws SQLException;
+    BigDecimal getYlReimbTotal(String ylLocationNo,int year) throws SQLException;
 
     /**
      * 获取用户今年来最近一次报销记录

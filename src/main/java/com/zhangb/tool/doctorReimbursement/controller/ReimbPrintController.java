@@ -61,7 +61,6 @@ public class ReimbPrintController {
     @ResponseBody
     public String printOne(@RequestParam(value = "bizId", required = true) String bizId) throws Exception {
         System.out.println("开始打印，打印机名："+printName);
-        //TODO 打印所有未打印的记录
         ReimbUnPrintRecordBo reimbDealRecord = reimbService.getUnPrintInfo(bizId);
         printOne(reimbDealRecord);
         return "打印完成";
@@ -78,9 +77,10 @@ public class ReimbPrintController {
         ExportWordUtil.exportWord(reimbPrintBo,filePath);
         //将图片插入到word文档中
         File targetFile =  FileUtil.getWebRoot();
-        String parent = targetFile.getParentFile().getAbsolutePath();
-        String chuFangImgFileName = parent+File.separator+"tool_config"+File.separator+"处方"+File.separator+reimbDealRecord.getIllNessName()+".jpg";
-        String ylCardImgFileName = parent+File.separator+"tool_config"+File.separator+"病人医疗账号"+File.separator+reimbDealRecord.getYlCard()+reimbDealRecord.getName()+".jpg";
+        //处方图
+        String chuFangImgFileName = "D:"+File.separator+"temp"+File.separator+"chufang"+File.separator+reimbDealRecord.getIllNessName()+"."+ReimbConstants.PIC_TYPE;
+        //医疗账户图
+        String ylCardImgFileName = "D:"+File.separator+"temp"+File.separator+"ylCardPic"+File.separator+reimbDealRecord.getYlCard()+reimbDealRecord.getName()+"."+ReimbConstants.PIC_TYPE;
         if(FileUtil.exist(chuFangImgFileName)){
             WordImgUtil.insertImgToWord(filePath,chuFangImgFileName, ReimbConstants.CHUFANG_IMG_IN_WORD_STR,520,260);
         }
@@ -92,9 +92,9 @@ public class ReimbPrintController {
         //删除临时文件
      //   FileUtil.del(filePath);
         //更新状态为已打印
-        ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
-        reimbPrintInfo.setBizId(reimbDealRecord.getBizId());
-        reimbPrintInfo.setPrintState("1002");
-        reimbService.savePrintInfo(reimbPrintInfo);
+//        ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
+//        reimbPrintInfo.setBizId(reimbDealRecord.getBizId());
+//        reimbPrintInfo.setPrintState("1002");
+//        reimbService.savePrintInfo(reimbPrintInfo);
     }
 }

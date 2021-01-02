@@ -8,6 +8,10 @@ spring:
   freemarker:
     settings:
       classic_compatible: true
-
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 print:
   name: Samsung SCX-3400 Series
+

@@ -41,7 +41,7 @@ public class ExportWordUtil {
             //获取模版文件夹的绝对路径
 
             File targetFile =  FileUtil.getWebRoot();
-            String parent = targetFile.getParentFile().getAbsolutePath()+"/tool_config/模板";
+            String parent = targetFile.getParentFile().getAbsolutePath()+"/";
             System.out.println(parent);
             //读取jar中文件的方式
             configuration.setDirectoryForTemplateLoading(FileUtil.newFile(parent));

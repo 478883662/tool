@@ -4,6 +4,8 @@ import com.zhangb.tool.common.annotation.DbFeildAnnotation;
 import com.zhangb.tool.common.annotation.DbTableAnnotation;
 import lombok.Data;
 
+import java.io.InputStream;
+
 /**
  * Created by z9104 on 2020/9/24.
  */

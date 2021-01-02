@@ -4,7 +4,7 @@ spring:
   thymeleaf:
     cache: false
   resources:
-    static-locations: classpath:/templates/,classpath:/static/
+    static-locations: classpath:/templates/,classpath:/static/,file:D:/temp/ylCardPic
   freemarker:
     settings:
       classic_compatible: true

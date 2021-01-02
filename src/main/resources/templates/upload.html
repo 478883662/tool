@@ -15,7 +15,6 @@
 <script>
     var ylCard = $.getUrlParam('ylCard');
     var name = $.getUrlParam('name');
-
     function upload() {
         if (!window.FormData) {
             $("#msg").html("你的浏览器不支持。");
@@ -41,7 +40,7 @@
         //构造FormData对象用于发送数据
         var formData = new FormData(form);
         var xhr = new XMLHttpRequest();
-        xhr.open("post", form.action+"?fileName="+ylCard+name, true);
+        xhr.open("post", form.action+"?ylCard="+ylCard+"&name="+name, true);
 
         //设置请求超时
         xhr.upload.timeout = 2000;
@@ -59,9 +58,8 @@
         //上传完成
         xhr.upload.addEventListener("load", function (event) {
             $(".progress-bar").removeClass("active");
-            $("#msg").html("上传完成！");
-            $(".alert").show();
-            $("#resultFile").src=ylCard+name;
+            alert("上传完成！");
+            window.close();
         }, false);
         xhr.upload.addEventListener("error", function (event) {
             $(".progress-bar").removeClass("active");

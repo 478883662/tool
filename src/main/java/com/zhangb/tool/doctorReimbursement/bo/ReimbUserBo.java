@@ -18,4 +18,5 @@ public class ReimbUserBo {
     private String reimbDate = "";
     private String dealResult = "";
     private double remibTotal = 0D;
+    private String filePath="";
 }

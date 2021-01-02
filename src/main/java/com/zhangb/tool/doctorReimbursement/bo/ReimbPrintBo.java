@@ -17,134 +17,134 @@ public class ReimbPrintBo {
 
     /**姓名 ${name}*/
     @ExportFeildAnnotation("name")
-    private String name;
+    private String name="";
     /**性别*/
     @ExportFeildAnnotation("sex")
-    private String sex;
+    private String sex="";
     /**年龄*/
     @ExportFeildAnnotation("age")
-    private String age;
+    private String age="";
     /**身份证号*/
     @ExportFeildAnnotation("idCard")
-    private String idCard;
+    private String idCard="";
     /**医疗账号*/
     @ExportFeildAnnotation("ylCard")
-    private String ylCard;
+    private String ylCard="";
     /**住院号*/
     @ExportFeildAnnotation("zhuYuanHao")
-    private String zhuYuanHao;
+    private String zhuYuanHao="";
     /**补偿类别*/
     @ExportFeildAnnotation("reimbType")
-    private String reimbType;
+    private String reimbType="";
     /**家庭地址*/
     @ExportFeildAnnotation("familyLocation")
     private String familyLocation="";
     /**入院日期*/
     @ExportFeildAnnotation("inDate")
-    private String inDate;
+    private String inDate="";
     /**出院日期*/
     @ExportFeildAnnotation("outDate")
-    private String outDate;
+    private String outDate="";
     /**住院天数*/
     @ExportFeildAnnotation("zhuYuanDay")
-    private String zhuYuanDay;
+    private String zhuYuanDay="";
     /**出院诊断*/
     @ExportFeildAnnotation("illnessName")
-    private String illnessName;
+    private String illnessName="";
     /**医疗费用--床位费*/
     @ExportFeildAnnotation("chuangWeiYlFee")
-    private String chuangWeiYlFee;
+    private String chuangWeiYlFee="";
     /**可报费用--床位费*/
     @ExportFeildAnnotation("chuangWeiCanFee")
-    private String chuangWeiCanFee;
+    private String chuangWeiCanFee="";
     /**医疗费用--护理费*/
     @ExportFeildAnnotation("huLiYlFee")
-    private String huLiYlFee;
+    private String huLiYlFee="";
     /**可报费用--护理费*/
     @ExportFeildAnnotation("huLiCanFee")
-    private String huLiCanFee;
+    private String huLiCanFee="";
     /**医疗费用--西药费*/
     @ExportFeildAnnotation("xiYaoYlFee")
-    private String xiYaoYlFee;
+    private String xiYaoYlFee="";
     /**可报费用--西药费*/
     @ExportFeildAnnotation("xiYaoCanFee")
-    private String xiYaoCanFee;
+    private String xiYaoCanFee="";
     /**医疗费用--中药费*/
     @ExportFeildAnnotation("zhongYaoYlFee")
-    private String zhongYaoYlFee;
+    private String zhongYaoYlFee="";
     /**可报费用--中药费*/
     @ExportFeildAnnotation("zhongYaoCanFee")
-    private String zhongYaoCanFee;
+    private String zhongYaoCanFee="";
     /**医疗费用--化验费*/
     @ExportFeildAnnotation("huaYanYlFee")
-    private String huaYanYlFee;
+    private String huaYanYlFee="";
     /**可报费用--化验费*/
     @ExportFeildAnnotation("huaYanCanFee")
-    private String huaYanCanFee;
+    private String huaYanCanFee="";
     /**医疗费用--诊疗费*/
     @ExportFeildAnnotation("zhenLiaoYlFee")
-    private String zhenLiaoYlFee;
+    private String zhenLiaoYlFee="";
     /**可报费用--诊疗费*/
     @ExportFeildAnnotation("zhenLiaoCanFee")
-    private String zhenLiaoCanFee;
+    private String zhenLiaoCanFee="";
     /**医疗费用--手术费*/
     @ExportFeildAnnotation("shouShuYlFee")
-    private String shouShuYlFee;
+    private String shouShuYlFee="";
     /**可报费用--手术费*/
     @ExportFeildAnnotation("shouShuCanFee")
-    private String shouShuCanFee;
+    private String shouShuCanFee="";
     /**医疗费用--检查费*/
     @ExportFeildAnnotation("jianChaYlFee")
-    private String jianChaYlFee;
+    private String jianChaYlFee="";
     /**可报费用--检查费*/
     @ExportFeildAnnotation("jianChaCanFee")
-    private String jianChaCanFee;
+    private String jianChaCanFee="";
     /**医疗费用--其他费*/
     @ExportFeildAnnotation("othterYlFee")
-    private String othterYlFee;
+    private String othterYlFee="";
     /**可报费用--其他费*/
     @ExportFeildAnnotation("otherCanFee")
-    private String otherCanFee;
+    private String otherCanFee="";
     /**医疗费用--总计*/
     @ExportFeildAnnotation("totalYlFee")
-    private String totalYlFee;
+    private String totalYlFee="";
     /**可报费用--总计*/
     @ExportFeildAnnotation("totalCanFee")
-    private String totalCanFee;
+    private String totalCanFee="";
 
     /**核算机构*/
     @ExportFeildAnnotation("heSuanLocation")
-    private String heSuanLocation;
+    private String heSuanLocation="";
     /**核算人*/
     @ExportFeildAnnotation("heSuanPerson")
-    private String heSuanPerson;
+    private String heSuanPerson="";
     /**核算补偿额*/
     @ExportFeildAnnotation("heSuanMoney")
-    private String heSuanMoney;
+    private String heSuanMoney="";
     /**增减补偿额*/
     @ExportFeildAnnotation("zengJianReimbMoney")
-    private String zengJianReimbMoney;
+    private String zengJianReimbMoney="";
     /**实际补偿额*/
     @ExportFeildAnnotation("actualReimbMoney")
-    private String actualReimbMoney;
+    private String actualReimbMoney="";
     /**实际补偿额（大写）*/
     @ExportFeildAnnotation("actualReimbMoneyCn")
-    private String actualReimbMoneyCn;
+    private String actualReimbMoneyCn="";
     /**累计是否达封顶线*/
     @ExportFeildAnnotation("isTopTotal")
-    private String isTopTotal;
+    private String isTopTotal="";
     /**核算时间*/
     @ExportFeildAnnotation("heSuanDate")
-    private String heSuanDate;
+    private String heSuanDate="";
     @ExportFeildAnnotation("reimbNo")
-    private String reimbNo;
+    private String reimbNo="";
     @ExportFeildAnnotation("jgLevel")
-    private String jgLevel;
+    private String jgLevel="";
     @ExportFeildAnnotation("ylJg")
-    private String ylJg;
+    private String ylJg="";
     //户属性
     @ExportFeildAnnotation("huAttr")
-    private String huAttr;
+    private String huAttr="";
 
 
     public String getHuAttr() {

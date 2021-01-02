@@ -60,7 +60,7 @@
         window.onload = function () {
             $.ajax({
                 type: 'GET',
-                url: "/print/getAllPrint?state=1001",
+                url: "/print/getAllPrint?state=1002",
                 contentType: "application/json;cherset=utf-8",
                 dataType: "json",
                 success: function (data) {
@@ -103,14 +103,14 @@
         function printAll() {
             $("#btn_printAll").attr("disabled", true);
             $("#btn_printAll").val("一键打印中，请稍等...");
-            $.get("/print/printAll?state=1001", function (data) {
+            $.get("/print/printAll?state=1002", function (data) {
                 alert(data);
                 window.location.reload();
             });
         }
 
         function printOne(bizId) {
-            $.get("/print/printOne?state=1001&bizId="+bizId, function (data) {
+            $.get("/print/printOne?state=1002&bizId="+bizId, function (data) {
                 alert(data);
                 window.location.reload();
             });

@@ -156,7 +156,6 @@ public class ReimbUserServiceImpl implements IReimbUserService {
                 ReimbUserBo.class,today,year);
     }
 
-
     private List<ReimbUserInfo> parseResult(String result){
         List<ReimbUserInfo> reimbUserInfoList = new ArrayList<>();
         //0@!@$0121011214 4306210121011214 欧凤华 1214 04 4 章婧 2 2020/5/25 0:00:00 430621202005250042 0 723053649 城关镇-&gt;荣站居委会-&gt;1组 1 1 93630709 2020 430621012101 0 0 0 0 0 0 20200525-20201231

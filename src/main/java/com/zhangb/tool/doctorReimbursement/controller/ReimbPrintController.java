@@ -36,20 +36,24 @@ public class ReimbPrintController {
 
     @RequestMapping("/getAllPrint")
     @ResponseBody
-    public List<ReimbUnPrintRecordBo> getAllPrint() throws Exception {
-        List<ReimbUnPrintRecordBo> reimbPrintInfoList = reimbService.getAllUnPrintInfo();
+    public List<ReimbUnPrintRecordBo> getAllPrint(@RequestParam(value = "state", required = false) String state) throws Exception {
+        List<ReimbUnPrintRecordBo> reimbPrintInfoList = reimbService.getAllUnPrintInfo(state);
+        reimbPrintInfoList.forEach(e->{
+            e.setFilePath(e.getYlCard()+e.getName()+"."+ReimbConstants.PIC_TYPE);
+        });
         return reimbPrintInfoList;
     }
 
     @RequestMapping("/printAll")
     @ResponseBody
-    public String printAll(@RequestParam(value = "name", required = false) String name) throws Exception {
+    public String printAll(@RequestParam(value = "name", required = false) String name,
+                           @RequestParam(value = "state", required = false) String state) throws Exception {
         if (StrUtil.isNotBlank(name)){
             printName = name;
         }
         System.out.println("开始打印，打印机名："+printName);
         //TODO 打印所有未打印的记录
-        List<ReimbUnPrintRecordBo> reimbPrintInfoList = reimbService.getAllUnPrintInfo();
+        List<ReimbUnPrintRecordBo> reimbPrintInfoList = reimbService.getAllUnPrintInfo(state);
         for (ReimbUnPrintRecordBo reimbDealRecord:reimbPrintInfoList){
             printOne(reimbDealRecord);
         }
@@ -59,9 +63,10 @@ public class ReimbPrintController {
 
     @RequestMapping("/printOne")
     @ResponseBody
-    public String printOne(@RequestParam(value = "bizId", required = true) String bizId) throws Exception {
+    public String printOne(@RequestParam(value = "bizId", required = true) String bizId,
+                           @RequestParam(value = "state", required = false) String state) throws Exception {
         System.out.println("开始打印，打印机名："+printName);
-        ReimbUnPrintRecordBo reimbDealRecord = reimbService.getUnPrintInfo(bizId);
+        ReimbUnPrintRecordBo reimbDealRecord = reimbService.getUnPrintInfo(bizId,state);
         printOne(reimbDealRecord);
         return "打印完成";
     }
@@ -70,7 +75,9 @@ public class ReimbPrintController {
         if (reimbDealRecord == null){
             return;
         }
-        ReimbPrintBo reimbPrintBo =reimbService.getPrintInfo(reimbDealRecord.getBizId());
+//        ReimbPrintBo reimbPrintBo =reimbService.getPrintInfo(reimbDealRecord.getBizId());
+        ReimbPrintBo reimbPrintBo =getReimbPrintBo();
+
         reimbPrintBo.setFamilyLocation(reimbDealRecord.getFamilyLocation());
         //套入模版生成临时word文档   文件名为报销日期+姓名+bizid
         String filePath ="D:"+File.separator+"temp"+File.separator+ DateUtil.formatDate(reimbDealRecord.getCreatedDate())+reimbDealRecord.getName()+reimbDealRecord.getBizId()+".doc";
@@ -88,7 +95,7 @@ public class ReimbPrintController {
             WordImgUtil.insertImgToWord(filePath,ylCardImgFileName,ReimbConstants.YLCARD_IMG_IN_WORD_STR,520,170);
         }
         //调用打印机打印word文档
-        PrintUtil.printWord(filePath,printName);
+//        PrintUtil.printWord(filePath,printName);
         //删除临时文件
      //   FileUtil.del(filePath);
         //更新状态为已打印
@@ -96,5 +103,14 @@ public class ReimbPrintController {
 //        reimbPrintInfo.setBizId(reimbDealRecord.getBizId());
 //        reimbPrintInfo.setPrintState("1002");
 //        reimbService.savePrintInfo(reimbPrintInfo);
+    }
+
+    private ReimbPrintBo getReimbPrintBo() {
+        ReimbPrintBo reimbPrintBo = new ReimbPrintBo();
+        reimbPrintBo.setAge("1");
+        reimbPrintBo.setReimbType("2");
+        reimbPrintBo.setChuangWeiYlFee("3");
+        reimbPrintBo.setFamilyLocation("4");
+        return reimbPrintBo;
     }
 }

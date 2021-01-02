@@ -114,7 +114,10 @@
 
                         child = child + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].reimbDate + '</td>'
                             + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].dealResult + '</td>'
-                            + '<td style="border: 1px solid ; "><input  type="button" id="btn_upLoad_' + chargeRuleLogs[index].ylCard + chargeRuleLogs[index].name + '" value="上传" onclick="upload(\'' + chargeRuleLogs[index].ylCard + '\',\'' + chargeRuleLogs[index].name + '\')"/></td>'
+                            + '<td style="border: 1px solid ; "><img onclick="showPic(this)" height="30" width="60" src="'+ chargeRuleLogs[index].filePath+'">'
+                                +'<input  type="button" id="btn_upLoad_' + chargeRuleLogs[index].ylCard + chargeRuleLogs[index].name
+                                + '" value="上传" onclick="upload(\'' + chargeRuleLogs[index].ylCard + '\',\''
+                                + chargeRuleLogs[index].name + '\')"/></td>'
 
                         //将要展示的信息写入页面
                         rowTr.innerHTML = child
@@ -135,6 +138,9 @@
             });
         }
 
+        function showPic(obj){
+            window.open(obj.src);
+        }
         //全量同步所有人的所有信息
         function syncAll() {
             $("#btn_syncAll").attr("disabled", true);

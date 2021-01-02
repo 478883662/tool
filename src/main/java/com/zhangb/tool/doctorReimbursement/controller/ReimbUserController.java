@@ -2,6 +2,7 @@ package com.zhangb.tool.doctorReimbursement.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhangb.tool.doctorReimbursement.bo.ReimbIllnessBo;
 import com.zhangb.tool.doctorReimbursement.bo.ReimbUserBo;
@@ -20,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -54,7 +57,11 @@ public class ReimbUserController {
     @RequestMapping("/getAllUser")
     @ResponseBody
     public List<ReimbUserBo> getAllUser() throws Exception {
-        return userService.getUserBoList();
+        List<ReimbUserBo> userList=userService.getUserBoList();
+        userList.forEach(e->{
+            e.setFilePath(e.getYlCard()+e.getName()+"."+ReimbConstants.PIC_TYPE);
+        });
+        return userList;
     }
 
     @RequestMapping("/getReimbTotal")
@@ -133,7 +140,9 @@ public class ReimbUserController {
     @RequestMapping("/upload")
     @ResponseBody
     public String upload(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) throws Exception {
-        String fileName = request.getParameter("fileName");
+        String ylCard = request.getParameter("ylCard");
+        String name = request.getParameter("name");
+        String fileName=ylCard+name;
         if (file.isEmpty()) {
             throw new Exception("上传文件为空");
         }
@@ -142,7 +151,7 @@ public class ReimbUserController {
         if (!StrUtil.equals(fileType,ReimbConstants.PIC_TYPE)){
             throw new Exception("文件类型只能是png");
         }
-        String filePath = "D://temp//ylCardPic//"; // 上传后的路径
+        String filePath = ReimbConstants.PIC_FILE_PATH; // 上传后的路径
         File dest = new File(filePath + fileName+"."+ReimbConstants.PIC_TYPE);
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
@@ -152,8 +161,7 @@ public class ReimbUserController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String filename = "/temp/" + fileName;
-        return filename;
+        return "上传成功";
     }
     /**
      * 按最近一次报销记录给用户报销

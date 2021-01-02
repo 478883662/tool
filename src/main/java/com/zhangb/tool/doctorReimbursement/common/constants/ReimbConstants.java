@@ -1,5 +1,6 @@
 package com.zhangb.tool.doctorReimbursement.common.constants;
 
+import java.io.File;
 import java.math.BigDecimal;
 
 /**
@@ -18,4 +19,5 @@ public interface ReimbConstants {
     String CHUFANG_IMG_IN_WORD_STR="__";
     String YLCARD_IMG_IN_WORD_STR="_-";
     String PIC_TYPE="png";
+    String PIC_FILE_PATH="D:"+ File.separator+"temp"+ File.separator+"ylCardPic"+ File.separator;
 }

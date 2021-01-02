@@ -21,5 +21,5 @@ public class ReimbUnPrintRecordBo {
     private String familyLocation;
     private String ylCard;
     private String ylLocation;
-
+    private String filePath;
 }

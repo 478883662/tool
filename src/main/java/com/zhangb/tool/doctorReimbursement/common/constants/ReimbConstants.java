@@ -21,4 +21,8 @@ public interface ReimbConstants {
     String PIC_TYPE_PNG ="png";
     String PIC_TYPE_JPG="jpg";
     String PIC_FILE_PATH="D:"+ File.separator+"temp"+ File.separator+"ylCardPic"+ File.separator;
+    String UN_PRINT_PATH="D:/temp/unprint/src/";
+    String UN_PRINT_CHUFANG_PATH="D:/temp/unprint/chufang/";
+    String UN_PRINT_YLINFO_PATH="D:/temp/unprint/ylinfo/";
+    String CHUFANG_PIC_PATH="D:/temp/chufang/";
 }

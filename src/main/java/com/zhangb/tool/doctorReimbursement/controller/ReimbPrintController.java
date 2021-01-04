@@ -164,7 +164,12 @@ public class ReimbPrintController {
         //列出文件夹下的所有文件
         List<String> fileList = FileUtil.listFileNames(filePath);
         for (String fileName : fileList){
-            printOneFile(filePath+ File.separator+fileName,printName);
+            try{
+                printOneFile(filePath+ File.separator+fileName,printName);
+            }catch (Exception e){
+
+            }
+
         }
         return null;
     }

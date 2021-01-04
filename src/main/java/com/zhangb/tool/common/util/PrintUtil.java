@@ -29,26 +29,34 @@ public class PrintUtil {
         try{
             Dispatch.callN(doc, "PrintOut");
             System.out.println("打印成功！");
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println("打印失败");
         }finally {
             try {
                 if (doc != null) {
                     Dispatch.call(doc, "Close", new Variant(0));//word文档关闭
                 }
             } catch (Exception e2) {
-                e2.printStackTrace();
             }
             try {
                 if (document != null) {
                     Dispatch.call(document, "Close", new Variant(0));//word文档关闭
                 }
             } catch (Exception e2) {
-                e2.printStackTrace();
             }
-            //退出
-            word.invoke("Quit", new Variant[0]);
+            //重试退出多次
+            for(int i=0;i<5;i++){
+                try{
+                    //退出
+                    word.invoke("Quit", new Variant[0]);
+                    break;
+                }catch(Exception e){
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+
             //释放资源
             ComThread.Release();
             ComThread.quitMainSTA();

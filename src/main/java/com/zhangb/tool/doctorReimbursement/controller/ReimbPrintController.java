@@ -8,10 +8,10 @@ import com.zhangb.tool.common.util.PrintUtil;
 import com.zhangb.tool.common.util.WordImgUtil;
 import com.zhangb.tool.doctorReimbursement.bo.ReimbPrintBo;
 import com.zhangb.tool.doctorReimbursement.bo.ReimbUnPrintRecordBo;
-import com.zhangb.tool.doctorReimbursement.bo.ReimbUserBo;
 import com.zhangb.tool.doctorReimbursement.common.constants.ReimbConstants;
 import com.zhangb.tool.doctorReimbursement.entity.ReimbPrintInfo;
 import com.zhangb.tool.doctorReimbursement.service.*;
+import com.zhangb.tool.doctorReimbursement.util.PrintBizUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +39,12 @@ public class ReimbPrintController {
     public List<ReimbUnPrintRecordBo> getAllPrint(@RequestParam(value = "state", required = false) String state) throws Exception {
         List<ReimbUnPrintRecordBo> reimbPrintInfoList = reimbService.getAllUnPrintInfo(state);
         reimbPrintInfoList.forEach(e->{
-            e.setFilePath(e.getYlCard()+e.getName()+"."+ReimbConstants.PIC_TYPE);
+            String fileName = PrintBizUtil.getYlCardName(e.getYlCard(),e.getName())+"."+ReimbConstants.PIC_TYPE_PNG;
+            if (FileUtil.exist(fileName)){
+                e.setFilePath(e.getYlCard()+e.getName()+"."+ReimbConstants.PIC_TYPE_PNG);
+            }else{
+                e.setFilePath(e.getYlCard()+e.getName()+"."+ReimbConstants.PIC_TYPE_JPG);
+            }
         });
         return reimbPrintInfoList;
     }
@@ -55,7 +60,12 @@ public class ReimbPrintController {
         //TODO 打印所有未打印的记录
         List<ReimbUnPrintRecordBo> reimbPrintInfoList = reimbService.getAllUnPrintInfo(state);
         for (ReimbUnPrintRecordBo reimbDealRecord:reimbPrintInfoList){
-            printOne(reimbDealRecord);
+            try{
+                printOne(reimbDealRecord);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
         }
         return "打印完成";
     }
@@ -75,8 +85,8 @@ public class ReimbPrintController {
         if (reimbDealRecord == null){
             return;
         }
-//        ReimbPrintBo reimbPrintBo =reimbService.getPrintInfo(reimbDealRecord.getBizId());
-        ReimbPrintBo reimbPrintBo =getReimbPrintBo();
+        ReimbPrintBo reimbPrintBo =reimbService.getPrintInfo(reimbDealRecord.getBizId());
+//        ReimbPrintBo reimbPrintBo =getReimbPrintBo();
 
         reimbPrintBo.setFamilyLocation(reimbDealRecord.getFamilyLocation());
         //套入模版生成临时word文档   文件名为报销日期+姓名+bizid
@@ -85,25 +95,30 @@ public class ReimbPrintController {
         //将图片插入到word文档中
         File targetFile =  FileUtil.getWebRoot();
         //处方图
-        String chuFangImgFileName = "D:"+File.separator+"temp"+File.separator+"chufang"+File.separator+reimbDealRecord.getIllNessName()+"."+ReimbConstants.PIC_TYPE;
+        String chuFangImgFileName = "D:"+File.separator+"temp"+File.separator+"chufang"+File.separator+reimbDealRecord.getIllNessName()+"."+ReimbConstants.PIC_TYPE_PNG;
         //医疗账户图
-        String ylCardImgFileName = "D:"+File.separator+"temp"+File.separator+"ylCardPic"+File.separator+reimbDealRecord.getYlCard()+reimbDealRecord.getName()+"."+ReimbConstants.PIC_TYPE;
+        String ylCardImgFileName = PrintBizUtil.getYlCardName(reimbDealRecord.getYlCard(),reimbDealRecord.getName())+"."+ReimbConstants.PIC_TYPE_PNG;
+        if (!FileUtil.exist(ylCardImgFileName)){
+            ylCardImgFileName = PrintBizUtil.getYlCardName(reimbDealRecord.getYlCard(),reimbDealRecord.getName())+"."+ReimbConstants.PIC_TYPE_JPG;
+        }
         if(FileUtil.exist(chuFangImgFileName)){
-            WordImgUtil.insertImgToWord(filePath,chuFangImgFileName, ReimbConstants.CHUFANG_IMG_IN_WORD_STR,520,260);
+            WordImgUtil.insertImgToWord(filePath,chuFangImgFileName, ReimbConstants.CHUFANG_IMG_IN_WORD_STR,480,260);
         }
         if(FileUtil.exist(ylCardImgFileName)){
-            WordImgUtil.insertImgToWord(filePath,ylCardImgFileName,ReimbConstants.YLCARD_IMG_IN_WORD_STR,520,170);
+            WordImgUtil.insertImgToWord(filePath,ylCardImgFileName,ReimbConstants.YLCARD_IMG_IN_WORD_STR,480,170);
         }
         //调用打印机打印word文档
 //        PrintUtil.printWord(filePath,printName);
         //删除临时文件
-     //   FileUtil.del(filePath);
+//        FileUtil.del(filePath);
         //更新状态为已打印
-//        ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
-//        reimbPrintInfo.setBizId(reimbDealRecord.getBizId());
-//        reimbPrintInfo.setPrintState("1002");
-//        reimbService.savePrintInfo(reimbPrintInfo);
+        ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
+        reimbPrintInfo.setBizId(reimbDealRecord.getBizId());
+        reimbPrintInfo.setPrintState("1002");
+        reimbService.savePrintInfo(reimbPrintInfo);
     }
+
+
 
     private ReimbPrintBo getReimbPrintBo() {
         ReimbPrintBo reimbPrintBo = new ReimbPrintBo();

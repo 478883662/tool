@@ -31,13 +31,18 @@ public class WordImgUtil {
     public static void insertImgToWord(String wordPath,String imgPath,
                                      String imgInWord,int imgWidth,int imgHeight) {
         System.out.println("要插入到word中图片的位置:"+imgPath);
-        WordImgUtil demo = new WordImgUtil(false);//获取工具类对象
-        demo.openDocument(wordPath);//打开word
-        // 在指定位置插入指定的图片
-        demo.replaceAllImage(imgInWord,imgPath,imgWidth,imgHeight);//imgInWord是指定的图片位置。后面的两个参数是指定图片的长和宽。
-        demo.saveAs(wordPath);//插入成功后生成的新word
-        demo.closeDocument();//关闭对象。
-        System.out.println("插入成功图片到word文档成功:"+wordPath);
+        WordImgUtil demo =null;
+        try{
+            demo = new WordImgUtil(false);//获取工具类对象
+            demo.openDocument(wordPath);//打开word
+            // 在指定位置插入指定的图片
+            demo.replaceAllImage(imgInWord,imgPath,imgWidth,imgHeight);//imgInWord是指定的图片位置。后面的两个参数是指定图片的长和宽。
+            demo.saveAs(wordPath);//插入成功后生成的新word
+            System.out.println("插入成功图片到word文档成功:"+wordPath);
+        }finally {
+            demo.closeDocument();//关闭对象。
+        }
+
     }
 
 

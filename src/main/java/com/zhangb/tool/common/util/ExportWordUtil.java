@@ -29,6 +29,9 @@ public class ExportWordUtil {
      * @param <T>
      */
     public static <T> void exportWord(T t, String filePath) {
+        OutputStream outputStream = null;
+        Writer writer = null;
+        Writer out = null;
         try {
             Map<String, Object> dataMap = new HashMap<>();
             Field[] fields = t.getClass().getDeclaredFields();
@@ -40,8 +43,8 @@ public class ExportWordUtil {
             configuration.setDefaultEncoding("utf-8");
             //获取模版文件夹的绝对路径
 
-            File targetFile =  FileUtil.getWebRoot();
-            String parent = targetFile.getParentFile().getAbsolutePath()+"/";
+            File targetFile = FileUtil.getWebRoot();
+            String parent = targetFile.getParentFile().getAbsolutePath() + "/";
             System.out.println(parent);
             //读取jar中文件的方式
             configuration.setDirectoryForTemplateLoading(FileUtil.newFile(parent));
@@ -52,11 +55,16 @@ public class ExportWordUtil {
             }
             //以utf-8的编码读取模版文件 ftl文件
             Template template = configuration.getTemplate("print_template.ftl", "utf-8");
-            Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), "utf-8"), 10240);
+             outputStream = new FileOutputStream(outFile);
+             writer = new OutputStreamWriter(outputStream, "utf-8");
+             out = new BufferedWriter(writer, 10240);
             template.process(dataMap, out);
-            out.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            StreamCloseUtil.closeWriter(out);
+            StreamCloseUtil.closeWriter(writer);
+            StreamCloseUtil.closeOutputStream(outputStream);
         }
 
     }

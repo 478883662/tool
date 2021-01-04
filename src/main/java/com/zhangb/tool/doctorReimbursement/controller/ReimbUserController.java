@@ -13,16 +13,14 @@ import com.zhangb.tool.doctorReimbursement.entity.ReimbPrintInfo;
 import com.zhangb.tool.doctorReimbursement.entity.ReimbUserInfo;
 import com.zhangb.tool.doctorReimbursement.entity.ReimbYlCard;
 import com.zhangb.tool.doctorReimbursement.service.*;
+import com.zhangb.tool.doctorReimbursement.util.PrintBizUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -59,7 +57,13 @@ public class ReimbUserController {
     public List<ReimbUserBo> getAllUser() throws Exception {
         List<ReimbUserBo> userList=userService.getUserBoList();
         userList.forEach(e->{
-            e.setFilePath(e.getYlCard()+e.getName()+"."+ReimbConstants.PIC_TYPE);
+            String fileName = PrintBizUtil.getYlCardName(e.getYlCard(),e.getName())+"."+ReimbConstants.PIC_TYPE_PNG;
+            if (FileUtil.exist(fileName)){
+                e.setFilePath(e.getYlCard()+e.getName()+"."+ReimbConstants.PIC_TYPE_PNG);
+            }else{
+                e.setFilePath(e.getYlCard()+e.getName()+"."+ReimbConstants.PIC_TYPE_JPG);
+            }
+
         });
         return userList;
     }
@@ -148,11 +152,12 @@ public class ReimbUserController {
         }
         String srcFileName = file.getOriginalFilename();
         String fileType = srcFileName.substring(srcFileName.lastIndexOf(".")+1);
-        if (!StrUtil.equals(fileType,ReimbConstants.PIC_TYPE)){
-            throw new Exception("文件类型只能是png");
+        if (!StrUtil.equals(fileType,ReimbConstants.PIC_TYPE_PNG)
+                && !StrUtil.equals(fileType,ReimbConstants.PIC_TYPE_JPG)){
+            throw new Exception("文件类型只能是png、jpg");
         }
         String filePath = ReimbConstants.PIC_FILE_PATH; // 上传后的路径
-        File dest = new File(filePath + fileName+"."+ReimbConstants.PIC_TYPE);
+        File dest = new File(filePath + fileName+"."+fileType);
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }

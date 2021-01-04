@@ -108,20 +108,22 @@ public class ReimbPrintController {
         //插入处方图后的新文件名
         String newFileName=docFileName+"_1.doc";
         if(FileUtil.exist(chuFangImgFileName)){
-            WordImgUtil.insertImgToWord(srcFilePath,chuFangImgFileName, ReimbConstants.CHUFANG_IMG_IN_WORD_STR,480,260,ReimbConstants.UN_PRINT_CHUFANG_PATH+newFileName);
+            PrintUtil.replaceImg(srcFilePath,chuFangImgFileName, ReimbConstants.CHUFANG_IMG_IN_WORD_STR,480,260,ReimbConstants.UN_PRINT_CHUFANG_PATH+newFileName);
+            FileUtil.del(srcFilePath);
             //源文件变成有处方图的文件
             srcFilePath = ReimbConstants.UN_PRINT_CHUFANG_PATH+newFileName;
         }
         if(FileUtil.exist(ylCardImgFileName)){
             newFileName = docFileName+"_2.doc";
-            WordImgUtil.insertImgToWord(srcFilePath,ylCardImgFileName,ReimbConstants.YLCARD_IMG_IN_WORD_STR,480,170,ReimbConstants.UN_PRINT_YLINFO_PATH+newFileName);
+            PrintUtil.replaceImg(srcFilePath,ylCardImgFileName,ReimbConstants.YLCARD_IMG_IN_WORD_STR,480,170,ReimbConstants.UN_PRINT_YLINFO_PATH+newFileName);
+            FileUtil.del(srcFilePath);
             //源文件变成有医疗信息图的文件
             srcFilePath = ReimbConstants.UN_PRINT_YLINFO_PATH+newFileName;
         }
         //调用打印机打印word文档
 //        PrintUtil.printWord(srcFilePath,printName);
         //删除临时文件
-//        FileUtil.del(filePath);
+//        FileUtil.del(srcFilePath);
         //更新状态为已打印
         ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
         reimbPrintInfo.setBizId(reimbDealRecord.getBizId());

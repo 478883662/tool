@@ -2,6 +2,7 @@ package com.zhangb.tool.common.util;
 
 import java.io.File;
 import com.jacob.activeX.ActiveXComponent;
+import com.jacob.com.ComThread;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 /**
@@ -42,6 +43,9 @@ public class WordImgUtil {
             System.out.println("插入成功图片到word文档成功:"+wordPath);
         }finally {
             demo.closeDocument();//关闭对象。
+            //释放资源
+            ComThread.Release();
+            ComThread.quitMainSTA();
         }
     }
 

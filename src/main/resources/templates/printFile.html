@@ -57,10 +57,20 @@
     </style>
 
     <script>
+
         window.onload = function () {
+            var filePath = "ylinfo";
+            search(filePath);
+        }
+        function changeFile(){
+            var vs = $('#filePath').val();
+            search(vs);
+        }
+
+        function search (filePath) {
             $.ajax({
                 type: 'GET',
-                url: "/print/getAllPrint?state=1001",
+                url: "/print/getAllWord?filePath="+filePath,
                 contentType: "application/json;cherset=utf-8",
                 dataType: "json",
                 success: function (data) {
@@ -74,16 +84,8 @@
                         rowTr.className = "tr_node";
                         rowTr.style = "border: 2px solid ;";
                         var child='';
-                        child = child + '<td  style="border: 1px solid ; ">'+(index+1)+'_<input  type="button" id="btn_' + chargeRuleLogs[index].bizId + '" value="生成word文档" onclick="printOne(\'' + chargeRuleLogs[index].bizId + '\')"/></td>';
-
-                        child = child + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].bizId + '</td>'
-                            + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].ylLocation + '</td>'
-                            + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].ylCard + '</td>'
-                            + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].name + '</td>'
-                            + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].illNessName + '</td>'
-                            + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index].money + '</td>'
-                            + '<td style="border: 1px solid ; ">' + new Date(chargeRuleLogs[index].createdDate).Format("yyyy-MM-dd")  + '</td>'
-                            + '<td style="border: 1px solid ; "><img onclick="showPic(this)" height="30" width="60" src="'+chargeRuleLogs[index].filePath +'"></td>'
+                        child = child + '<td  style="border: 1px solid ; ">'+(index+1)+'_<input  type="button" value="打印" onclick="printOne(\'' + chargeRuleLogs[index] + '\')"/></td>';
+                        child = child + '<td style="border: 1px solid ; ">' + chargeRuleLogs[index] + '</td>'
                         ;
 
                         //将要展示的信息写入页面
@@ -102,15 +104,17 @@
         //全量同步所有人的所有信息
         function printAll() {
             $("#btn_printAll").attr("disabled", true);
-            $("#btn_printAll").val("一键生成word文档中，请稍等...");
-            $.get("/print/printAll?state=1001", function (data) {
+            $("#btn_printAll").val("一键打印中，请稍等...");
+            //待打印文件夹路径
+            var filePath = $("#filePath").val();
+            $.get("/print/printAllFile?filePath="+filePath, function (data) {
                 alert(data);
                 window.location.reload();
             });
         }
 
-        function printOne(bizId) {
-            $.get("/print/printOne?state=1001&bizId="+bizId, function (data) {
+        function printOne(filePath) {
+            $.get("/print/printOneFile?filePath="+filePath, function (data) {
                 alert(data);
                 window.location.reload();
             });
@@ -131,8 +135,14 @@
                     <div>
                         <table style="width: 100%;">
                             <tr>
+                                <td><label>待打印文件夹路径：</label>
+                                    <select id="filePath" onchange="changeFile()">
+                                        <option value="ylinfo">包含处方和医疗账户的文件</option>
+                                        <option value="chufang">包含处方图的文件</option>
+                                        <option value="src">原始文件</option>
+                                    </select>
                                 <td>
-                                    <input type="button" value="一键生成word文档" id="btn_printAll" onclick="printAll()"/>
+                                    <input type="button" value="打印所有word文档" id="btn_printAll" onclick="printAll()"/>
                                 </td>
                             </tr>
                         </table>
@@ -144,14 +154,7 @@
                         <thead>
                         <tr style="border: 2px solid ;">
                             <th style="border: 1px solid ;">操作</th>
-                            <th style="border: 1px solid ;">业务id</th>
-                            <th style="border: 1px solid ;">报销机构</th>
-                            <th style="border: 1px solid ;">医疗账号</th>
-                            <th style="border: 1px solid ;">姓名</th>
-                            <th style="border: 1px solid ;">诊断名称</th>
-                            <th style="border: 1px solid ;">报销金额</th>
-                            <th style="border: 1px solid ;">报销时间</th>
-                            <th style="border: 1px solid ;">医疗账户图</th>
+                            <th style="border: 1px solid ;">文件路径</th>
                         </tr>
                         </thead>
 

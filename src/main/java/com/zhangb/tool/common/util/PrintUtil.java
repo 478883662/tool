@@ -40,6 +40,13 @@ public class PrintUtil {
             } catch (Exception e2) {
                 e2.printStackTrace();
             }
+            try {
+                if (document != null) {
+                    Dispatch.call(document, "Close", new Variant(0));//word文档关闭
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
             //退出
             word.invoke("Quit", new Variant[0]);
             //释放资源
@@ -73,8 +80,6 @@ public class PrintUtil {
                 Dispatch.call(selection, "HomeKey", new Variant(6));
             }
             Dispatch.call(doc, "SaveAs", newFilePath);
-        }catch (Exception e){
-            e.printStackTrace();
         }finally {
             try {
                 if (doc != null) {

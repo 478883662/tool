@@ -5,7 +5,6 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhangb.tool.common.util.ExportWordUtil;
 import com.zhangb.tool.common.util.PrintUtil;
-import com.zhangb.tool.common.util.WordImgUtil;
 import com.zhangb.tool.doctorReimbursement.bo.ReimbPrintBo;
 import com.zhangb.tool.doctorReimbursement.bo.ReimbUnPrintRecordBo;
 import com.zhangb.tool.doctorReimbursement.common.constants.ReimbConstants;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/print")
@@ -56,7 +56,6 @@ public class ReimbPrintController {
         if (StrUtil.isNotBlank(name)){
             printName = name;
         }
-        System.out.println("开始打印，打印机名："+printName);
         //TODO 打印所有未打印的记录
         List<ReimbUnPrintRecordBo> reimbPrintInfoList = reimbService.getAllUnPrintInfo(state);
         for (ReimbUnPrintRecordBo reimbDealRecord:reimbPrintInfoList){
@@ -67,7 +66,7 @@ public class ReimbPrintController {
             }
 
         }
-        return "打印完成";
+        return "生成word文档完成";
     }
 
 
@@ -78,7 +77,7 @@ public class ReimbPrintController {
         System.out.println("开始打印，打印机名："+printName);
         ReimbUnPrintRecordBo reimbDealRecord = reimbService.getUnPrintInfo(bizId,state);
         printOne(reimbDealRecord);
-        return "打印完成";
+        return "生成word文档完成";
     }
 
     private void printOne(ReimbUnPrintRecordBo reimbDealRecord) throws Exception {
@@ -92,7 +91,7 @@ public class ReimbPrintController {
         //套入模版生成临时word文档   文件名为报销日期+姓名+bizid
         String docFileName = DateUtil.formatDate(reimbDealRecord.getCreatedDate())+reimbDealRecord.getName()+reimbDealRecord.getBizId();
         //原始word文档文件路径
-        String srcFilePath =ReimbConstants.UN_PRINT_PATH+ docFileName +".doc";
+        String srcFilePath =ReimbConstants.UN_PRINT_SRC_PATH + docFileName +".doc";
         //生成原始word文档
         ExportWordUtil.exportWord(reimbPrintBo,srcFilePath);
 
@@ -118,12 +117,7 @@ public class ReimbPrintController {
             PrintUtil.replaceImg(srcFilePath,ylCardImgFileName,ReimbConstants.YLCARD_IMG_IN_WORD_STR,480,170,ReimbConstants.UN_PRINT_YLINFO_PATH+newFileName);
             FileUtil.del(srcFilePath);
             //源文件变成有医疗信息图的文件
-            srcFilePath = ReimbConstants.UN_PRINT_YLINFO_PATH+newFileName;
         }
-        //调用打印机打印word文档
-//        PrintUtil.printWord(srcFilePath,printName);
-        //删除临时文件
-//        FileUtil.del(srcFilePath);
         //更新状态为已打印
         ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
         reimbPrintInfo.setBizId(reimbDealRecord.getBizId());
@@ -132,13 +126,59 @@ public class ReimbPrintController {
     }
 
 
-
-    private ReimbPrintBo getReimbPrintBo() {
-        ReimbPrintBo reimbPrintBo = new ReimbPrintBo();
-        reimbPrintBo.setAge("1");
-        reimbPrintBo.setReimbType("2");
-        reimbPrintBo.setChuangWeiYlFee("3");
-        reimbPrintBo.setFamilyLocation("4");
-        return reimbPrintBo;
+    @RequestMapping("/getAllWord")
+    @ResponseBody
+    public List<String> getAllWord(@RequestParam(value = "filePath", required = true) String filePath) throws Exception {
+        String fFilePath = ReimbConstants.UN_PRINT_PATH+filePath;
+        List<String> fileList = FileUtil.listFileNames(fFilePath);
+        fileList = fileList.stream().map(e->{
+           return fFilePath+"/"+e;
+        }).collect(Collectors.toList());
+        //列出文件夹下的所有文件
+        return fileList;
     }
+
+    /**
+     * 打印单个文件
+     * @param filePath
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/printOneFile")
+    @ResponseBody
+    public String printOneFile(@RequestParam(value = "filePath", required = true) String filePath) throws Exception {
+        printOneFile(filePath,printName);
+        return "打印成功";
+    }
+
+    /**
+     * 打印所有文件
+     * @param filePath
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/printAllFile")
+    @ResponseBody
+    public String printAllFile(@RequestParam(value = "filePath", required = true) String filePath) throws Exception {
+        filePath = ReimbConstants.UN_PRINT_PATH+filePath;
+        //列出文件夹下的所有文件
+        List<String> fileList = FileUtil.listFileNames(filePath);
+        for (String fileName : fileList){
+            printOneFile(filePath+ File.separator+fileName,printName);
+        }
+        return null;
+    }
+
+    /**
+     * 打印单个文件
+     * @param srcFilePath
+     * @param printName
+     */
+    private void printOneFile(String srcFilePath,String printName){
+//        调用打印机打印word文档
+        PrintUtil.printWord(srcFilePath,printName);
+//        删除临时文件
+        FileUtil.del(srcFilePath);
+    }
+
 }

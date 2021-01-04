@@ -28,7 +28,7 @@ public class ExportWordUtil {
      * @param filePath
      * @param <T>
      */
-    public static <T> void exportWord(T t, String filePath) {
+    public static <T> void exportWord(T t, String filePath) throws Exception {
         OutputStream outputStream = null;
         Writer writer = null;
         Writer out = null;
@@ -59,8 +59,6 @@ public class ExportWordUtil {
              writer = new OutputStreamWriter(outputStream, "utf-8");
              out = new BufferedWriter(writer, 10240);
             template.process(dataMap, out);
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             StreamCloseUtil.closeWriter(out);
             StreamCloseUtil.closeWriter(writer);

@@ -127,6 +127,7 @@ public class PrintUtil {
 
         if (doc != null) {
             try {
+                ThreadSleepUtil.sleep(1);
                 Dispatch.call(doc, "Close", new Variant(0));
                 doc = null;
             } catch (Exception e) {
@@ -137,6 +138,7 @@ public class PrintUtil {
 
         if (word != null) {
             try {
+                ThreadSleepUtil.sleep(1);
                 //退出
                 word.invoke("Quit", new Variant[0]);
                 word = null;
@@ -145,8 +147,10 @@ public class PrintUtil {
             }
 
         }
+        ThreadSleepUtil.sleep(1);
         //释放资源
         ComThread.Release();
         ComThread.quitMainSTA();
+        ThreadSleepUtil.sleep(1);
     }
 }

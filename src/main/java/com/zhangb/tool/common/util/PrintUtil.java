@@ -26,7 +26,7 @@ public class PrintUtil {
             //设置打印机名称
             word.setProperty("ActivePrinter", new Variant(printerName));
             // 这里Visible是控制文档打开后是可见还是不可见，若是静默打印，那么第三个参数就设为false就好了
-            Dispatch.put(word, "Visible", new Variant(false));
+            Dispatch.put(word, "Visible", new Variant(true));
             // 获取文档属性
             Dispatch document = word.getProperty("Documents").toDispatch();
             // 打开激活文挡

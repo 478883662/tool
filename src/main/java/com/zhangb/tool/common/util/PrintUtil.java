@@ -12,7 +12,8 @@ public class PrintUtil {
 
     /**
      * 打印word文档
-     *Visual Studio中Add reference中
+     * Visual Studio中Add reference中
+     *
      * @param filePath    文件路径
      * @param printerName 打印机名称
      */
@@ -30,7 +31,9 @@ public class PrintUtil {
             Dispatch document = word.getProperty("Documents").toDispatch();
             // 打开激活文挡
             doc = Dispatch.call(document, "Open", filePath).toDispatch();
-            Dispatch.callN(doc, "PrintOut");
+
+            //开始打印
+            Dispatch.callN(doc, "PrintOut",new Object[]{Variant.VT_FALSE,Variant.VT_FALSE,Variant.VariantEmpty});
             System.out.println("打印成功！");
         } finally {
             closeStream(word, doc);
@@ -40,10 +43,11 @@ public class PrintUtil {
 
     /**
      * 替换word文档中的图片
-     * @param wordPath word文档位置
-     * @param imgPath 图片路径
+     *
+     * @param wordPath  word文档位置
+     * @param imgPath   图片路径
      * @param imgInWord 要替换的关键字
-     * @param imgWidth 图片路径
+     * @param imgWidth  图片路径
      * @param imgHeight 要替换的关键字
      */
     public static void replaceImg(String wordPath, String imgPath,
@@ -75,6 +79,7 @@ public class PrintUtil {
 
     /**
      * 查询word文本内容
+     *
      * @param findText
      * @param selection
      * @return
@@ -102,16 +107,21 @@ public class PrintUtil {
 
     /**
      * 关闭流
+     *
      * @param word
      * @param doc
      */
     private static void closeStream(ActiveXComponent word, Dispatch doc) {
-        Dispatch.call(doc, "Save");
-        Dispatch.call(doc, "Close", new Variant(true));
-        doc = null;
-        //退出
-        word.invoke("Quit", new Variant[0]);
-        word = null;
+        if (doc != null){
+            Dispatch.call(doc, "Save");
+            Dispatch.call(doc, "Close", new Variant(true));
+            doc = null;
+        }
+        if (word != null){
+            //退出
+            word.invoke("Quit", new Variant[0]);
+            word = null;
+        }
         //释放资源
         ComThread.Release();
         ComThread.quitMainSTA();

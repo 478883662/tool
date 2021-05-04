@@ -51,7 +51,8 @@ public class PrintUtil {
      * @param imgHeight 要替换的关键字
      */
     public static void replaceImg(String wordPath, String imgPath,
-                                  String imgInWord, int imgWidth, int imgHeight) {
+                                  String imgInWord, int imgWidth,
+                                  int imgHeight,String newFilePath) {
 //        初始化线程
         ComThread.InitSTA();
         ActiveXComponent word = new ActiveXComponent("Word.Application");
@@ -72,6 +73,7 @@ public class PrintUtil {
                 Dispatch.put(picture, "Height", new Variant(imgHeight));
                 Dispatch.call(selection, "HomeKey", new Variant(6));
             }
+            Dispatch.call(doc, "SaveAs", newFilePath);
         } finally {
             closeStream(word, doc);
         }

@@ -72,20 +72,11 @@ public class ReimbPrintController {
 
     @RequestMapping("/printOne")
     @ResponseBody
-    public String printOne(@RequestParam(value = "bizId", required = true) String bizId,
-                           @RequestParam(value = "state", required = false) String state) throws Exception {
-        System.out.println("开始打印，打印机名："+printName);
-        ReimbUnPrintRecordBo reimbDealRecord = reimbService.getUnPrintInfo(bizId,state);
-        printOne(reimbDealRecord);
-        return "生成word文档完成";
-    }
-
     private void printOne(ReimbUnPrintRecordBo reimbDealRecord) throws Exception {
         if (reimbDealRecord == null){
             return;
         }
         ReimbPrintBo reimbPrintBo =reimbService.getPrintInfo(reimbDealRecord.getBizId());
-//        ReimbPrintBo reimbPrintBo =getReimbPrintBo();
 
         reimbPrintBo.setFamilyLocation(reimbDealRecord.getFamilyLocation());
         //套入模版生成临时word文档   文件名为报销日期+姓名+bizid
@@ -104,17 +95,25 @@ public class ReimbPrintController {
         //将图片插入到word文档中
         //处方图文件全路径
         String chuFangImgFileName = ReimbConstants.CHUFANG_PIC_PATH+reimbDealRecord.getIllNessName()+"."+ReimbConstants.PIC_TYPE_PNG;
+        //插入处方图后的新文件名
+        String newFileName=docFileName+"_1.doc";
         if(FileUtil.exist(chuFangImgFileName)){
-            PrintUtil.replaceImg(srcFilePath,chuFangImgFileName, ReimbConstants.CHUFANG_IMG_IN_WORD_STR,480,260);
+            PrintUtil.replaceImg(srcFilePath,chuFangImgFileName, ReimbConstants.CHUFANG_IMG_IN_WORD_STR,480,260,ReimbConstants.UN_PRINT_CHUFANG_PATH+newFileName);
+            FileUtil.del(srcFilePath);
+            //源文件变成有处方图的文件
+            srcFilePath = ReimbConstants.UN_PRINT_CHUFANG_PATH+newFileName;
         }
         if(FileUtil.exist(ylCardImgFileName)){
-            PrintUtil.replaceImg(srcFilePath,ylCardImgFileName,ReimbConstants.YLCARD_IMG_IN_WORD_STR,480,170);
+            newFileName = docFileName+"_2.doc";
+            PrintUtil.replaceImg(srcFilePath,ylCardImgFileName,ReimbConstants.YLCARD_IMG_IN_WORD_STR,480,170,ReimbConstants.UN_PRINT_YLINFO_PATH+newFileName);
+            FileUtil.del(srcFilePath);
+            //源文件变成有医疗信息图的文件
         }
         //更新状态为已打印
-//        ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
-//        reimbPrintInfo.setBizId(reimbDealRecord.getBizId());
-//        reimbPrintInfo.setPrintState("1002");
-//        reimbService.savePrintInfo(reimbPrintInfo);
+        ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
+        reimbPrintInfo.setBizId(reimbDealRecord.getBizId());
+        reimbPrintInfo.setPrintState("1002");
+        reimbService.savePrintInfo(reimbPrintInfo);
     }
 
 

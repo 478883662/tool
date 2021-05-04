@@ -22,21 +22,22 @@ public class PrintUtil {
         ComThread.InitSTA();
         ActiveXComponent word = new ActiveXComponent("Word.Application");
         Dispatch doc = null;
+        Dispatch document = null;
         try {
             //设置打印机名称
             word.setProperty("ActivePrinter", new Variant(printerName));
             // 这里Visible是控制文档打开后是可见还是不可见，若是静默打印，那么第三个参数就设为false就好了
             Dispatch.put(word, "Visible", new Variant(true));
             // 获取文档属性
-            Dispatch document = word.getProperty("Documents").toDispatch();
+            document = word.getProperty("Documents").toDispatch();
             // 打开激活文挡
             doc = Dispatch.call(document, "Open", filePath).toDispatch();
 
             //开始打印
-            Dispatch.callN(doc, "PrintOut",new Object[]{Variant.VT_FALSE,Variant.VT_FALSE,Variant.VariantEmpty});
+            Dispatch.callN(doc, "PrintOut", new Object[]{Variant.VT_FALSE, Variant.VT_FALSE, new Variant(0)});
             System.out.println("打印成功！");
         } finally {
-            closeStream(word, doc);
+            closeStream(word, doc, document);
         }
     }
 
@@ -52,7 +53,7 @@ public class PrintUtil {
      */
     public static void replaceImg(String wordPath, String imgPath,
                                   String imgInWord, int imgWidth,
-                                  int imgHeight,String newFilePath) {
+                                  int imgHeight, String newFilePath) {
 //        初始化线程
         ComThread.InitSTA();
         ActiveXComponent word = new ActiveXComponent("Word.Application");
@@ -75,7 +76,7 @@ public class PrintUtil {
             }
             Dispatch.call(doc, "SaveAs", newFilePath);
         } finally {
-            closeStream(word, doc);
+            closeStream(word, doc, document);
         }
     }
 
@@ -113,16 +114,36 @@ public class PrintUtil {
      * @param word
      * @param doc
      */
-    private static void closeStream(ActiveXComponent word, Dispatch doc) {
-        if (doc != null){
-            Dispatch.call(doc, "Save");
-            Dispatch.call(doc, "Close", new Variant(true));
-            doc = null;
+    private static void closeStream(ActiveXComponent word, Dispatch doc, Dispatch document) {
+        if (document != null) {
+            try {
+                Dispatch.call(document, "Close", new Variant(0));
+                document = null;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
-        if (word != null){
-            //退出
-            word.invoke("Quit", new Variant[0]);
-            word = null;
+
+//        if (doc != null) {
+//            try {
+//                Dispatch.call(doc, "Close", new Variant(0));
+//                doc = null;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+
+        if (word != null) {
+            try {
+                //退出
+                word.invoke("Quit", new Variant[0]);
+                word = null;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
         //释放资源
         ComThread.Release();

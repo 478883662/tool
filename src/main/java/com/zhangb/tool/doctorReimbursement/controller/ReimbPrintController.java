@@ -110,10 +110,10 @@ public class ReimbPrintController {
             //源文件变成有医疗信息图的文件
         }
         //更新状态为已打印
-//        ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
-//        reimbPrintInfo.setBizId(reimbDealRecord.getBizId());
-//        reimbPrintInfo.setPrintState("1002");
-//        reimbService.savePrintInfo(reimbPrintInfo);
+        ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
+        reimbPrintInfo.setBizId(reimbDealRecord.getBizId());
+        reimbPrintInfo.setPrintState("1002");
+        reimbService.savePrintInfo(reimbPrintInfo);
     }
 
 

@@ -27,7 +27,7 @@ public class PrintUtil {
             //设置打印机名称
             word.setProperty("ActivePrinter", new Variant(printerName));
             // 这里Visible是控制文档打开后是可见还是不可见，若是静默打印，那么第三个参数就设为false就好了
-            Dispatch.put(word, "Visible", new Variant(true));
+            Dispatch.put(word, "Visible", new Variant(false));
             // 获取文档属性
             document = word.getProperty("Documents").toDispatch();
             // 打开激活文挡
@@ -115,25 +115,25 @@ public class PrintUtil {
      * @param doc
      */
     private static void closeStream(ActiveXComponent word, Dispatch doc, Dispatch document) {
-        if (document != null) {
-            try {
-                Dispatch.call(document, "Close", new Variant(0));
-                document = null;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-
-//        if (doc != null) {
+//        if (document != null) {
 //            try {
-//                Dispatch.call(doc, "Close", new Variant(0));
-//                doc = null;
+//                Dispatch.call(document, "Close", new Variant(0));
+//                document = null;
 //            } catch (Exception e) {
 //                e.printStackTrace();
 //            }
 //
 //        }
+
+        if (doc != null) {
+            try {
+                Dispatch.call(doc, "Close", new Variant(0));
+                doc = null;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
 
         if (word != null) {
             try {

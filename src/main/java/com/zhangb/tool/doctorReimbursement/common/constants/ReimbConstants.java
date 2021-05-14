@@ -25,9 +25,5 @@ public interface ReimbConstants {
     String CHUFANG_PIC_PATH="D:/temp/chufang/";
     /**未打印文件夹路径*/
     String UN_PRINT_PATH = "D:/temp/unprint/";
-    String UN_PRINT_SRC_PATH =UN_PRINT_PATH+"src/";
-    String UN_PRINT_CHUFANG_PATH=UN_PRINT_PATH+"chufang/";
-    String UN_PRINT_YLINFO_PATH=UN_PRINT_PATH+"ylinfo/";
-
 
 }

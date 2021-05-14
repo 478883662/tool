@@ -82,7 +82,7 @@ public class ReimbPrintController {
         //套入模版生成临时word文档   文件名为报销日期+姓名+bizid
         String docFileName = DateUtil.formatDate(reimbDealRecord.getCreatedDate())+reimbDealRecord.getName()+reimbDealRecord.getBizId();
         //原始word文档文件路径
-        String srcFilePath =ReimbConstants.UN_PRINT_SRC_PATH + docFileName +".doc";
+        String srcFilePath =ReimbConstants.UN_PRINT_PATH + docFileName +".doc";
         //生成原始word文档
         ExportWordUtil.exportWord(reimbPrintBo,srcFilePath);
 
@@ -98,14 +98,14 @@ public class ReimbPrintController {
         //插入处方图后的新文件名
         String newFileName=docFileName+"_1.doc";
         if(FileUtil.exist(chuFangImgFileName)){
-            PrintUtil.replaceImg(srcFilePath,chuFangImgFileName, ReimbConstants.CHUFANG_IMG_IN_WORD_STR,480,260,ReimbConstants.UN_PRINT_CHUFANG_PATH+newFileName);
+            PrintUtil.replaceImg(srcFilePath,chuFangImgFileName, ReimbConstants.CHUFANG_IMG_IN_WORD_STR,480,260,ReimbConstants.UN_PRINT_PATH+newFileName);
             FileUtil.del(srcFilePath);
             //源文件变成有处方图的文件
-            srcFilePath = ReimbConstants.UN_PRINT_CHUFANG_PATH+newFileName;
+            srcFilePath = ReimbConstants.UN_PRINT_PATH+newFileName;
         }
         if(FileUtil.exist(ylCardImgFileName)){
             newFileName = docFileName+"_2.doc";
-            PrintUtil.replaceImg(srcFilePath,ylCardImgFileName,ReimbConstants.YLCARD_IMG_IN_WORD_STR,480,170,ReimbConstants.UN_PRINT_YLINFO_PATH+newFileName);
+            PrintUtil.replaceImg(srcFilePath,ylCardImgFileName,ReimbConstants.YLCARD_IMG_IN_WORD_STR,480,170,ReimbConstants.UN_PRINT_PATH+newFileName);
             FileUtil.del(srcFilePath);
             //源文件变成有医疗信息图的文件
         }
@@ -119,11 +119,11 @@ public class ReimbPrintController {
 
     @RequestMapping("/getAllWord")
     @ResponseBody
-    public List<String> getAllWord(@RequestParam(value = "filePath", required = true) String filePath) throws Exception {
-        String fFilePath = ReimbConstants.UN_PRINT_PATH+filePath;
+    public List<String> getAllWord() throws Exception {
+        String fFilePath = ReimbConstants.UN_PRINT_PATH;
         List<String> fileList = FileUtil.listFileNames(fFilePath);
         fileList = fileList.stream().map(e->{
-           return fFilePath+"/"+e;
+           return fFilePath+e;
         }).collect(Collectors.toList());
         //列出文件夹下的所有文件
         return fileList;
@@ -144,23 +144,20 @@ public class ReimbPrintController {
 
     /**
      * 打印所有文件
-     * @param filePath
      * @return
      * @throws Exception
      */
     @RequestMapping("/printAllFile")
     @ResponseBody
-    public String printAllFile(@RequestParam(value = "filePath", required = true) String filePath) throws Exception {
-        filePath = ReimbConstants.UN_PRINT_PATH+filePath;
+    public String printAllFile() throws Exception {
         //列出文件夹下的所有文件
-        List<String> fileList = FileUtil.listFileNames(filePath);
+        List<String> fileList = FileUtil.listFileNames(ReimbConstants.UN_PRINT_PATH);
         for (String fileName : fileList){
             try{
-                printOneFile(filePath+ File.separator+fileName,printName);
+                printOneFile(ReimbConstants.UN_PRINT_PATH+fileName,printName);
             }catch (Exception e){
 
             }
-
         }
         return null;
     }

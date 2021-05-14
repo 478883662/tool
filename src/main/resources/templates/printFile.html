@@ -59,18 +59,13 @@
     <script>
 
         window.onload = function () {
-            var filePath = "ylinfo";
-            search(filePath);
-        }
-        function changeFile(){
-            var vs = $('#filePath').val();
-            search(vs);
+            search();
         }
 
-        function search (filePath) {
+        function search () {
             $.ajax({
                 type: 'GET',
-                url: "/print/getAllWord?filePath="+filePath,
+                url: "/print/getAllWord",
                 contentType: "application/json;cherset=utf-8",
                 dataType: "json",
                 success: function (data) {
@@ -106,8 +101,7 @@
             $("#btn_printAll").attr("disabled", true);
             $("#btn_printAll").val("一键打印中，请稍等...");
             //待打印文件夹路径
-            var filePath = $("#filePath").val();
-            $.get("/print/printAllFile?filePath="+filePath, function (data) {
+            $.get("/print/printAllFile", function (data) {
                 alert(data);
                 window.location.reload();
             });
@@ -135,13 +129,6 @@
                     <div>
                         <table style="width: 100%;">
                             <tr>
-                                <td><label>待打印文件夹路径：</label>
-                                    <select id="filePath" onchange="changeFile()">
-                                        <option value="ylinfo">包含处方和医疗账户的文件</option>
-                                        <option value="chufang">包含处方图的文件</option>
-                                        <option value="src">原始文件</option>
-                                    </select>
-                                <td>
                                     <input type="button" value="打印所有word文档" id="btn_printAll" onclick="printAll()"/>
                                 </td>
                             </tr>

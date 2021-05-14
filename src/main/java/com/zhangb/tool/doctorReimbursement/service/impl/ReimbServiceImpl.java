@@ -194,6 +194,12 @@ public class ReimbServiceImpl implements IReimbService {
         if (reimbIllness == null) {
             throw new Exception(String.format("找不到病例：%s\r\n",  reimbIllnessBo.getIllnessName()));
         }
+        //获取今年第一天的日期
+        Date fristDayOfYear = DateUtil.beginOfYear(new Date());
+
+        if(DateUtil.compare(reimbIllnessBo.getOutDate(),fristDayOfYear)<0){
+            reimbIllnessBo.setOutDate(fristDayOfYear);
+        }
         //计算本次的入院时间、出院时间
         Date inDate = DateUtil.offsetDay(reimbIllnessBo.getOutDate(), NumberUtil.parseInt(reimbIllness.getRestDay()));
         Date outDate = DateUtil.offsetDay(inDate, NumberUtil.parseInt(reimbIllness.getHospitalDay()));

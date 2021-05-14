@@ -131,7 +131,7 @@ public class PrintUtil {
                 Dispatch.call(doc, "Close", new Variant(0));
                 doc = null;
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
 
         }
@@ -143,7 +143,7 @@ public class PrintUtil {
                 word.invoke("Quit", new Variant[0]);
                 word = null;
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
 
         }

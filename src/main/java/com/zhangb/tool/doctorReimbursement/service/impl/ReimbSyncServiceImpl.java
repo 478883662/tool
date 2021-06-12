@@ -85,10 +85,10 @@ public class ReimbSyncServiceImpl implements IReimbSyncService {
         List<ReimbUserInfo> userList = userService.getAllUserInfo(where);
         //取出所有用户
         for (ReimbUserInfo reimbUserInfo:userList){
-            if(checkSync(reimbUserInfo.getSelfNo(),ReimbSyncTypeEnum.REIMB_RECORD.getType())){
-                System.out.println("用户报销记录已同步过："+reimbUserInfo.getName());
-                continue;
-            }
+//            if(checkSync(reimbUserInfo.getSelfNo(),ReimbSyncTypeEnum.REIMB_RECORD.getType())){
+//                System.out.println("用户报销记录已同步过："+reimbUserInfo.getName());
+//                continue;
+//            }
             //2、同步报销记录
             recordService.syncRecord(reimbUserInfo.getSelfNo());
 

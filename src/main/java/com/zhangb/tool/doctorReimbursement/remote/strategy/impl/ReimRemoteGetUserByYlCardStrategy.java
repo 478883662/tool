@@ -1,5 +1,6 @@
 package com.zhangb.tool.doctorReimbursement.remote.strategy.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.zhangb.tool.doctorReimbursement.adapter.ICxnhRemoteAdapter;
 import com.zhangb.tool.doctorReimbursement.common.constants.ReimbRemoteStrategyKeyConstants;
 import com.zhangb.tool.doctorReimbursement.remote.strategy.IReimbursementRemoteStrategy;
@@ -9,10 +10,10 @@ import org.springframework.stereotype.Service;
  * Created by z9104 on 2020/9/23.
  */
 @Service(ReimbRemoteStrategyKeyConstants.REIMB_GET_USER_BY_YLCARD_STRATEGY)
-public class ReimRemoteGetUserByYlCardStrategy extends ICxnhRemoteAdapter implements IReimbursementRemoteStrategy{
+public class ReimRemoteGetUserByYlCardStrategy extends ICxnhRemoteAdapter implements IReimbursementRemoteStrategy {
 
     //查询报销用户（病人）信息
-    private static String reqStr ="<E:Envelope\n" +
+    private static String reqStr = "<E:Envelope\n" +
             "\txmlns:E=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
             "\txmlns:A=\"http://schemas.xmlsoap.org/soap/encoding/\"\n" +
             "\txmlns:s=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
@@ -63,14 +64,14 @@ public class ReimRemoteGetUserByYlCardStrategy extends ICxnhRemoteAdapter implem
             "   and nvl(a.ybkh, &apos; &apos;) like :ls_ybkh || &apos;%%&apos;&#xd;\n" +
             "   and nvl(a.zklsh, &apos; &apos;) like :ls_zklsh || &apos;%%&apos;&#xd;\n" +
             "   and nvl(a.sfzhm, &apos; &apos;) like :ls_sfzhm || &apos;%%&apos;&#xd;\n" +
-            "@!:ls_nd#:ls_xm#:ls_ylzh#:ls_ybkh#:ls_zklsh#:ls_sfzhm@!2020##%s###</m:String_input>\n" +
+            "@!:ls_nd#:ls_xm#:ls_ylzh#:ls_ybkh#:ls_zklsh#:ls_sfzhm@!" + DateUtil.thisYear() + "##%s###</m:String_input>\n" +
             "</m:nh_interface>\n" +
             "</E:Body>\n" +
             "</E:Envelope>\n";
 
     @Override
     public String execute(String... param) {
-        String respStr = super.sendHttp(reqStr,param);
+        String respStr = super.sendHttp(reqStr, param);
         return respStr;
     }
 }

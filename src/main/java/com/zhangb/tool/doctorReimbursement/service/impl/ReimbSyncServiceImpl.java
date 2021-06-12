@@ -58,10 +58,10 @@ public class ReimbSyncServiceImpl implements IReimbSyncService {
     @Override
     public String syncUserInfo(String ylCard) throws Exception {
         //同步医疗账户下的人员信息
-        if(checkSync(ylCard, ReimbSyncTypeEnum.YL_CARD_SYNC.getType())){
-            System.out.println("医疗账号["+ylCard+"]今日已同步过了");
-            return "FAIL:医疗账号["+ylCard+"]今日已同步过了";
-        }
+//        if(checkSync(ylCard, ReimbSyncTypeEnum.YL_CARD_SYNC.getType())){
+//            System.out.println("医疗账号["+ylCard+"]今日已同步过了");
+//            return "FAIL:医疗账号["+ylCard+"]今日已同步过了";
+//        }
         //没有同步过，就同步更新下账户下所有人，看是否有新增的人
         String result = userService.syncUserByYlCard(ylCard);
         ReimbSyncInfo ylCardSyncInfo  = new ReimbSyncInfo();

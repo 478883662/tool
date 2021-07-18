@@ -1,6 +1,7 @@
 package com.zhangb.family.doctor.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import com.zhangb.family.common.module.ViewData;
@@ -10,6 +11,7 @@ import com.zhangb.family.common.util.ViewDataUtil;
 import com.zhangb.family.doctor.bo.ReimbPrintBo;
 import com.zhangb.family.doctor.bo.ReimbUnPrintRecordBo;
 import com.zhangb.family.doctor.bo.ReimbUserBo;
+import com.zhangb.family.doctor.bo.ReimbYearTotalBo;
 import com.zhangb.family.doctor.common.constants.ReimbConstants;
 import com.zhangb.family.doctor.common.constants.RemoteConstants;
 import com.zhangb.family.doctor.entity.ReimbPrintInfo;
@@ -20,9 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/doctor/reimb")
@@ -45,12 +45,15 @@ public class ReimbController {
     @RequestMapping("/getReimbTotal")
     @ResponseBody
     public ViewData getReimbTotal() throws Exception {
-        Map<String,BigDecimal> resultMap = CollectionUtil.newHashMap();
-        BigDecimal ylTotal_2020 = recordService.getYlReimbTotal(RemoteConstants.YL_LOCATION_NO,2020);
-        BigDecimal ylTotal_2021 = recordService.getYlReimbTotal(RemoteConstants.YL_LOCATION_NO,2021);
-        resultMap.put("ylTotal_2020",ylTotal_2020);
-        resultMap.put("ylTotal_2021",ylTotal_2021);
-        return ViewDataUtil.success(resultMap);
+
+        List<ReimbYearTotalBo> resultList = ListUtil.list(false);
+        for (int i=2020;i<=DateUtil.thisYear();i++){
+            ReimbYearTotalBo reimbYearTotalBo = new ReimbYearTotalBo();
+            reimbYearTotalBo.setYear(i);
+            reimbYearTotalBo.setTotal(recordService.getYlReimbTotal(RemoteConstants.YL_LOCATION_NO,i));
+            resultList.add(reimbYearTotalBo);
+        }
+        return ViewDataUtil.success(resultList);
     }
 
 

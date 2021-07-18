@@ -48,6 +48,20 @@
                     <el-button type="primary" @click="queryClick">查询</el-button>
                 </el-form-item>
                 <el-button type="primary" @click="addBtnClick">添加</el-button>
+                <el-button @click="allReimbTotalClick" type="primary" style="margin-left: 16px;">
+                    查询年度报销金额
+                </el-button>
+                <el-drawer
+                        title="历年报销金额汇总"
+                        :visible.sync="drawer"
+                        direction="rtl"
+                        size="250px">
+                    <el-table :data="reimbTotalList">
+                        <el-table-column property="year" label="年份" width="100"></el-table-column>
+                        <el-table-column property="total" label="报销金额/元" width="150"></el-table-column>
+                    </el-table>
+                </el-drawer>
+
                 <el-dialog title="添加医疗账户" :visible.sync="dialogFormVisible">
                     <el-form :model="ylCardForm">
                         <el-form-item label="医疗账号" :label-width="formLabelWidth">
@@ -60,10 +74,10 @@
                     </div>
                 </el-dialog>
             </el-form>
-            <el-table ref="multipleTable" :data="ylCardList" stripe  height="800" v-loading="loading" :border=true
+            <el-table ref="multipleTable" :data="ylCardList" stripe
+                      v-loading="loading" :border=true
                       tooltip-effect="dark"
-                      style="width: 100%;"
-                      :default-sort="{prop: 'createDate', order: 'descending'}">
+                      style="width: 100%;">
                 <!--<el-table-column type="selection" width="55">-->
                 <!--</el-table-column>-->
                 <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="200">
@@ -94,7 +108,11 @@
             </div>
         </div>
     </div>
+
 </div>
+
+
+
 </body>
 <!-- import Vue before Element -->
 <script src="../../js/vue.js"></script>
@@ -111,6 +129,8 @@
                     ylCard: '',
                     masterName: ''
                 },
+                drawer:false,
+                reimbTotalList:[],
                 dialogFormVisible: false,
                 ylCardForm: {
                     ylCardNo: ''
@@ -138,6 +158,22 @@
             handleCurrentChange(page) {
                 this.currentPage = page;
                 this.queryClick();
+            },
+            allReimbTotalClick(){
+                this.drawer = true
+                this.loading=true
+                // 调用后端--查询接口
+                httpPost("/reimb/getReimbTotal").then(result => {
+                    this.loading=false
+                    if (result.code == '0000') {
+                        this.reimbTotalList = result.obj.map(item => {
+                            return item;
+                        });
+                    } else {
+                        alert(result.msg);
+                    }
+                });
+
             },
             addBtnClick(){
                 this.dialogFormVisible=true

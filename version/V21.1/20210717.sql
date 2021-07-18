@@ -1,0 +1,1 @@
+ALTER TABLE `tool_patient_t` ADD enable_flag VARCHAR(255) DEFAULT 'T';

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>
+        医疗账户管理
+    </title>
+    <!-- import CSS -->
+    <!--https://unpkg.com/element-ui@2.14.1/lib/theme-chalk/index.css-->
+    <!--https://unpkg.com/element-ui@1.4.13/lib/theme-default/fonts/element-icons.woff-->
+    <link rel="stylesheet" href="../../css/index.css">
+</head>
+
+<style>
+    [v-cloak] {
+        display: none;
+    }
+
+    .el-table .warning-row {
+        background: rgb(243, 247, 196);
+    }
+
+    .el-table .success-row {
+        background: #e1f5d6;
+    }
+
+    .el-table .failure-row {
+        background: rgb(245, 196, 196);
+    }
+
+    .el-table .processing-row {
+        background: rgb(187, 185, 185);
+    }
+</style>
+
+<body>
+<div id="app" v-cloak>
+    <div>
+        <div>
+            <el-form :inline="true" :model="queryParam" class="demo-form-inline">
+                <el-form-item label="医疗账号">
+                    <el-input v-model="queryParam.ylCard" placeholder="请填写医疗账号"></el-input>
+                </el-form-item>
+                <el-form-item label="户主姓名">
+                    <el-input v-model="queryParam.masterName" placeholder="请填写户主姓名"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="queryClick">查询</el-button>
+                </el-form-item>
+                <el-button type="primary" @click="addBtnClick">添加</el-button>
+                <el-dialog title="添加医疗账户" :visible.sync="dialogFormVisible">
+                    <el-form :model="ylCardForm">
+                        <el-form-item label="医疗账号" :label-width="formLabelWidth">
+                            <el-input v-model="ylCardForm.ylCardNo" autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="dialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="addYlCard">确 定</el-button>
+                    </div>
+                </el-dialog>
+            </el-form>
+            <el-table ref="multipleTable" :data="ylCardList" stripe  height="800" v-loading="loading" :border=true
+                      tooltip-effect="dark"
+                      highlight-current-row max-height="500" style="width: 100%;"
+                      :default-sort="{prop: 'createDate', order: 'descending'}">
+                <!--<el-table-column type="selection" width="55">-->
+                <!--</el-table-column>-->
+                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="400">
+                </el-table-column>
+                <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="400">
+                </el-table-column>
+                <el-table-column prop="createdDate" label="创建时间" show-overflow-tooltip sortable width="400">
+                </el-table-column>
+                <el-table-column
+                        fixed="right"
+                        label="操作"
+                        width="200">
+                    <template slot-scope="scope">
+                        <el-button @click="queryDetailClick(scope.row)" type="text" size="small">查看</el-button>
+                        <el-button @click="deleteClick(scope.row)" type="text" size="small">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="block">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-sizes="pageSizes"
+                        :page-size="currentPageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="total">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="../../js/vue.js"></script>
+<script src="../../js/axios.js"></script>
+<script src="../../js/httpUtil.js"></script>
+<!-- import JavaScript -->
+<script src="../../js/index.js"></script>
+<script type="module">
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                queryParam: {
+                    ylCard: '',
+                    masterName: ''
+                },
+                dialogFormVisible: false,
+                ylCardForm: {
+                    ylCardNo: ''
+                },
+                formLabelWidth: '120px',
+                ylCardList: [],
+                createDate: '',
+                currentPage: 1,
+                total: 0,
+                currentPageSize: 10,
+                pageSizes: [10, 50, 100, 200, 300],
+                loading: false
+            }
+        },
+        mounted:function () {
+            //初始化调用查询方法
+            this.queryClick();
+        },
+        methods: {
+            handleSizeChange(pageSize) {
+                this.currentPage = 1;
+                this.currentPageSize = pageSize;
+                this.queryClick();
+            },
+            handleCurrentChange(page) {
+                this.currentPage = page;
+                this.queryClick();
+            },
+            addYlCard(){
+                var param = {
+                    'ylCard': this.ylCardForm.ylCardNo,
+                }
+                // 调用后端--查询接口
+                httpPost("/ylCard/addYlCard", param).then(result => {
+                    alert(result.msg);
+                    this.loading = false;
+                });
+                this.dialogFormVisible = false
+
+            },
+            clear() {
+                this.ylCard = '';
+                this.masterName = '';
+            },
+            queryDetailClick(row){
+                alert('查看成员待开发',row);
+            },
+            deleteClick(row){
+                alert('删除待开发',row);
+            },
+            queryClick() {
+                this.loading = true;
+                var page = {
+                    'pageNum': this.currentPage,
+                    'pageSize': this.currentPageSize
+                }
+                var param = {
+                    'ylCard': this.queryParam.ylCard,
+                    'masterName': this.queryParam.masterName,
+                    'pageInfo': page
+                }
+                // 调用后端--查询接口
+                httpPost("/ylCard/getYlCardList", param).then(result => {
+                    if (result.code == '0000') {
+                        this.ylCardList = result.obj.list.map(item => {
+                            return item;
+                        });
+                        this.total = result.obj.total;
+                    } else {
+                        alert(result.msg);
+                    }
+                    this.loading = false;
+                });
+            }
+
+        }
+    })
+</script>
+
+</html>

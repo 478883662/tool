@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangb.family.doctor.dao.ReimbUserDao">
+
+
+    <resultMap id="getUserBoList_Map" type="com.zhangb.family.doctor.bo.ReimbUserBo">
+        <result column="yl_card" jdbcType="VARCHAR" property="ylCard"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="master_name" jdbcType="VARCHAR" property="masterName"/>
+        <result column="enable_flag" jdbcType="VARCHAR" property="enableFlag"/>
+        <result column="deal_result" property="dealResult"/>
+        <result column="remib_total" property="remibTotal"/>
+        <result column="deal_time" property="reimbDate"/>
+    </resultMap>
+
+    <select id="getUserBoList" resultMap="getUserBoList_Map" parameterType="com.zhangb.family.doctor.dto.ReimbUserDTO">
+        select
+            t1.YL_CARD,
+            t1.`NAME`,
+            t1.MASTER_NAME,
+            t1.enable_flag,
+            t4.deal_result,
+            t4.deal_time,
+            (select sum(MONEY) from tool_deal_record_t
+                  where self_no = t1.SELF_NO and YL_CARD=t1.YL_CARD
+                  and REIMB_YEAR = #{year} AND REIMB_TYPE='1101') remib_total
+         from
+            tool_patient_t t1
+            left join tool_yl_card_t t5 on t1.yl_card = t5.yl_card
+            left join tool_deal_result_t t4  on (
+                    t1.yl_card = t4.yl_card
+                    and t1.name = t4.name
+                    and t4.deal_time >=#{year}
+                )
+        where 1=1
+        <if test="ylCard!=null and ylCard != ''">
+            and t1.yl_card = #{ylCard}
+        </if>
+        <if test="name!=null and name != ''">
+            and t1.name = #{name}
+        </if>
+        order by
+            t4.deal_time desc ,t1.yl_card,t1.`NAME`
+    </select>
+
+</mapper>

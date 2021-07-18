@@ -1,3 +1,0 @@
-# 定时同步病人信息、报销记录、病例信息、病例与药品关系、药品信息
-[com.zhangb.tool.doctorReimbursement.job]
-ReimbSyncUserInfoJob.run = 0 6 * * *

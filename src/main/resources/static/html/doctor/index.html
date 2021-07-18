@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>
+        首页
+    </title>
+    <!-- import CSS -->
+    <!--https://unpkg.com/element-ui@2.14.1/lib/theme-chalk/index.css-->
+    <!--https://unpkg.com/element-ui@1.4.13/lib/theme-default/fonts/element-icons.woff-->
+    <link rel="stylesheet" href="../../css/index.css">
+</head>
+
+<style>
+    [v-cloak] {
+        display: none;
+    }
+    .el-table .warning-row {
+        background: rgb(243, 247, 196);
+    }
+
+    .el-table .success-row {
+        background: #e1f5d6;
+    }
+    .el-table .failure-row {
+        background: rgb(245, 196, 196);
+    }
+    .el-table .processing-row {
+        background: rgb(187, 185, 185);
+    }
+</style>
+
+<body>
+<div id="app" v-cloak>
+    <div>
+        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal"
+                 @select="handleSelect">
+            <el-menu-item index="1">待开发</el-menu-item>
+            <el-submenu index="2">
+                <template slot="title">医疗报销系统</template>
+                <el-menu-item index="2-1">添加账户</el-menu-item>
+                <el-menu-item index="2-2">报销</el-menu-item>
+                <!--<el-submenu index="2-3">-->
+                    <!--<template slot="title">选项3</template>-->
+                    <!--<el-menu-item index="2-3-1">选项1</el-menu-item>-->
+                    <!--<el-menu-item index="2-3-2">选项2</el-menu-item>-->
+                <!--</el-submenu>-->
+            </el-submenu>
+        </el-menu>
+        <div class="line"></div>
+
+    </div>
+
+    <div>
+        <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
+            <el-tab-pane
+                    v-for="(item, index) in editableTabs"
+                    :key="item.name"
+                    :label="item.title"
+                    :name="item.name"
+            >
+                <iframe :src="item.content" style="width: 100%;height: 450px" frameborder="0"></iframe>
+            </el-tab-pane>
+        </el-tabs>
+
+    </div>
+
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="../../js/vue.js"></script>
+<script src="../../js/httpUtil.js"></script>
+<!-- import JavaScript -->
+<script src="../../js/index.js"></script>
+<script src="../../js/menu.js"></script>
+<script type="module">
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                activeIndex: '2-1',
+                editableTabsValue: '2-1',
+                editableTabs: [{
+                    title: '添加账户',
+                    name: '2-1',
+                    content: './ylcard.html'
+                }, {
+                    title: '报销',
+                    name: '2-2',
+                    content: './reimb.html'
+                }],
+                tabIndex: 2
+            }
+        },
+        methods: {
+            handleSelect(key, keyPath) {
+                //判断tab是否已存在,若存在，则将tab页选中
+                if (this.checkTabExists(key)){
+//                    alert('tab已存在')
+                    this.editableTabsValue=key;
+                    return;
+                }
+//                alert('tab不存在')
+                //若tab不存在，则调用addtab新增tab页面
+                var menu = getMenu(key)
+                console.log(menu)
+                this.addTab(menu)
+            },
+            checkTabExists(key){
+                console.log("index="+key)
+                let tabs = this.editableTabs;
+                var flag = false;
+                //遍历所有tab页面
+                tabs.some((tab, index) => {
+                    if (tab.name === key) {
+                        //存在相同key的tab，返回true
+                        flag = true;
+                        return true;
+                    }
+                });
+                return flag;
+            },
+            addTab(menu) {
+                this.editableTabs.push({
+                    title: menu.name,
+                    name: menu.index,
+                    content: menu.url
+                });
+                this.editableTabsValue = menu.index;
+            },
+            removeTab(targetName) {
+                let tabs = this.editableTabs;
+                let activeName = this.editableTabsValue;
+                if (activeName === targetName) {
+                    tabs.forEach((tab, index) => {
+                        if (tab.name === targetName) {
+                            let nextTab = tabs[index + 1] || tabs[index - 1];
+                            if (nextTab) {
+                                activeName = nextTab.name;
+                            }
+                        }
+                    });
+                }
+
+                this.editableTabsValue = activeName;
+                this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+            }
+        }
+    })
+</script>
+</html>

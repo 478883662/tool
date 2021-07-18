@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>
+        医疗报销管理
+    </title>
+    <!-- import CSS -->
+    <!--https://unpkg.com/element-ui@2.14.1/lib/theme-chalk/index.css-->
+    <!--https://unpkg.com/element-ui@1.4.13/lib/theme-default/fonts/element-icons.woff-->
+    <link rel="stylesheet" href="../../css/index.css">
+</head>
+
+<style>
+    [v-cloak] {
+        display: none;
+    }
+
+    .el-table .warning-row {
+        background: rgb(243, 247, 196);
+    }
+
+    .el-table .success-row {
+        background: #e1f5d6;
+    }
+
+    .el-table .failure-row {
+        background: rgb(245, 196, 196);
+    }
+
+    .el-table .processing-row {
+        background: rgb(187, 185, 185);
+    }
+</style>
+
+<body>
+<div id="app" v-cloak>
+    <div>
+        <div>
+            <el-form :inline="true" :model="queryParam" class="demo-form-inline">
+                <el-form-item label="医疗账号">
+                    <el-input v-model="queryParam.ylCard" placeholder="请填写医疗账号"></el-input>
+                </el-form-item>
+                <el-form-item label="姓名">
+                    <el-input v-model="queryParam.name" placeholder="请填写姓名"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="queryClick">查询</el-button>
+                </el-form-item>
+                <el-button type="primary" @click="batchReimbClick">批量报销</el-button>
+            </el-form>
+            <el-table ref="multipleTable" :data="reimbUserBoList" stripe  height="800" v-loading="loading" :border=true
+                      tooltip-effect="dark"
+                      highlight-current-row max-height="500" style="width: 100%;"
+                      :default-sort="{prop: 'createDate', order: 'descending'}">
+                <el-table-column type="selection" width="55">
+                </el-table-column>
+                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="150">
+                </el-table-column>
+                <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="100">
+                </el-table-column>
+                <el-table-column prop="name" label="姓名" show-overflow-tooltip width="100">
+                </el-table-column>
+                <el-table-column prop="remibTotal" label="今年已报销金额" show-overflow-tooltip width="120">
+                </el-table-column>
+                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="150">
+                </el-table-column>
+                <el-table-column prop="dealResult" label="最近报销结果" show-overflow-tooltip width="300">
+                </el-table-column>
+                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip width="100">
+                </el-table-column>
+                <el-table-column
+                        fixed="right"
+                        label="操作"
+                        width="100">
+                    <template slot-scope="scope">
+                        <el-button @click="reimbClick(scope.row)" type="text" size="small"  :style="{ display: enableFlag }">报销</el-button>
+                        <el-button @click="deleteClick(scope.row)" type="text" size="small" :style="{ display: enableFlag }">删除</el-button>
+                        <el-button @click="resumeClick(scope.row)" type="text" size="small" :style="{ display: enableFlag }">恢复</el-button>
+
+                        <!—使用 v-if 来判断，如果当前行的冻结状态值 为0（未冻结），就显示按钮，否则不显示-->
+                        <el-button
+                                size="mini"
+                                type="text"
+                                icon="el-icon-edit"
+                                @click="reimbClick(scope.row)"
+                                v-if="scope.row.enableFlag == T"
+                        >报销</el-button>
+                        <el-button
+                                size="mini"
+                                type="text"
+                                icon="el-icon-edit"
+                                @click="deleteClick(scope.row)"
+                                v-if="scope.row.enableFlag == T"
+                        >删除</el-button>
+                        <el-button
+                                size="mini"
+                                type="text"
+                                icon="el-icon-edit"
+                                @click="deleteClick(scope.row)"
+                                v-if="scope.row.enableFlag == F"
+                        >恢复</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="block">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-sizes="pageSizes"
+                        :page-size="currentPageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="total">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="../../js/vue.js"></script>
+<script src="../../js/axios.js"></script>
+<script src="../../js/httpUtil.js"></script>
+<!-- import JavaScript -->
+<script src="../../js/index.js"></script>
+<script type="module">
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                queryParam: {
+                    ylCard: '',
+                    name: ''
+                },
+                isEnable:'none',
+                isDisable:'',
+                dialogFormVisible: false,
+                ylCardForm: {
+                    ylCardNo: ''
+                },
+                formLabelWidth: '120px',
+                reimbUserBoList: [],
+                createDate: '',
+                currentPage: 1,
+                total: 0,
+                currentPageSize: 10,
+                pageSizes: [50, 100, 200, 400,1000],
+                loading: false
+            }
+        },
+        mounted:function () {
+            //初始化调用查询方法
+            this.queryClick();
+        },
+        methods: {
+            handleSizeChange(pageSize) {
+                this.currentPage = 1;
+                this.currentPageSize = pageSize;
+                this.queryClick();
+            },
+            handleCurrentChange(page) {
+                this.currentPage = page;
+                this.queryClick();
+            },
+            clear() {
+                this.ylCard = '';
+                this.name = '';
+            },
+            reimbClick(row){
+                // 调用后端--查询接口
+                httpGet("/reimb/reimbursement?ylCard="+row.ylCard+"&name="+row.name).then(result => {
+                    console.log(result)
+                    alert(result.msg);
+                    this.loading = false;
+                });
+
+            },
+            batchReimbClick(){
+                var list = this.$refs.multipleTable.selection;
+                // 调用后端--查询接口
+                httpPost("/reimb/batchReimbursement", list).then(result => {
+                    console.log(result)
+                    if (result.code == '0000') {
+                        this.reimbUserBoList = result.obj.list.map(item => {
+                            return item;
+                        });
+                        this.total = result.obj.total;
+                    } else {
+                        alert(result.msg);
+                    }
+                    this.loading = false;
+                });
+
+
+            },
+            deleteClick(row){
+                alert('删除待开发',row);
+            },
+            queryClick() {
+                this.loading = true;
+                var page = {
+                    'pageNum': this.currentPage,
+                    'pageSize': this.currentPageSize
+                }
+                var param = {
+                    'ylCard': this.queryParam.ylCard,
+                    'name': this.queryParam.name,
+                    'pageInfo': page
+                }
+                // 调用后端--查询接口
+                httpPost("/user/getUserInfo", param).then(result => {
+                    console.log(result)
+                    if (result.code == '0000') {
+                        this.reimbUserBoList = result.obj.list.map(item => {
+                            if(item.enableFlag == 'F'){
+                                item.enableFlag = '无效'
+                                this.isEnable='none'
+                                this.isDisabled=''
+                            }else{
+                                item.enableFlag = '有效'
+                                this.isEnable=''
+                                this.isDisabled='none'
+                            }
+                            return item;
+                        });
+                        this.total = result.obj.total;
+                    } else {
+                        alert(result.msg);
+                    }
+                    this.loading = false;
+                });
+            }
+
+        }
+    })
+</script>
+
+</html>

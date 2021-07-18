@@ -32,4 +32,11 @@ public interface IReimbUserService {
      * @param userInfoList
      */
     void addBatchUser(List<ReimbUserInfo> userInfoList) throws SQLException, BizException;
+
+    /**
+     * 逻辑删除用户
+     * @param reimbUserDTO
+     * @return
+     */
+    Boolean deleteUser(ReimbUserDTO reimbUserDTO) throws SQLException, BizException;
 }

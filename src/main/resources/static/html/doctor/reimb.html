@@ -10,7 +10,6 @@
     <!--https://unpkg.com/element-ui@1.4.13/lib/theme-default/fonts/element-icons.woff-->
     <link rel="stylesheet" href="../../css/index.css">
 </head>
-
 <style>
     [v-cloak] {
         display: none;
@@ -31,6 +30,11 @@
     .el-table .processing-row {
         background: rgb(187, 185, 185);
     }
+
+    .el-table--border th.gutter:last-of-type {
+      display: block!important;
+    }
+
 </style>
 
 <body>
@@ -49,13 +53,12 @@
                 </el-form-item>
                 <el-button type="primary" @click="batchReimbClick">批量报销</el-button>
             </el-form>
-            <el-table ref="multipleTable" :data="reimbUserBoList" stripe  height="800" v-loading="loading" :border=true
-                      tooltip-effect="dark"
-                      highlight-current-row max-height="500" style="width: 100%;"
-                      :default-sort="{prop: 'createDate', order: 'descending'}">
+            <el-table ref="multipleTable" :data="reimbUserBoList" stripe
+                      v-loading="loading" :border=true
+                      style="width: 100%;">
                 <el-table-column type="selection" width="55">
                 </el-table-column>
-                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="150">
+                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="180">
                 </el-table-column>
                 <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="100">
                 </el-table-column>
@@ -63,42 +66,35 @@
                 </el-table-column>
                 <el-table-column prop="remibTotal" label="今年已报销金额" show-overflow-tooltip width="120">
                 </el-table-column>
-                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="150">
+                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip width="70" :formatter = "enableFlagFormat">
+                </el-table-column>
+                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="180">
                 </el-table-column>
                 <el-table-column prop="dealResult" label="最近报销结果" show-overflow-tooltip width="300">
-                </el-table-column>
-                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip width="100">
                 </el-table-column>
                 <el-table-column
                         fixed="right"
                         label="操作"
-                        width="100">
+                        width="150">
                     <template slot-scope="scope">
-                        <el-button @click="reimbClick(scope.row)" type="text" size="small"  :style="{ display: enableFlag }">报销</el-button>
-                        <el-button @click="deleteClick(scope.row)" type="text" size="small" :style="{ display: enableFlag }">删除</el-button>
-                        <el-button @click="resumeClick(scope.row)" type="text" size="small" :style="{ display: enableFlag }">恢复</el-button>
-
                         <!—使用 v-if 来判断，如果当前行的冻结状态值 为0（未冻结），就显示按钮，否则不显示-->
                         <el-button
                                 size="mini"
                                 type="text"
-                                icon="el-icon-edit"
                                 @click="reimbClick(scope.row)"
-                                v-if="scope.row.enableFlag == T"
+                                v-if="scope.row.enableFlag == 'T'"
                         >报销</el-button>
                         <el-button
                                 size="mini"
                                 type="text"
-                                icon="el-icon-edit"
                                 @click="deleteClick(scope.row)"
-                                v-if="scope.row.enableFlag == T"
+                                v-if="scope.row.enableFlag == 'T'"
                         >删除</el-button>
                         <el-button
                                 size="mini"
                                 type="text"
-                                icon="el-icon-edit"
-                                @click="deleteClick(scope.row)"
-                                v-if="scope.row.enableFlag == F"
+                                @click="resumeClick(scope.row)"
+                                v-if="scope.row.enableFlag == 'F'"
                         >恢复</el-button>
                     </template>
                 </el-table-column>
@@ -133,8 +129,7 @@
                     ylCard: '',
                     name: ''
                 },
-                isEnable:'none',
-                isDisable:'',
+
                 dialogFormVisible: false,
                 ylCardForm: {
                     ylCardNo: ''
@@ -144,8 +139,8 @@
                 createDate: '',
                 currentPage: 1,
                 total: 0,
-                currentPageSize: 10,
-                pageSizes: [50, 100, 200, 400,1000],
+                currentPageSize: 100,
+                pageSizes: [100, 100, 200, 400,1000],
                 loading: false
             }
         },
@@ -194,8 +189,58 @@
 
 
             },
+            resumeClick(row){
+                this.$message({
+                  showClose: true,
+                  message: '恢复功能建设中...',
+                  type: 'warning'
+                });
+            },
             deleteClick(row){
-                alert('删除待开发',row);
+                console.log(row);
+
+                this.$confirm('确定删除'+row.name+'吗?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                    var param = {
+                        'ylCard': row.ylCard,
+                        'name': row.name,
+                    }
+                    // 调用后端--逻辑删除接口
+                    httpPost("/user/deleteUser", param).then(result => {
+                        console.log(result)
+                        if (result.code == '0000') {
+                            this.$message({
+                              showClose: true,
+                              message: '删除成功',
+                              type: 'success'
+                            });
+                            this.queryClick();
+                        }else{
+                            this.$message({
+                              showClose: true,
+                              message: '系统异常',
+                              type: 'error'
+                            });
+                        }
+
+                    });
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                  });
+                });
+            },
+            enableFlagFormat(data){
+                if(data.enableFlag == 'T'){
+                      return '有效'
+                }
+                if(data.enableFlag == 'F'){
+                      return '无效'
+                }
             },
             queryClick() {
                 this.loading = true;
@@ -213,15 +258,6 @@
                     console.log(result)
                     if (result.code == '0000') {
                         this.reimbUserBoList = result.obj.list.map(item => {
-                            if(item.enableFlag == 'F'){
-                                item.enableFlag = '无效'
-                                this.isEnable='none'
-                                this.isDisabled=''
-                            }else{
-                                item.enableFlag = '有效'
-                                this.isEnable=''
-                                this.isDisabled='none'
-                            }
                             return item;
                         });
                         this.total = result.obj.total;

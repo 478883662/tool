@@ -3,6 +3,7 @@ package com.zhangb.family.doctor.service.impl;
 import cn.hutool.core.date.DateUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.zhangb.family.common.constants.GlobalConstants;
 import com.zhangb.family.common.dao.BaseDao;
 import com.zhangb.family.common.exception.BizException;
 import com.zhangb.family.doctor.bo.ReimbUserBo;
@@ -55,6 +56,18 @@ public class ReimbUserServiceImpl implements IReimbUserService {
                 BaseDao.insert(reimbUserInfo);
             }
         }
+    }
+
+    @Override
+    public Boolean deleteUser(ReimbUserDTO reimbUserDTO) throws SQLException, BizException {
+        ReimbUserInfo where = new ReimbUserInfo();
+        where.setName(reimbUserDTO.getName());
+        where.setYlCard(reimbUserDTO.getYlCard());
+
+        ReimbUserInfo reimbUserInfo = new ReimbUserInfo();
+        reimbUserInfo.setEnableFlag(GlobalConstants.ENABLE_FLAG_F);
+        BaseDao.updateForValue(reimbUserInfo,where);
+        return null;
     }
 
 

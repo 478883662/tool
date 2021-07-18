@@ -44,6 +44,17 @@ public class ReimbUserController {
         return ViewDataUtil.success( userList.toPageInfo());
     }
 
+    /**
+     * 删除报销用户
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/deleteUser")
+    @ResponseBody
+    public ViewData deleteUser(@RequestBody ReimbUserDTO reimbUserDTO) throws Exception {
+        //逻辑删除用户，置为失效
+        return ViewDataUtil.success( reimbUserService.deleteUser(reimbUserDTO));
+    }
 
     /**
      * 上次文件

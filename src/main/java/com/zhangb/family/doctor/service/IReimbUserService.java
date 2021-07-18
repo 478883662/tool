@@ -38,5 +38,5 @@ public interface IReimbUserService {
      * @param reimbUserDTO
      * @return
      */
-    Boolean deleteUser(ReimbUserDTO reimbUserDTO) throws SQLException, BizException;
+    Boolean updateUserEnableFlag(ReimbUserDTO reimbUserDTO) throws SQLException, BizException;
 }

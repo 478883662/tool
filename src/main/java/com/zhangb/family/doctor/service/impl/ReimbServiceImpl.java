@@ -16,6 +16,7 @@ import com.zhangb.family.doctor.bo.ReimbUnPrintRecordBo;
 import com.zhangb.family.doctor.common.constants.ReimbConstants;
 import com.zhangb.family.doctor.common.constants.ReimbRemoteStrategyKeyConstants;
 import com.zhangb.family.doctor.common.constants.RemoteConstants;
+import com.zhangb.family.doctor.common.enums.DoctorReimbResultEnum;
 import com.zhangb.family.doctor.entity.*;
 import com.zhangb.family.doctor.remote.service.ICxnhRemoteService;
 import com.zhangb.family.doctor.service.*;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -169,7 +171,7 @@ public class ReimbServiceImpl implements IReimbService {
     }
 
     @Override
-    public String reimb(ReimbIllnessBo reimbIllnessBo) throws Exception {
+    public DoctorReimbResultEnum reimb(ReimbIllnessBo reimbIllnessBo) throws Exception {
         List<ReimbDrugBo> reimbDrugBoList = reimbIllnessBo.getReimbDrugBoList();
         //获取远端的业务id
         String bizId = getBizId();
@@ -241,7 +243,7 @@ public class ReimbServiceImpl implements IReimbService {
             String result = remoteService.executeRemote(ReimbRemoteStrategyKeyConstants.REIMB_STRATEGY,
                     bizId);
             if(StrUtil.equals("0@!@!0@!0@!0@!0@!0@!0@!0@!0@!0@$@$",result)){
-                return "报销成功\r\n";
+                return DoctorReimbResultEnum.SUCCESS;
             }
             throw new Exception("正式补偿失败:"+result);
         }else if(tryResult.compareTo(BigDecimal.ZERO) == 0){
@@ -301,63 +303,87 @@ public class ReimbServiceImpl implements IReimbService {
     }
 
     @Override
-    /**
-     * 报销单人
-     * @param ylCard
-     * @param name
-     * @return
-     * @throws Exception
-     */
-    public String reimbOneUser(String ylCard,String name) {
+    public String reimbForYlCardAndName(String ylCard, String name) {
         try{
             //一次只能有一个用户进行报销。
             if (StrUtil.hasBlank(ylCard)) {
                 return "入参医疗账号不能为空";
             }
-            //报销前先同步
+            //报销前先同步医疗账号下的所有人
             reimbSyncService.syncAllByYlCard(ylCard);
 
             Map<String, String> resultMap = CollectionUtil.newHashMap();
+            List<ReimbDealResult> resultList = new ArrayList<>();
             //获取医疗账户下要报销的人
             List<ReimbUserInfo> userList = reimbUserService.getAllUserInfo(new ReimbUserInfo(ylCard,name));
             for (ReimbUserInfo user : userList) {
-                ReimbDealResult reimbDealResult = new ReimbDealResult();
-                reimbDealResult.setYlCard(ylCard);
-                reimbDealResult.setName(user.getName());
-                reimbDealResult.setDealTime(DateUtil.now());
-                try{
-                    //获取这次报销的病例
-                    ReimbIllnessBo reimbIllnessBo = getNextIllness(user);
-                    if(CollectionUtil.isEmpty(reimbIllnessBo.getReimbDrugBoList())){
-                        throw new Exception(reimbIllnessBo.getIllnessName()+":没有找到用药处方");
-                    }
-                    //报销处理
-                    String result = reimb(reimbIllnessBo);
-                    resultMap.put(user.getName(),result+"\r\n");
-                    //报销结束了就同步一次远端报销记录到本地库
-                    String bizId = recordService.syncRecord(user.getSelfNo());
-                    if (bizId==null){
-                        System.out.println("本地仍没有报销记录");
-                        continue;
-                    }
-                    ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
-                    reimbPrintInfo.setBizId(bizId);
-                    reimbPrintInfo.setCreatedDate(new Date());
-                    reimbPrintInfo.setPrintState("1001");
-                    savePrintInfo(reimbPrintInfo);
-                    reimbDealResult.setDealResult("报销成功");
-                }catch (Exception e){
-                    e.printStackTrace();
-                    resultMap.put(user.getName(),e.getMessage()+"\r\n");
-                    reimbDealResult.setDealResult(e.getMessage());
-                } finally {
-                    dealResultService.saveDealResult(reimbDealResult);
-                }
-
+                //记录每次报销的结果到结果集然后返回给前端
+                resultList.add(reimbForUser(user));
             }
             return resultMap.toString();
         }catch (Exception e){
             return  e.getMessage();
+        }
+    }
+
+    /**
+     * 报销单个人
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    private ReimbDealResult reimbForUser(ReimbUserInfo user) throws Exception {
+
+        ReimbDealResult reimbDealResult = new ReimbDealResult();
+        reimbDealResult.setYlCard(user.getYlCard());
+        reimbDealResult.setName(user.getName());
+        reimbDealResult.setDealTime(DateUtil.now());
+
+        DoctorReimbResultEnum result = null;
+        try{
+            //获取这次报销的病例
+            ReimbIllnessBo reimbIllnessBo = getNextIllness(user);
+            if(CollectionUtil.isEmpty(reimbIllnessBo.getReimbDrugBoList())){
+                throw new Exception(reimbIllnessBo.getIllnessName()+":没有找到用药处方");
+            }
+            //报销处理
+            result = reimb(reimbIllnessBo);
+            if (!result.getCode().equals(DoctorReimbResultEnum.SUCCESS.getCode())){
+
+                reimbDealResult.setDealResult(result.getMsg());
+                reimbDealResult.setDealCode(result.getCode());
+                return reimbDealResult;
+            }
+
+            //报销结束了就同步一次远端报销记录到本地库
+            String bizId = recordService.syncRecord(user.getSelfNo());
+            if (bizId==null){
+                System.out.println("本地仍没有报销记录");
+                throw new Exception("报销失败，远端没有报销成功的记录");
+            }
+
+            //保存待打印记录
+            ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
+            reimbPrintInfo.setBizId(bizId);
+            reimbPrintInfo.setCreatedDate(new Date());
+            reimbPrintInfo.setPrintState("1001");
+            savePrintInfo(reimbPrintInfo);
+
+            reimbDealResult.setDealResult(result.getMsg());
+            reimbDealResult.setDealCode(result.getCode());
+            return reimbDealResult;
+        }catch (Exception e){
+            e.printStackTrace();
+            if (result!=null){
+                reimbDealResult.setDealResult(result.getMsg());
+                reimbDealResult.setDealCode(result.getCode());
+            }else {
+                reimbDealResult.setDealResult(e.getMessage());
+                reimbDealResult.setDealCode("9999");
+            }
+            return reimbDealResult;
+        } finally {
+            dealResultService.saveDealResult(reimbDealResult);
         }
     }
 

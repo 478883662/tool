@@ -190,10 +190,29 @@
 
             },
             resumeClick(row){
-                this.$message({
-                  showClose: true,
-                  message: '恢复功能建设中...',
-                  type: 'warning'
+                console.log(row)
+                var param = {
+                    'ylCard': row.ylCard,
+                    'name': row.name,
+                    'enableFlag':'T'
+                }
+                // 调用后端--逻辑恢复接口
+                httpPost("/user/updateUserEnableFlag", param).then(result => {
+                    console.log(result)
+                    if (result.code == '0000') {
+                        this.$message({
+                          showClose: true,
+                          message: '恢复成功',
+                          type: 'success'
+                        });
+                        this.queryClick();
+                    }else{
+                        this.$message({
+                          showClose: true,
+                          message: '系统异常',
+                          type: 'error'
+                        });
+                    }
                 });
             },
             deleteClick(row){
@@ -207,9 +226,10 @@
                     var param = {
                         'ylCard': row.ylCard,
                         'name': row.name,
+                        'enableFlag':'F'
                     }
                     // 调用后端--逻辑删除接口
-                    httpPost("/user/deleteUser", param).then(result => {
+                    httpPost("/user/updateUserEnableFlag", param).then(result => {
                         console.log(result)
                         if (result.code == '0000') {
                             this.$message({

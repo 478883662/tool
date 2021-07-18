@@ -70,7 +70,7 @@ public class ReimbController {
     @ResponseBody
     public ViewData reimbursement(@RequestParam(value = "ylCard", required = true) String ylCard,
                                 @RequestParam(value = "name", required = false) String name) throws Exception {
-        return ViewDataUtil.success(reimbService.reimbOneUser(ylCard, name));
+        return ViewDataUtil.success(reimbService.reimbForYlCardAndName(ylCard, name));
     }
 
     /**
@@ -89,7 +89,7 @@ public class ReimbController {
         }
         List<String> resultMap = CollectionUtil.newArrayList();
         for(ReimbUserBo reimbUserBo :list){
-            resultMap.add(reimbService.reimbOneUser(reimbUserBo.getYlCard(), reimbUserBo.getName()));
+            resultMap.add(reimbService.reimbForYlCardAndName(reimbUserBo.getYlCard(), reimbUserBo.getName()));
         }
         return ViewDataUtil.success(resultMap);
     }

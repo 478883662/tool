@@ -4,6 +4,7 @@ package com.zhangb.family.doctor.service;
 import com.zhangb.family.doctor.bo.ReimbIllnessBo;
 import com.zhangb.family.doctor.bo.ReimbPrintBo;
 import com.zhangb.family.doctor.bo.ReimbUnPrintRecordBo;
+import com.zhangb.family.doctor.common.enums.DoctorReimbResultEnum;
 import com.zhangb.family.doctor.entity.ReimbPrintInfo;
 import com.zhangb.family.doctor.entity.ReimbUserInfo;
 
@@ -59,7 +60,7 @@ public interface IReimbService {
      * @param reimbIllnessBo
      * @return
      */
-    String reimb(ReimbIllnessBo reimbIllnessBo) throws Exception;
+    DoctorReimbResultEnum reimb(ReimbIllnessBo reimbIllnessBo) throws Exception;
 
     /**
      * 获取打印信息
@@ -85,5 +86,5 @@ public interface IReimbService {
      * @param name
      * @return
      */
-    String reimbOneUser(String ylCard, String name);
+    String reimbForYlCardAndName(String ylCard, String name);
 }

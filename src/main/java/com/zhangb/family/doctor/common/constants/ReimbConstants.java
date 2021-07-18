@@ -30,4 +30,5 @@ public interface ReimbConstants {
     String UN_PRINT_YLINFO_PATH=UN_PRINT_PATH+"ylinfo/";
 
 
+    String DEFALT_ILLNESS_REST_DAY="1";
 }

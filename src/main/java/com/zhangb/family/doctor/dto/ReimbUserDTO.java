@@ -15,5 +15,7 @@ public class ReimbUserDTO {
     private String name = "";
     private String today;
     private Integer year;
+    /**是否有效*/
+    private String enableFlag;
 
 }

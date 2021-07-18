@@ -25,4 +25,7 @@ public class ReimbDealResult {
     /**处理结果*/
     @DbFeildAnnotation("deal_result")
     private String dealResult;
+    /**处理结果编码*/
+    @DbFeildAnnotation("deal_code")
+    private String dealCode;
 }

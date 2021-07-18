@@ -8,6 +8,7 @@ import cn.hutool.db.Db;
 import com.zhangb.family.common.dao.BaseDao;
 import com.zhangb.family.common.exception.BizException;
 import com.zhangb.family.doctor.bo.ReimbDrugBo;
+import com.zhangb.family.doctor.common.constants.ReimbConstants;
 import com.zhangb.family.doctor.common.constants.ReimbRemoteStrategyKeyConstants;
 import com.zhangb.family.doctor.entity.ReimbIllness;
 import com.zhangb.family.doctor.entity.ReimbUserInfo;
@@ -63,7 +64,11 @@ public class ReimbIllnessServiceImpl implements IReimbIllnessService {
         if (CollectionUtil.isEmpty(resultList)){
             return null;
         }
-        return resultList.get(0);
+        ReimbIllness reimbIllness = resultList.get(0);
+        if (StrUtil.isBlank(reimbIllness.getRestDay())){
+            reimbIllness.setRestDay(ReimbConstants.DEFALT_ILLNESS_REST_DAY);
+        }
+        return reimbIllness;
     }
 
     @Override

@@ -1,0 +1,4 @@
+Host github.com
+HostName github.com
+User a344180788
+IdenityFile /Users/z9104/.ssh/id_rsa 

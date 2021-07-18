@@ -49,11 +49,11 @@ public class ReimbUserController {
      * @return
      * @throws Exception
      */
-    @RequestMapping("/deleteUser")
+    @RequestMapping("/updateUserEnableFlag")
     @ResponseBody
-    public ViewData deleteUser(@RequestBody ReimbUserDTO reimbUserDTO) throws Exception {
-        //逻辑删除用户，置为失效
-        return ViewDataUtil.success( reimbUserService.deleteUser(reimbUserDTO));
+    public ViewData updateUserEnableFlag(@RequestBody ReimbUserDTO reimbUserDTO) throws Exception {
+        //逻辑删除/恢复用户，置为失效
+        return ViewDataUtil.success(reimbUserService.updateUserEnableFlag(reimbUserDTO) );
     }
 
     /**

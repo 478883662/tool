@@ -51,21 +51,22 @@ public class ReimbUserServiceImpl implements IReimbUserService {
             int count = BaseDao.count(where);
             //数据库里存在就只更新值
             if(count>0){
-                BaseDao.update(reimbUserInfo,where);
+                BaseDao.updateForValue(reimbUserInfo,where);
             }else{//不存在就插入一条新记录
+                reimbUserInfo.setEnableFlag(GlobalConstants.ENABLE_FLAG_T);
                 BaseDao.insert(reimbUserInfo);
             }
         }
     }
 
     @Override
-    public Boolean deleteUser(ReimbUserDTO reimbUserDTO) throws SQLException, BizException {
+    public Boolean updateUserEnableFlag(ReimbUserDTO reimbUserDTO) throws SQLException, BizException {
         ReimbUserInfo where = new ReimbUserInfo();
         where.setName(reimbUserDTO.getName());
         where.setYlCard(reimbUserDTO.getYlCard());
 
         ReimbUserInfo reimbUserInfo = new ReimbUserInfo();
-        reimbUserInfo.setEnableFlag(GlobalConstants.ENABLE_FLAG_F);
+        reimbUserInfo.setEnableFlag(reimbUserDTO.getEnableFlag());
         BaseDao.updateForValue(reimbUserInfo,where);
         return null;
     }

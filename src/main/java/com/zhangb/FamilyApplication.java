@@ -17,6 +17,7 @@ public class FamilyApplication {
 		SpringApplication.run(FamilyApplication.class, args);
 	}
 
+
 	@Bean(destroyMethod = "close", initMethod = "init")
 	@ConfigurationProperties(prefix = "spring.datasource")
 	public DataSource druidDataSource() {

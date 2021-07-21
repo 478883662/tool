@@ -44,6 +44,24 @@ const httpPostForm = function (url, data) {
     return result;
 }
 
+const uploadFile = function (url, data) {
+    let result = axios({
+            method: 'post',
+            url: baseURL + url,
+            data: data,
+            header: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(resp => {
+            return resp.data;
+}).catch(error => {
+        return "exception=" + error;
+});
+    return result;
+}
+
+
+
 //get请求
 const httpGet = function (url) {
     var result = axios({

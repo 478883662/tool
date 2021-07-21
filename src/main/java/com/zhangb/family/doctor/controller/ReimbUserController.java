@@ -63,8 +63,8 @@ public class ReimbUserController {
      */
     @RequestMapping("/upload")
     @ResponseBody
-    public String upload(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) throws Exception {
-        String ylCard = request.getParameter("ylCard");
+    public ViewData upload(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) throws Exception {
+        String ylCard = request.getParameter("ylCardNo");
         String name = request.getParameter("name");
         String fileName=ylCard+name;
         if (file.isEmpty()) {
@@ -86,7 +86,7 @@ public class ReimbUserController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "上传成功";
+        return ViewDataUtil.success("上传成功");
     }
 
 }

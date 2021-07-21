@@ -66,7 +66,8 @@
                 </el-table-column>
                 <el-table-column prop="remibTotal" label="今年已报销金额" show-overflow-tooltip width="120">
                 </el-table-column>
-                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip width="70" :formatter = "enableFlagFormat">
+                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip width="70"
+                                 :formatter="enableFlagFormat">
                 </el-table-column>
                 <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="180">
                 </el-table-column>
@@ -75,7 +76,7 @@
                 <el-table-column
                         fixed="right"
                         label="操作"
-                        width="150">
+                        width="200">
                     <template slot-scope="scope">
                         <!—使用 v-if 来判断，如果当前行的冻结状态值 为0（未冻结），就显示按钮，否则不显示-->
                         <el-button
@@ -83,19 +84,30 @@
                                 type="text"
                                 @click="reimbClick(scope.row)"
                                 v-if="scope.row.enableFlag == 'T'"
-                        >报销</el-button>
+                        >报销
+                        </el-button>
                         <el-button
                                 size="mini"
                                 type="text"
                                 @click="deleteClick(scope.row)"
                                 v-if="scope.row.enableFlag == 'T'"
-                        >删除</el-button>
+                        >删除
+                        </el-button>
+                        <el-button
+                                size="mini"
+                                type="text"
+                                @click="uploadClick(scope.row)"
+                                v-if="scope.row.enableFlag == 'T'"
+                        >上传证件
+                        </el-button>
+
                         <el-button
                                 size="mini"
                                 type="text"
                                 @click="resumeClick(scope.row)"
                                 v-if="scope.row.enableFlag == 'F'"
-                        >恢复</el-button>
+                        >恢复
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -109,6 +121,34 @@
                         layout="total, sizes, prev, pager, next, jumper"
                         :total="total">
                 </el-pagination>
+            </div>
+            <div>
+                <el-dialog title="用户信息" :visible.sync="uploadVisible">
+                    <el-form ref="form" :model="form" label-width="80px">
+                        <el-form-item label="姓名">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="医疗账号">
+                            <el-input v-model="form.ylCardNo"></el-input>
+                        </el-form-item>
+                        <el-form-item label="上传文件">
+                            <el-upload
+                                    ref="upload"
+                                    :action="uploadAction"
+                                    :on-change="handleChange"
+                                    :file-list="fileList"
+                                    :auto-upload="false"
+                                    :data="fileDa"
+                            >
+                                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                            </el-upload>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="onSubmit()">提交</el-button>
+                            <el-button @click="uploadVisible = false">取 消</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-dialog>
             </div>
         </div>
     </div>
@@ -129,8 +169,16 @@
                     ylCard: '',
                     name: ''
                 },
-
-                dialogFormVisible: false,
+                formLabelWidth: '120px',
+                uploadVisible: false,
+                form: {
+                  ylCardNo: '',
+                  name: '',
+                },
+                uploadAction:'',
+                fileList: [],
+                dialogImageUrl: '',
+                dialogVisible: false,
                 ylCardForm: {
                     ylCardNo: ''
                 },
@@ -148,7 +196,33 @@
             //初始化调用查询方法
             this.queryClick();
         },
+        computed: {
+            // 上传是带的参数
+            fileDa() {
+              return {
+                ...this.form
+              }
+            }
+          },
         methods: {
+            handleChange(file, fileList) {
+              this.fileList = fileList
+            },
+            onSubmit() {
+                if(this.fileList.length<1){
+                     this.$message.error('请先选择要上传的图片');
+                     return;
+                }
+                this.uploadAction='/doctor/user/upload'
+                this.$refs.upload.submit()
+                this.uploadVisible = false;
+                this.$message({
+                          message: '上传成功',
+                          type: 'success'
+                        });
+                this.uploadAction=''
+                this.fileList=[]
+            },
             handleSizeChange(pageSize) {
                 this.currentPage = 1;
                 this.currentPageSize = pageSize;
@@ -188,6 +262,12 @@
                 });
 
 
+            },
+            uploadClick(row){
+                console.log(row)
+                this.uploadVisible=true
+                this.form.ylCardNo=row.ylCard
+                this.form.name=row.name
             },
             resumeClick(row){
                 console.log(row)
@@ -290,6 +370,7 @@
 
         }
     })
+
 </script>
 
 </html>

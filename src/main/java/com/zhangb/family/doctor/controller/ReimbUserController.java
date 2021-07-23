@@ -34,27 +34,29 @@ public class ReimbUserController {
 
     /**
      * 分页查询报销用户
+     *
      * @return /image/getImg?oid=2&t=1626969600000
      * @throws Exception
      */
     @RequestMapping("/getUserInfo")
     @ResponseBody
     public ViewData getUserInfo(@RequestBody ReimbUserDTO reimbUserDTO) throws Exception {
-        Page<ReimbUserBo> userList= reimbUserService.getUserListByPage(reimbUserDTO);
-        userList.getResult().forEach(e->{
+        Page<ReimbUserBo> userList = reimbUserService.getUserListByPage(reimbUserDTO);
+        userList.getResult().forEach(e -> {
             //若查出有关联的文件主键oid，则说明有图片
-            if (StrUtil.isNotBlank(e.getFileOid())){
-                e.setFilePath(String.format(GlobalConstants.IMAGE_DOWNLOAD_PRE,e.getFileOid(),e.getFileCreateDate().getTime()));
+            if (StrUtil.isNotBlank(e.getFileOid())) {
+                e.setFilePath(String.format(GlobalConstants.IMAGE_DOWNLOAD_PRE, e.getFileOid(), e.getFileCreateDate().getTime()));
                 List<String> preImgList = new ArrayList<>();
                 preImgList.add(e.getFilePath());
                 e.setPreFilePath(preImgList);
             }
         });
-        return ViewDataUtil.success( userList.toPageInfo());
+        return ViewDataUtil.success(userList.toPageInfo());
     }
 
     /**
      * 删除报销用户
+     *
      * @return
      * @throws Exception
      */
@@ -62,11 +64,12 @@ public class ReimbUserController {
     @ResponseBody
     public ViewData updateUserEnableFlag(@RequestBody ReimbUserDTO reimbUserDTO) throws Exception {
         //逻辑删除/恢复用户，置为失效
-        return ViewDataUtil.success(reimbUserService.updateUserEnableFlag(reimbUserDTO) );
+        return ViewDataUtil.success(reimbUserService.updateUserEnableFlag(reimbUserDTO));
     }
 
     /**
      * 上次文件
+     *
      * @return
      * @throws Exception
      */
@@ -75,14 +78,14 @@ public class ReimbUserController {
     public void upload(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) throws Exception {
         String ylCard = request.getParameter("ylCardNo");
         String name = request.getParameter("name");
-        String fileName=ylCard+name;
+        String fileName = ylCard + name;
         if (file.isEmpty()) {
             throw new Exception("上传文件为空");
         }
         String srcFileName = file.getOriginalFilename();
-        String fileType = srcFileName.substring(srcFileName.lastIndexOf(".")+1);
-        if (!StrUtil.equals(fileType,ReimbConstants.PIC_TYPE_PNG)
-                && !StrUtil.equals(fileType,ReimbConstants.PIC_TYPE_JPG)){
+        String fileType = srcFileName.substring(srcFileName.lastIndexOf(".") + 1);
+        if (!StrUtil.equals(fileType, ReimbConstants.PIC_TYPE_PNG)
+                && !StrUtil.equals(fileType, ReimbConstants.PIC_TYPE_JPG)) {
             throw new Exception("文件类型只能是png、jpg");
         }
         ReimbUserInfo reimbUserInfo = new ReimbUserInfo();
@@ -90,21 +93,21 @@ public class ReimbUserController {
         reimbUserInfo.setName(name);
         reimbUserInfo.setYlCard(ylCard);
         List<ReimbUserInfo> userList = reimbUserService.getAllUserInfo(reimbUserInfo);
-        if (CollectionUtil.isEmpty(userList)){
+        if (CollectionUtil.isEmpty(userList)) {
             throw new Exception("用户不存在或已失效，无法上传图片");
         }
         InputStream is = file.getInputStream();
-        byte[] pic = new byte[(int)file.getSize()];
+        byte[] pic = new byte[(int) file.getSize()];
         is.read(pic);
         String pkOid = userList.get(0).getIdCard();
         FamilyFile familyFile = new FamilyFile();
-        familyFile.setFileName(fileName+"."+fileType);
+        familyFile.setFileName(fileName + "." + fileType);
         familyFile.setPkOid(pkOid);
         familyFile.setFile(pic);
         FamilyFileDto familyFileDto = new FamilyFileDto();
         familyFileDto.setPkOid(pkOid);
         int count = familyFileService.getFamilyFileCount(familyFileDto);
-        if (count>0){
+        if (count > 0) {
             familyFileService.updateFile(familyFile);
             return;
         }

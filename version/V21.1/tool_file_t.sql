@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2021-07-23 21:12:07
+Date: 2021-07-24 00:11:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,9 +24,9 @@ CREATE TABLE `tool_file_t` (
   `file` longblob COMMENT '文件流',
   `file_name` varchar(1000) DEFAULT NULL COMMENT '文件名',
   `pk_oid` varchar(32) DEFAULT NULL COMMENT '外键--业务id',
-  `create_date` date DEFAULT NULL COMMENT '创建时间',
+  `create_date` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`oid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tool_file_t

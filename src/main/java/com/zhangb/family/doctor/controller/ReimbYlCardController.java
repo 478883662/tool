@@ -41,10 +41,11 @@ public class ReimbYlCardController {
     /**
      * 分页查询医疗账号信息
      * http://localhost:8086/doctor/ylCard/getYlCardList
+     *
      * @return
      */
     @RequestMapping("/getYlCardList")
-    public ViewData getYlCardList(@RequestBody YlCardDTO ylCardDTO){
+    public ViewData getYlCardList(@RequestBody YlCardDTO ylCardDTO) {
         Page<ReimbYlCard> ylCardList = reimbYlCardService.getYlCardByPage(ylCardDTO);
         return ViewDataUtil.success(ylCardList.toPageInfo());
     }
@@ -66,7 +67,7 @@ public class ReimbYlCardController {
         //从远端获取医疗账号下的所有人员
         List<ReimbUserInfo> userInfoList = reimbSyncService.syncUserByYlCard(ylCardDTO.getYlCard());
 
-        for (ReimbUserInfo reimbUserInfo:userInfoList){
+        for (ReimbUserInfo reimbUserInfo : userInfoList) {
             //2、同步报销记录
             reimbRecordService.syncRecord(reimbUserInfo.getSelfNo());
         }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangb.family.common.dao.FamilyFileDao">
+
+    <resultMap id="getFile_Map" type="com.zhangb.family.common.entity.FamilyFile">
+        <result column="oid"  property="oid"/>
+        <result column="file"  property="file"/>
+        <result column="file_name"  property="fileName"/>
+        <result column="pk_oid"  property="pkOid"/>
+    </resultMap>
+
+    <select id="getFamilyFile" resultMap="getFile_Map" parameterType="com.zhangb.family.common.dto.FamilyFileDto">
+        select file, file_name, pk_oid,oid
+        from tool_file_t
+        where
+        <if test="oid!=null">
+            oid=#{oid}
+        </if>
+        <if test="pkOid!=null">
+            pk_oid=#{pkOid}
+        </if>
+    </select>
+
+    <select id="getFamilyFileCount" resultType="integer" parameterType="com.zhangb.family.common.dto.FamilyFileDto">
+        select count(1)
+        from tool_file_t
+        where
+        <if test="pkOid!=null">
+            pk_oid=#{pkOid}
+        </if>
+    </select>
+
+    <insert id="addFile" parameterType="com.zhangb.family.common.entity.FamilyFile">
+        insert into tool_file_t (file, file_name, pk_oid,create_date) values (#{file}, #{fileName}, #{pkOid},now())
+    </insert>
+
+    <update id="updateFile" parameterType="com.zhangb.family.common.entity.FamilyFile">
+        update tool_file_t
+        set file = #{file},
+        file_name=#{fileName},
+        create_date = now()
+        where pk_oid =  #{pkOid}
+    </update>
+</mapper>

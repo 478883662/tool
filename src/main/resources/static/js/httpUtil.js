@@ -72,5 +72,5 @@ const httpGet = function (url) {
     }).catch(function (error) {
         return "exception=" + error;
     });
-    return res
+    return result
 }

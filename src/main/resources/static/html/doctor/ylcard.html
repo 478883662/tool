@@ -70,7 +70,7 @@
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click="dialogFormVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="addYlCard">确 定</el-button>
+                        <el-button type="primary" @click="addYlCard"  :disabled="isDisabledForAdd">确 定</el-button>
                     </div>
                 </el-dialog>
             </el-form>
@@ -125,6 +125,7 @@
         el: '#app',
         data: function () {
             return {
+                isDisabledForAdd: false,
                 queryParam: {
                     ylCard: '',
                     masterName: ''
@@ -179,6 +180,7 @@
                 this.dialogFormVisible=true
             },
             addYlCard(){
+                this.isDisabledForAdd=true
                 var param = {
                     'ylCard': this.ylCardForm.ylCardNo,
                 }
@@ -186,6 +188,7 @@
                 httpPost("/ylCard/addYlCard", param).then(result => {
                     alert(result.msg);
                     this.loading = false;
+                    this.isDisabledForAdd=false
                 });
                 this.dialogFormVisible = false
 

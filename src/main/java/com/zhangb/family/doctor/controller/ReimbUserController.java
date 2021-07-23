@@ -1,21 +1,27 @@
 package com.zhangb.family.doctor.controller;
 
-import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.Page;
+import com.zhangb.family.common.constants.GlobalConstants;
+import com.zhangb.family.common.dto.FamilyFileDto;
+import com.zhangb.family.common.entity.FamilyFile;
 import com.zhangb.family.common.module.ViewData;
+import com.zhangb.family.common.service.FamilyFileService;
 import com.zhangb.family.common.util.ViewDataUtil;
 import com.zhangb.family.doctor.bo.ReimbUserBo;
 import com.zhangb.family.doctor.common.constants.ReimbConstants;
 import com.zhangb.family.doctor.dto.ReimbUserDTO;
+import com.zhangb.family.doctor.entity.ReimbUserInfo;
 import com.zhangb.family.doctor.service.IReimbUserService;
-import com.zhangb.family.doctor.util.PrintBizUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/doctor/user")
@@ -23,10 +29,12 @@ public class ReimbUserController {
 
     @Autowired
     private IReimbUserService reimbUserService;
+    @Autowired
+    private FamilyFileService familyFileService;
 
     /**
      * 分页查询报销用户
-     * @return
+     * @return /image/getImg?oid=2&t=1626969600000
      * @throws Exception
      */
     @RequestMapping("/getUserInfo")
@@ -34,11 +42,12 @@ public class ReimbUserController {
     public ViewData getUserInfo(@RequestBody ReimbUserDTO reimbUserDTO) throws Exception {
         Page<ReimbUserBo> userList= reimbUserService.getUserListByPage(reimbUserDTO);
         userList.getResult().forEach(e->{
-            String fileName = PrintBizUtil.getYlCardName(e.getYlCard(),e.getName())+"."+ ReimbConstants.PIC_TYPE_PNG;
-            if (FileUtil.exist(fileName)){
-                e.setFilePath(e.getYlCard()+e.getName()+"."+ReimbConstants.PIC_TYPE_PNG);
-            }else{
-                e.setFilePath(e.getYlCard()+e.getName()+"."+ReimbConstants.PIC_TYPE_JPG);
+            //若查出有关联的文件主键oid，则说明有图片
+            if (StrUtil.isNotBlank(e.getFileOid())){
+                e.setFilePath(String.format(GlobalConstants.IMAGE_DOWNLOAD_PRE,e.getFileOid(),e.getFileCreateDate().getTime()));
+                List<String> preImgList = new ArrayList<>();
+                preImgList.add(e.getFilePath());
+                e.setPreFilePath(preImgList);
             }
         });
         return ViewDataUtil.success( userList.toPageInfo());
@@ -63,7 +72,7 @@ public class ReimbUserController {
      */
     @RequestMapping("/upload")
     @ResponseBody
-    public ViewData upload(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) throws Exception {
+    public void upload(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) throws Exception {
         String ylCard = request.getParameter("ylCardNo");
         String name = request.getParameter("name");
         String fileName=ylCard+name;
@@ -76,17 +85,30 @@ public class ReimbUserController {
                 && !StrUtil.equals(fileType,ReimbConstants.PIC_TYPE_JPG)){
             throw new Exception("文件类型只能是png、jpg");
         }
-        String filePath = ReimbConstants.PIC_FILE_PATH; // 上传后的路径
-        File dest = new File(filePath + fileName+"."+fileType);
-        if (!dest.getParentFile().exists()) {
-            dest.getParentFile().mkdirs();
+        ReimbUserInfo reimbUserInfo = new ReimbUserInfo();
+        reimbUserInfo.setEnableFlag(GlobalConstants.ENABLE_FLAG_T);
+        reimbUserInfo.setName(name);
+        reimbUserInfo.setYlCard(ylCard);
+        List<ReimbUserInfo> userList = reimbUserService.getAllUserInfo(reimbUserInfo);
+        if (CollectionUtil.isEmpty(userList)){
+            throw new Exception("用户不存在或已失效，无法上传图片");
         }
-        try {
-            file.transferTo(dest);
-        } catch (Exception e) {
-            e.printStackTrace();
+        InputStream is = file.getInputStream();
+        byte[] pic = new byte[(int)file.getSize()];
+        is.read(pic);
+        String pkOid = userList.get(0).getIdCard();
+        FamilyFile familyFile = new FamilyFile();
+        familyFile.setFileName(fileName+"."+fileType);
+        familyFile.setPkOid(pkOid);
+        familyFile.setFile(pic);
+        FamilyFileDto familyFileDto = new FamilyFileDto();
+        familyFileDto.setPkOid(pkOid);
+        int count = familyFileService.getFamilyFileCount(familyFileDto);
+        if (count>0){
+            familyFileService.updateFile(familyFile);
+            return;
         }
-        return ViewDataUtil.success("上传成功");
+        familyFileService.addFile(familyFile);
     }
 
 }

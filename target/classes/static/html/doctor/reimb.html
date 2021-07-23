@@ -51,14 +51,13 @@
                 <el-form-item>
                     <el-button type="primary" @click="queryClick">查询</el-button>
                 </el-form-item>
-                <el-button type="primary" @click="batchReimbClick">批量报销</el-button>
+                <el-button type="primary" @click="batchReimbClick" :disabled="isDisabledForBatchReimbBtn">批量报销</el-button>
             </el-form>
             <el-table ref="multipleTable" :data="reimbUserBoList" stripe
                       v-loading="loading" :border=true
                       style="width: 100%;">
-                <el-table-column type="selection" width="55">
-                </el-table-column>
-                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="180">
+                <el-table-column type="selection" width="40" :selectable="selectable"></el-table-column>
+                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="170">
                 </el-table-column>
                 <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="100">
                 </el-table-column>
@@ -69,9 +68,17 @@
                 <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip width="70"
                                  :formatter="enableFlagFormat">
                 </el-table-column>
-                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="180">
+                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="170">
                 </el-table-column>
-                <el-table-column prop="dealResult" label="最近报销结果" show-overflow-tooltip width="300">
+                <el-table-column prop="dealResult" label="最近报销结果" show-overflow-tooltip width="200">
+                </el-table-column>
+                <el-table-column label="证件照" width="100">
+                    <template scope="scope">
+                        <el-image  :src="scope.row.filePath"
+                             :preview-src-list="scope.row.preFilePath"
+                                   style="width: 60px; height: 40px" class="head_pic">
+                        </el-image>
+                    </template>
                 </el-table-column>
                 <el-table-column
                         fixed="right"
@@ -134,7 +141,7 @@
                         <el-form-item label="上传文件">
                             <el-upload
                                     ref="upload"
-                                    :action="uploadAction"
+                                    action="/doctor/user/upload"
                                     :on-change="handleChange"
                                     :file-list="fileList"
                                     :auto-upload="false"
@@ -144,7 +151,7 @@
                             </el-upload>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="onSubmit()">提交</el-button>
+                            <el-button type="primary" @click="onSubmit()" :disabled="isDisabledForUpload">提交</el-button>
                             <el-button @click="uploadVisible = false">取 消</el-button>
                         </el-form-item>
                     </el-form>
@@ -165,6 +172,8 @@
         el: '#app',
         data: function () {
             return {
+                isDisabledForUpload: false,
+                isDisabledForBatchReimbBtn: false,
                 queryParam: {
                     ylCard: '',
                     name: ''
@@ -175,7 +184,6 @@
                   ylCardNo: '',
                   name: '',
                 },
-                uploadAction:'',
                 fileList: [],
                 dialogImageUrl: '',
                 dialogVisible: false,
@@ -187,8 +195,8 @@
                 createDate: '',
                 currentPage: 1,
                 total: 0,
-                currentPageSize: 100,
-                pageSizes: [100, 100, 200, 400,1000],
+                currentPageSize: 50,
+                pageSizes: [50, 100, 200, 400,800],
                 loading: false
             }
         },
@@ -208,20 +216,30 @@
             handleChange(file, fileList) {
               this.fileList = fileList
             },
+            selectable(row, index) {
+                if(row.enableFlag == 'T'){
+                    return true
+                }else {
+                    return false
+                }
+            },
             onSubmit() {
                 if(this.fileList.length<1){
                      this.$message.error('请先选择要上传的图片');
                      return;
                 }
-                this.uploadAction='/doctor/user/upload'
+                this.isDisabledForUpload=true
                 this.$refs.upload.submit()
-                this.uploadVisible = false;
-                this.$message({
+                this.fileList=[]
+                setTimeout(() => {
+                    this.isDisabledForUpload=false;
+                    this.uploadVisible = false;
+                    this.$message({
                           message: '上传成功',
                           type: 'success'
                         });
-                this.uploadAction=''
-                this.fileList=[]
+                    this.queryClick()
+                }, 1000)
             },
             handleSizeChange(pageSize) {
                 this.currentPage = 1;
@@ -237,7 +255,8 @@
                 this.name = '';
             },
             reimbClick(row){
-                // 调用后端--查询接口
+                // 调用后端--报销单人接口
+                this.loading=true
                 httpGet("/reimb/reimbursement?ylCard="+row.ylCard+"&name="+row.name).then(result => {
                     console.log(result)
                     alert(result.msg);
@@ -246,19 +265,20 @@
 
             },
             batchReimbClick(){
+                this.loading=true
+                this.isDisabledForBatchReimbBtn=true
                 var list = this.$refs.multipleTable.selection;
+
                 // 调用后端--查询接口
                 httpPost("/reimb/batchReimbursement", list).then(result => {
                     console.log(result)
                     if (result.code == '0000') {
-                        this.reimbUserBoList = result.obj.list.map(item => {
-                            return item;
-                        });
-                        this.total = result.obj.total;
+                        this.$message(result.obj);
                     } else {
-                        alert(result.msg);
+                        this.$message.error(result.msg);
                     }
                     this.loading = false;
+                    this.isDisabledForBatchReimbBtn=false
                 });
 
 

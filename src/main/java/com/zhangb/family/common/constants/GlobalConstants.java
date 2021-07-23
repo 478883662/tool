@@ -6,4 +6,6 @@ package com.zhangb.family.common.constants;
 public interface GlobalConstants {
     String ENABLE_FLAG_T="T";
     String ENABLE_FLAG_F="F";
+
+    String IMAGE_DOWNLOAD_PRE="/image/getImg?oid=%s&t=%s";
 }

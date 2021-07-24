@@ -3,6 +3,7 @@ package com.zhangb.family.doctor.bo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class ReimbUserBo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date reimbDate;
     private String dealResult = "";
-    private double remibTotal = 0D;
+    private BigDecimal remibTotal;
     private String filePath="";
     /**预览大图*/
     private List<String> preFilePath;

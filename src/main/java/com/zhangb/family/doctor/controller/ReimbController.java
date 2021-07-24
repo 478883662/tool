@@ -6,6 +6,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhangb.family.common.module.ViewData;
 import com.zhangb.family.common.util.ViewDataUtil;
+import com.zhangb.family.doctor.bo.DoctorReimbDetailInfo;
 import com.zhangb.family.doctor.bo.DoctorReimbResultBo;
 import com.zhangb.family.doctor.bo.ReimbUserBo;
 import com.zhangb.family.doctor.bo.ReimbYearTotalBo;
@@ -28,6 +29,7 @@ public class ReimbController {
     @Autowired
     private IReimbService reimbService;
 
+
     /**
      * 查询年度累计报销金额
      *
@@ -48,6 +50,18 @@ public class ReimbController {
         return ViewDataUtil.success(resultList);
     }
 
+    /**
+     *  查询今日报销情况
+     *
+     * @return /image/getImg?oid=2&t=1626969600000
+     * @throws Exception
+     */
+    @RequestMapping("/getTodayReimbInfo")
+    @ResponseBody
+    public ViewData getTodayReimbInfo() throws Exception {
+        DoctorReimbDetailInfo doctorTodayReimbInfo = reimbService.getTodayReimbInfo(DateUtil.today());
+        return ViewDataUtil.success(doctorTodayReimbInfo);
+    }
 
     /**
      * 按最近一次报销记录给用户报销
@@ -62,7 +76,9 @@ public class ReimbController {
     @ResponseBody
     public ViewData reimbursement(@RequestParam(value = "ylCard", required = true) String ylCard,
                                   @RequestParam(value = "name", required = false) String name) throws Exception {
-        return ViewDataUtil.success(reimbService.reimbForYlCardAndName(ylCard, name));
+        List<DoctorReimbResultBo> resultList = reimbService.reimbForYlCardAndName(ylCard, name);
+        String resultStr = getResultStr(1L, resultList);
+        return ViewDataUtil.success(resultStr, DoctorRespMsgUtil.getHtmlStr(resultList));
     }
 
     /**
@@ -85,8 +101,14 @@ public class ReimbController {
             resultList.addAll(reimbService.reimbForYlCardAndName(reimbUserBo.getYlCard(), reimbUserBo.getName()));
         }
         Long total = Long.valueOf(list.size());
+        String resultStr = getResultStr(total, resultList);
+        return ViewDataUtil.success(resultStr, DoctorRespMsgUtil.getHtmlStr(resultList));
+    }
+
+    private String getResultStr(Long total, List<DoctorReimbResultBo> resultList) {
         Long successCount = resultList.stream().filter(e-> StrUtil.equals(e.getCode(), DoctorReimbResultEnum.SUCCESS.getCode())).count();
-        return ViewDataUtil.success(String.format("成功报销%s个，失败%s个", successCount,total-successCount), DoctorRespMsgUtil.getHtmlStr(resultList));
+        String resultStr =String.format("成功报销%s个，失败%s个", successCount,total-successCount) ;
+        return resultStr;
     }
 
 }

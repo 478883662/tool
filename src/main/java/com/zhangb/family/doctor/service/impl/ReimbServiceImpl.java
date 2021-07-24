@@ -15,6 +15,7 @@ import com.zhangb.family.doctor.common.constants.ReimbRemoteStrategyKeyConstants
 import com.zhangb.family.doctor.common.constants.RemoteConstants;
 import com.zhangb.family.doctor.common.enums.DoctorPrintStateEnum;
 import com.zhangb.family.doctor.common.enums.DoctorReimbResultEnum;
+import com.zhangb.family.doctor.dao.DoctorReimbDao;
 import com.zhangb.family.doctor.entity.*;
 import com.zhangb.family.doctor.remote.service.ICxnhRemoteService;
 import com.zhangb.family.doctor.service.*;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,6 +53,9 @@ public class ReimbServiceImpl implements IReimbService {
     private IReimbDrugService reimbDrugService;
     @Autowired
     private IDoctorPrintService doctorPrintService;
+    @Autowired
+    private DoctorReimbDao doctorReimbDao;
+
 
     @Override
     public String getBizId() throws Exception {
@@ -323,6 +328,16 @@ public class ReimbServiceImpl implements IReimbService {
             resultList.add(new DoctorReimbResultBo(ylCard,name,DoctorReimbResultEnum.REIMB_ERROR));
         }
         return resultList;
+    }
+
+    @Override
+    public DoctorReimbDetailInfo getTodayReimbInfo(String today) {
+        List<ReimbUserBo> reimbUserBoList = doctorReimbDao.getTodayReimbInfo(today) ;
+        BigDecimal total = doctorReimbDao.getTodayTotalReimb(today);
+        DoctorReimbDetailInfo doctorTodayReimbInfo = new DoctorReimbDetailInfo();
+        doctorTodayReimbInfo.setTotalStr("今日累计成功报销金额："+total.setScale(0, RoundingMode.HALF_UP));
+        doctorTodayReimbInfo.setList(reimbUserBoList);
+        return doctorTodayReimbInfo;
     }
 
     /**

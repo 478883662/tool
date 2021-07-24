@@ -54,6 +54,21 @@
                 </el-form-item>
                 <el-button type="primary" @click="batchReimbClick" :disabled="isDisabledForBatchReimbBtn">批量报销
                 </el-button>
+                <el-button @click="todayReimbDetailClick" type="primary" style="margin-left: 16px;">
+                    查询今日报销情况
+                </el-button>
+                <el-drawer
+                        :title="todayTotalStr"
+                        :visible.sync="drawer"
+                        direction="rtl"
+                        size="550px">
+                    <el-table :data="todayReimbList">
+                        <el-table-column property="ylCard" label="医疗账号" width="160"></el-table-column>
+                        <el-table-column property="name" label="姓名" width="80"></el-table-column>
+                        <el-table-column property="remibTotal" label="报销金额" width="80"></el-table-column>
+                        <el-table-column property="dealResult" label="报销结果" show-overflow-tooltip width="230"></el-table-column>
+                    </el-table>
+                </el-drawer>
             </el-form>
             <el-table ref="multipleTable" :data="reimbUserBoList" stripe
                       v-loading="loading" :border=true
@@ -180,6 +195,9 @@
                     ylCard: '',
                     name: ''
                 },
+                todayTotalStr:'',
+                todayReimbList:[],
+                drawer:false,
                 formLabelWidth: '120px',
                 uploadVisible: false,
                 form: {
@@ -217,6 +235,18 @@
         methods: {
             handleChange(file, fileList) {
               this.fileList = fileList
+            },
+            todayReimbDetailClick(){
+                this.drawer = true
+                // 调用后端--查询今日报销信息接口
+                httpGet("/reimb/getTodayReimbInfo").then(result => {
+                    if (result.code == '0000') {
+                        this.todayTotalStr=result.obj.totalStr;
+                        this.todayReimbList=result.obj.list;
+                    }else{
+                        this.$message.error(result.msg);
+                    }
+                });
             },
             selectable(row, index) {
                 if(row.enableFlag == 'T'){
@@ -260,7 +290,13 @@
                 // 调用后端--报销单人接口
                 this.loading=true
                 httpGet("/reimb/reimbursement?ylCard="+row.ylCard+"&name="+row.name).then(result => {
-                    this.$message(result.msg);
+                    if (result.code == '0000') {
+                        this.$alert(result.obj, result.msg, {
+                          dangerouslyUseHTMLString: true
+                        });
+                    } else {
+                        this.$message.error(result.msg);
+                    }
                     this.loading = false;
                     this.queryClick();
                 });
@@ -276,7 +312,7 @@
                     console.log(result)
                     if (result.code == '0000') {
                         this.$alert(result.obj, result.msg, {
-                          confirmButtonText: '确定',
+                          dangerouslyUseHTMLString: true
                         });
                     } else {
                         this.$message.error(result.msg);

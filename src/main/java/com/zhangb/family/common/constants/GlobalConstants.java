@@ -9,7 +9,7 @@ public interface GlobalConstants {
 
     String UNDER_LINE="_";
 
-    String NEXT_LINE="\r\n";
+    String NEXT_LINE="<Br/>";
 
     String IMAGE_DOWNLOAD_PRE="/image/getImg?oid=%s&t=%s";
 }

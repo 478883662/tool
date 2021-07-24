@@ -10,8 +10,10 @@ public class DoctorRespMsgUtil {
     public static String getHtmlStr(List<DoctorReimbResultBo> resultList){
         StringBuilder stringBuilder = new StringBuilder();
         for (DoctorReimbResultBo doctorReimbResultBo : resultList){
-            stringBuilder.append(doctorReimbResultBo.getName())
+            stringBuilder.append("<span>")
+                    .append(doctorReimbResultBo.getName())
                     .append(doctorReimbResultBo.getErrMsg())
+                    .append("<span/>")
                     .append(GlobalConstants.NEXT_LINE);
         }
         return stringBuilder.toString();

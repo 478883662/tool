@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangb.family.doctor.dao.DoctorReimbDao">
+
+
+    <resultMap id="getTodayReimbInfo_Map" type="com.zhangb.family.doctor.bo.ReimbUserBo">
+        <result column="yl_card" jdbcType="VARCHAR" property="ylCard"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="deal_result" property="dealResult"/>
+        <result column="remib_total" property="remibTotal"/>
+    </resultMap>
+
+    <select id="getTodayReimbInfo" resultMap="getTodayReimbInfo_Map" parameterType="string">
+        select
+            t1.YL_CARD,
+            t1.`NAME`,
+            t4.deal_result,
+            (select IFNULL(sum(IFNULL(t10.MONEY,0)),0) from tool_deal_record_t t10
+            where t10.self_no = t1.SELF_NO and t10.YL_CARD=t1.YL_CARD
+            AND t10.REIMB_TYPE='1101' and t10.reimb_date=#{today}) remib_total
+        from
+            tool_patient_t t1
+            left join tool_deal_result_t t4  on (
+                t1.yl_card = t4.yl_card
+                and t1.name = t4.name
+                )
+        where  DATE_FORMAT(t4.deal_time,'%Y-%m-%d')  = #{today}
+    </select>
+
+    <select id="getTodayTotalReimb" resultType="java.math.BigDecimal" parameterType="string">
+        select IFNULL(sum(IFNULL(t10.MONEY,0)),0)
+        from tool_deal_record_t t10
+        where  t10.REIMB_TYPE='1101' and t10.reimb_date=#{today}
+    </select>
+</mapper>

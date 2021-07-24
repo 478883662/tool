@@ -23,7 +23,7 @@
             t1.enable_flag,
             t4.deal_result,
             t4.deal_time,
-            (select sum(MONEY) from tool_deal_record_t
+            (select IFNULL(sum(IFNULL(MONEY,0)),0) from tool_deal_record_t
                   where self_no = t1.SELF_NO and YL_CARD=t1.YL_CARD
                   and REIMB_YEAR = #{year} AND REIMB_TYPE='1101') remib_total,
             t2.oid as fileOid,

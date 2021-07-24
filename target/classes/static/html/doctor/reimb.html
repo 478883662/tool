@@ -35,6 +35,7 @@
       display: block!important;
     }
 
+
 </style>
 
 <body>
@@ -51,32 +52,33 @@
                 <el-form-item>
                     <el-button type="primary" @click="queryClick">查询</el-button>
                 </el-form-item>
-                <el-button type="primary" @click="batchReimbClick" :disabled="isDisabledForBatchReimbBtn">批量报销</el-button>
+                <el-button type="primary" @click="batchReimbClick" :disabled="isDisabledForBatchReimbBtn">批量报销
+                </el-button>
             </el-form>
             <el-table ref="multipleTable" :data="reimbUserBoList" stripe
                       v-loading="loading" :border=true
                       style="width: 100%;">
                 <el-table-column type="selection" width="40" :selectable="selectable"></el-table-column>
-                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="170">
+                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="160">
                 </el-table-column>
-                <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="100">
+                <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="80">
                 </el-table-column>
-                <el-table-column prop="name" label="姓名" show-overflow-tooltip width="100">
+                <el-table-column prop="name" label="姓名" show-overflow-tooltip width="80">
                 </el-table-column>
                 <el-table-column prop="remibTotal" label="今年已报销金额" show-overflow-tooltip width="120">
                 </el-table-column>
-                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip width="70"
+                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip width="50"
                                  :formatter="enableFlagFormat">
                 </el-table-column>
-                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="170">
+                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="160">
                 </el-table-column>
                 <el-table-column prop="dealResult" label="最近报销结果" show-overflow-tooltip width="200">
                 </el-table-column>
                 <el-table-column label="证件照" width="100">
                     <template scope="scope">
-                        <el-image  :src="scope.row.filePath"
-                             :preview-src-list="scope.row.preFilePath"
-                                   style="width: 60px; height: 40px" class="head_pic">
+                        <el-image :src="scope.row.filePath"
+                                  :preview-src-list="scope.row.preFilePath"
+                                  style="width: 60px; height: 40px" class="head_pic">
                         </el-image>
                     </template>
                 </el-table-column>
@@ -258,9 +260,9 @@
                 // 调用后端--报销单人接口
                 this.loading=true
                 httpGet("/reimb/reimbursement?ylCard="+row.ylCard+"&name="+row.name).then(result => {
-                    console.log(result)
-                    alert(result.msg);
+                    this.$message(result.msg);
                     this.loading = false;
+                    this.queryClick();
                 });
 
             },
@@ -273,12 +275,15 @@
                 httpPost("/reimb/batchReimbursement", list).then(result => {
                     console.log(result)
                     if (result.code == '0000') {
-                        this.$message(result.obj);
+                        this.$alert(result.obj, result.msg, {
+                          confirmButtonText: '确定',
+                        });
                     } else {
                         this.$message.error(result.msg);
                     }
                     this.loading = false;
                     this.isDisabledForBatchReimbBtn=false
+                    this.queryClick();
                 });
 
 
@@ -390,6 +395,7 @@
 
         }
     })
+
 
 </script>
 

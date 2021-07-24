@@ -7,5 +7,9 @@ public interface GlobalConstants {
     String ENABLE_FLAG_T="T";
     String ENABLE_FLAG_F="F";
 
+    String UNDER_LINE="_";
+
+    String NEXT_LINE="\r\n";
+
     String IMAGE_DOWNLOAD_PRE="/image/getImg?oid=%s&t=%s";
 }

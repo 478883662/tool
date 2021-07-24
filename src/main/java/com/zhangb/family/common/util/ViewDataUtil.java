@@ -17,6 +17,13 @@ public class ViewDataUtil {
         return viewData;
     }
 
+    public static ViewData success(String msg,Object obj){
+        ViewData viewData = new ViewData(ViewData.RespEnum.SUCCESS);
+        viewData.setObj(obj);
+        viewData.setMsg(msg);
+        return viewData;
+    }
+
     public static ViewData bizError(String msg){
         ViewData viewData = new ViewData(ViewData.RespEnum.BIZ_ERROR);
         viewData.setMsg(msg);

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by z9104 on 2021/5/5.
  */
-public interface ReimbYlCardService {
+public interface IReimbYlCardService {
 
 
     /**

@@ -25,7 +25,7 @@ public class ReimbSyncServiceImpl implements IReimbSyncService {
     @Autowired
     private IReimbRecordService recordService;
     @Autowired
-    private ReimbYlCardService reimbYlCardService;
+    private IReimbYlCardService reimbYlCardService;
     @Autowired
     private ICxnhRemoteService remoteService;
 

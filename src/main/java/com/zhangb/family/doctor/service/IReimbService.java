@@ -1,6 +1,7 @@
 package com.zhangb.family.doctor.service;
 
 
+import com.zhangb.family.doctor.bo.DoctorReimbResultBo;
 import com.zhangb.family.doctor.bo.ReimbIllnessBo;
 import com.zhangb.family.doctor.bo.ReimbPrintBo;
 import com.zhangb.family.doctor.bo.ReimbUnPrintRecordBo;
@@ -86,5 +87,5 @@ public interface IReimbService {
      * @param name
      * @return
      */
-    String reimbForYlCardAndName(String ylCard, String name);
+    List<DoctorReimbResultBo>  reimbForYlCardAndName(String ylCard, String name);
 }

@@ -11,7 +11,7 @@ import com.zhangb.family.doctor.remote.service.ICxnhRemoteService;
 import com.zhangb.family.doctor.service.IReimbRecordService;
 import com.zhangb.family.doctor.service.IReimbSyncService;
 import com.zhangb.family.doctor.service.IReimbUserService;
-import com.zhangb.family.doctor.service.ReimbYlCardService;
+import com.zhangb.family.doctor.service.IReimbYlCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +28,7 @@ import java.util.List;
 public class ReimbYlCardController {
 
     @Autowired
-    private ReimbYlCardService reimbYlCardService;
+    private IReimbYlCardService reimbYlCardService;
     @Autowired
     private IReimbSyncService reimbSyncService;
     @Autowired

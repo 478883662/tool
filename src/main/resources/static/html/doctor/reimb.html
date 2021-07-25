@@ -35,7 +35,6 @@
       display: block!important;
     }
 
-
 </style>
 
 <body>
@@ -70,8 +69,14 @@
                     </el-table>
                 </el-drawer>
             </el-form>
-            <el-table ref="multipleTable" :data="reimbUserBoList" stripe
+            <el-table ref="multipleTable" :data="reimbUserBoList"
                       v-loading="loading" :border=true
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(0, 0, 0, 0.8)"
+                      :row-class-name="tableRowClassName"
+                      max-height="600"
+                      border
                       style="width: 100%;">
                 <el-table-column type="selection" width="40" :selectable="selectable"></el-table-column>
                 <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="160">
@@ -82,7 +87,7 @@
                 </el-table-column>
                 <el-table-column prop="remibTotal" label="今年已报销金额" show-overflow-tooltip width="120">
                 </el-table-column>
-                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip width="50"
+                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip sortable width="50"
                                  :formatter="enableFlagFormat">
                 </el-table-column>
                 <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="160">
@@ -236,6 +241,15 @@
             handleChange(file, fileList) {
               this.fileList = fileList
             },
+            tableRowClassName(row,rowIndex) {
+                if (row.row.remibTotal >= 200  )  {
+                    return 'failure-row';
+
+                } else if (row.row.remibTotal >=100 && row.row.remibTotal <200) {
+                    return 'warning-row';
+                }
+                return '';
+              },
             todayReimbDetailClick(){
                 this.drawer = true
                 // 调用后端--查询今日报销信息接口

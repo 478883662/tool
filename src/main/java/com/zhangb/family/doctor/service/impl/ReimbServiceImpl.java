@@ -294,7 +294,7 @@ public class ReimbServiceImpl implements IReimbService {
     public ReimbUnPrintRecordBo getUnPrintInfo(String bizId,String state) throws SQLException {
         List<ReimbUnPrintRecordBo> reimbPrintInfoList = Db.use().query("select t1.BIZ_ID," +
                         "t1.`NAME`,t2.created_date,t1.ILLNESS_NAME,t1.MONEY ," +
-                        "t3.family_location,t1.yl_card,t1.yl_location\n" +
+                        "t3.family_location,t1.yl_card,t1.yl_location,t3.ID_CARD\n" +
                         "from tool_reimb_print_t t2 left join tool_deal_record_t t1 on (t1.BIZ_ID = t2.biz_id)" +
                         "left join tool_patient_t t3 on (  t1.SELF_NO = t3.SELF_NO) WHERE\n" +
                         "    t2.print_state=? and t1.MONEY>0 \n" +

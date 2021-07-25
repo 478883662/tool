@@ -2,10 +2,14 @@ package com.zhangb.family.doctor.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
+import com.zhangb.family.common.dto.FamilyFileDto;
+import com.zhangb.family.common.entity.FamilyFile;
+import com.zhangb.family.common.service.FamilyFileService;
 import com.zhangb.family.common.util.ExportWordUtil;
 import com.zhangb.family.common.util.PrintUtil;
 import com.zhangb.family.doctor.bo.ReimbPrintBo;
 import com.zhangb.family.doctor.bo.ReimbUnPrintRecordBo;
+import com.zhangb.family.doctor.common.constants.DoctorSingleInstance;
 import com.zhangb.family.doctor.common.constants.ReimbConstants;
 import com.zhangb.family.doctor.entity.ReimbPrintInfo;
 import com.zhangb.family.doctor.service.IDoctorPrintService;
@@ -15,11 +19,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+
 @Service
 public class DoctorPrintServiceImpl implements IDoctorPrintService {
 
     @Autowired
     private IReimbService reimbService;
+    @Autowired
+    private FamilyFileService familyFileService;
     // 打印机名称
     @Value("${print.name}")
     private String printName;
@@ -44,6 +53,8 @@ public class DoctorPrintServiceImpl implements IDoctorPrintService {
         //将图片插入到word文档中
         //处方图文件全路径
         String chuFangImgFileName = ReimbConstants.CHUFANG_PIC_PATH + reimbDealRecord.getIllNessName() + "." + ReimbConstants.PIC_TYPE_PNG;
+        //从数据库里取出最新的处方图，然后下载至chuFangImgFileName路径中
+        downloadImg(chuFangImgFileName, reimbDealRecord.getIdCard());
         //插入处方图后的新文件名
         String newFileName = docFileName + "_1.doc";
         if (FileUtil.exist(chuFangImgFileName)) {
@@ -56,6 +67,8 @@ public class DoctorPrintServiceImpl implements IDoctorPrintService {
         //3，生成有个人医疗账户图的word文档
         //获取医疗账户图文件名，png或者jpg格式
         String ylCardImgFileName = PrintBizUtil.getYlCardName(reimbDealRecord.getYlCard(), reimbDealRecord.getName()) + "." + ReimbConstants.PIC_TYPE_PNG;
+        //从数据库里取出最新的个人医疗账户图，然后下载至ylCardImgFileName路径中
+        downloadImg(ylCardImgFileName, reimbDealRecord.getIdCard());
         if (!FileUtil.exist(ylCardImgFileName)) {
             ylCardImgFileName = PrintBizUtil.getYlCardName(reimbDealRecord.getYlCard(), reimbDealRecord.getName()) + "." + ReimbConstants.PIC_TYPE_JPG;
         }
@@ -64,10 +77,10 @@ public class DoctorPrintServiceImpl implements IDoctorPrintService {
             PrintUtil.replaceImg(srcFilePath, ylCardImgFileName, ReimbConstants.YLCARD_IMG_IN_WORD_STR, 480, 170, ReimbConstants.UN_PRINT_PATH + newFileName);
             FileUtil.del(srcFilePath);
             //源文件变成有医疗信息图的文件
-            srcFilePath=ReimbConstants.UN_PRINT_PATH +newFileName;
+            srcFilePath = ReimbConstants.UN_PRINT_PATH + newFileName;
         }
         //打印文件
-        printOneFile(srcFilePath,printName);
+        printOneFile(srcFilePath, printName);
 
         //更新状态为已打印
         ReimbPrintInfo reimbPrintInfo = new ReimbPrintInfo();
@@ -78,6 +91,7 @@ public class DoctorPrintServiceImpl implements IDoctorPrintService {
 
     /**
      * 调用打印机打印单个文件
+     *
      * @param srcFilePath
      * @param printName
      */
@@ -86,5 +100,45 @@ public class DoctorPrintServiceImpl implements IDoctorPrintService {
         PrintUtil.printWord(srcFilePath, printName);
 //        删除临时文件
         FileUtil.del(srcFilePath);
+    }
+
+    /**
+     * 下载图片到本地路径
+     *
+     * @param filePath
+     * @param pkOid
+     */
+    private void downloadImg(String filePath, String pkOid) {
+        BufferedOutputStream bufferedOutputStream = null;
+        try {
+            if (DoctorSingleInstance.INSTANCE.isNewChufang(filePath)) {
+                //今日同步过，不用再同步，直接取本地的即可
+                return;
+            }
+            //取出图片
+            FamilyFileDto familyFileDto = new FamilyFileDto();
+            familyFileDto.setPkOid(pkOid);
+            FamilyFile familyFile = familyFileService.getFamilyFile(familyFileDto);
+            if (familyFile == null || familyFile.getFile() == null) {
+                return;
+            }
+            byte[] bytes = familyFile.getFile();
+            //下载图片到本地文件夹
+            bufferedOutputStream = FileUtil.getOutputStream(filePath);
+            bufferedOutputStream.write(bytes);
+            bufferedOutputStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedOutputStream != null) {
+                try {
+                    bufferedOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
     }
 }

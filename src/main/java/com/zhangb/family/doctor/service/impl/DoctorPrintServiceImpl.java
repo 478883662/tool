@@ -54,7 +54,7 @@ public class DoctorPrintServiceImpl implements IDoctorPrintService {
         //处方图文件全路径
         String chuFangImgFileName = ReimbConstants.CHUFANG_PIC_PATH + reimbDealRecord.getIllNessName() + "." + ReimbConstants.PIC_TYPE_PNG;
         //从数据库里取出最新的处方图，然后下载至chuFangImgFileName路径中
-        downloadImg(chuFangImgFileName, reimbDealRecord.getIdCard());
+//        downloadImg(chuFangImgFileName, reimbDealRecord.getIdCard());
         //插入处方图后的新文件名
         String newFileName = docFileName + "_1.doc";
         if (FileUtil.exist(chuFangImgFileName)) {

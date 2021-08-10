@@ -2,6 +2,7 @@ package com.zhangb.family.doctor.service;
 
 import com.github.pagehelper.Page;
 import com.zhangb.family.doctor.dto.YlCardDTO;
+import com.zhangb.family.doctor.dto.ValueDTO;
 import com.zhangb.family.doctor.entity.ReimbYlCard;
 
 import java.util.List;
@@ -30,4 +31,9 @@ public interface IReimbYlCardService {
      */
     void addYlCard(ReimbYlCard reimbYlCard) throws Exception;
 
+    /**
+     * 查询所有的医疗账号集合
+     * @return
+     */
+    List<ValueDTO> getYlCardNoList();
 }

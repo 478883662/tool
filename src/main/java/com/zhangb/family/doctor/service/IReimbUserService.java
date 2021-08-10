@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.zhangb.family.common.exception.BizException;
 import com.zhangb.family.doctor.bo.ReimbUserBo;
 import com.zhangb.family.doctor.dto.ReimbUserDTO;
+import com.zhangb.family.doctor.dto.ValueDTO;
 import com.zhangb.family.doctor.entity.ReimbUserInfo;
 
 import java.sql.SQLException;
@@ -39,4 +40,16 @@ public interface IReimbUserService {
      * @return
      */
     Boolean updateUserEnableFlag(ReimbUserDTO reimbUserDTO) throws SQLException, BizException;
+
+    /**
+     * 查询所有的用户
+     * @return
+     */
+    List<ValueDTO> getNameList();
+
+    /**
+     * 查询所有户主
+     * @return
+     */
+    List<ValueDTO> getMasterNameList();
 }

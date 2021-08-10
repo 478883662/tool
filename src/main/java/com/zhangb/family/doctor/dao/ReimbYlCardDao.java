@@ -1,6 +1,7 @@
 package com.zhangb.family.doctor.dao;
 
 import com.zhangb.family.doctor.dto.YlCardDTO;
+import com.zhangb.family.doctor.dto.ValueDTO;
 import com.zhangb.family.doctor.entity.ReimbYlCard;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -18,4 +19,10 @@ public interface ReimbYlCardDao {
      * @return
      */
     List<ReimbYlCard> getAllYlCard(YlCardDTO ylCardDTO);
+
+    /**
+     * 查询所有医疗账号
+     * @return
+     */
+    List<ValueDTO> getYlCardNoList();
 }

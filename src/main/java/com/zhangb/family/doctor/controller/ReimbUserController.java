@@ -12,6 +12,7 @@ import com.zhangb.family.common.util.ViewDataUtil;
 import com.zhangb.family.doctor.bo.ReimbUserBo;
 import com.zhangb.family.doctor.common.constants.ReimbConstants;
 import com.zhangb.family.doctor.dto.ReimbUserDTO;
+import com.zhangb.family.doctor.dto.ValueDTO;
 import com.zhangb.family.doctor.entity.ReimbUserInfo;
 import com.zhangb.family.doctor.service.IReimbUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,17 @@ public class ReimbUserController {
             }
         });
         return ViewDataUtil.success(userList.toPageInfo());
+    }
+
+    @RequestMapping("/getNameList")
+    public ViewData getNameList() {
+        List<ValueDTO> ylCardList = reimbUserService.getNameList();
+        return ViewDataUtil.success(ylCardList);
+    }
+    @RequestMapping("/getMasterNameList")
+    public ViewData getMasterNameList() {
+        List<ValueDTO> ylCardList = reimbUserService.getMasterNameList();
+        return ViewDataUtil.success(ylCardList);
     }
 
     /**

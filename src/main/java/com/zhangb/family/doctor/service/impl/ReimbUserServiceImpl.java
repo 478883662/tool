@@ -9,6 +9,7 @@ import com.zhangb.family.common.exception.BizException;
 import com.zhangb.family.doctor.bo.ReimbUserBo;
 import com.zhangb.family.doctor.dao.ReimbUserDao;
 import com.zhangb.family.doctor.dto.ReimbUserDTO;
+import com.zhangb.family.doctor.dto.ValueDTO;
 import com.zhangb.family.doctor.entity.ReimbUserInfo;
 import com.zhangb.family.doctor.service.IReimbUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,16 @@ public class ReimbUserServiceImpl implements IReimbUserService {
         reimbUserInfo.setEnableFlag(reimbUserDTO.getEnableFlag());
         BaseDao.updateForValue(reimbUserInfo,where);
         return null;
+    }
+
+    @Override
+    public List<ValueDTO> getNameList() {
+        return reimbUserDao.getNameList();
+    }
+
+    @Override
+    public List<ValueDTO> getMasterNameList() {
+        return reimbUserDao.getMasterNameList();
     }
 
 

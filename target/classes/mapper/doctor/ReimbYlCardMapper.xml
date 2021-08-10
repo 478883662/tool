@@ -27,4 +27,10 @@
         order by created_date desc
     </select>
 
+    <select id="getYlCardNoList" resultType="com.zhangb.family.doctor.dto.ValueDTO">
+        select distinct yl_card value
+        from tool_yl_card_t
+        order by yl_card
+    </select>
+
 </mapper>

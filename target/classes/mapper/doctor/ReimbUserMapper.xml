@@ -17,7 +17,6 @@
 
     <select id="getUserBoList" resultMap="getUserBoList_Map" parameterType="com.zhangb.family.doctor.dto.ReimbUserDTO">
         select
-            distinct
             t1.YL_CARD,
             t1.`NAME`,
             t1.MASTER_NAME,
@@ -49,4 +48,21 @@
         t1.enable_flag desc,t4.deal_time desc ,t1.yl_card,t1.`NAME`
     </select>
 
+    <select id="getMasterNameList" resultType="com.zhangb.family.doctor.dto.ValueDTO">
+        select distinct t1.MASTER_NAME value
+        from
+        tool_patient_t t1
+        where 1=1
+        order by
+        t1.enable_flag desc,t1.`NAME`
+    </select>
+
+    <select id="getNameList" resultType="com.zhangb.family.doctor.dto.ValueDTO">
+        select distinct t1.`NAME` value
+        from
+        tool_patient_t t1
+        where 1=1
+        order by
+        t1.enable_flag desc ,t1.`NAME`
+    </select>
 </mapper>

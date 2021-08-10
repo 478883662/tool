@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.zhangb.family.common.dao.BaseDao;
 import com.zhangb.family.doctor.dao.ReimbYlCardDao;
 import com.zhangb.family.doctor.dto.YlCardDTO;
+import com.zhangb.family.doctor.dto.ValueDTO;
 import com.zhangb.family.doctor.entity.ReimbYlCard;
 import com.zhangb.family.doctor.remote.service.ICxnhRemoteService;
 import com.zhangb.family.doctor.service.IReimbYlCardService;
@@ -50,6 +51,11 @@ public class ReimbYlCardServiceImpl  implements IReimbYlCardService {
             reimbYlCard.setCreatedDate(new Date());
             BaseDao.insert(reimbYlCard);
         }
+    }
+
+    @Override
+    public List<ValueDTO> getYlCardNoList() {
+        return reimbYlCardDao.getYlCardNoList();
     }
 
 }

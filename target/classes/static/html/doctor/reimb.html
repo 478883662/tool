@@ -43,16 +43,31 @@
         <div>
             <el-form :inline="true" :model="queryParam" class="demo-form-inline">
                 <el-form-item label="医疗账号">
-                    <el-input v-model="queryParam.ylCard" placeholder="请填写医疗账号"></el-input>
+                    <el-autocomplete
+                            class="inline-input"
+                            v-model="queryParam.ylCard"
+                            :fetch-suggestions="querySearch"
+                            placeholder="请填写医疗账号"
+                            @select="handleSelect"
+                            clearable
+                    ></el-autocomplete>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="queryParam.name" placeholder="请填写姓名"></el-input>
+                    <el-autocomplete
+                            class="inline-input"
+                            v-model="queryParam.name"
+                            :fetch-suggestions="querySearch1"
+                            placeholder="请填写姓名"
+                            @select="handleSelect"
+                            clearable
+                    ></el-autocomplete>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="queryClick">查询</el-button>
                 </el-form-item>
                 <el-button type="primary" @click="batchReimbClick" :disabled="isDisabledForBatchReimbBtn">批量报销
                 </el-button>
+                <el-button type="primary" @click="clearBtnClick">清除</el-button>
                 <el-button @click="todayReimbDetailClick" type="primary" style="margin-left: 16px;">
                     查询今日报销情况
                 </el-button>
@@ -79,18 +94,18 @@
                       border
                       style="width: 100%;">
                 <el-table-column type="selection" width="50" :selectable="selectable"></el-table-column>
-                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="200">
+                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="180">
                 </el-table-column>
                 <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="100">
                 </el-table-column>
                 <el-table-column prop="name" label="姓名" show-overflow-tooltip width="100">
                 </el-table-column>
-                <el-table-column prop="remibTotal" label="今年已报销金额" show-overflow-tooltip width="200">
+                <el-table-column prop="remibTotal" label="今年已报销金额" show-overflow-tooltip width="150">
                 </el-table-column>
-                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip sortable width="60"
+                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip sortable width="50"
                                  :formatter="enableFlagFormat">
                 </el-table-column>
-                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="200">
+                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="180">
                 </el-table-column>
                 <el-table-column prop="dealResult" label="最近报销结果" show-overflow-tooltip width="300">
                 </el-table-column>
@@ -215,6 +230,7 @@
                 ylCardForm: {
                     ylCardNo: ''
                 },
+                ylCardNoes: [],
                 formLabelWidth: '120px',
                 reimbUserBoList: [],
                 createDate: '',
@@ -228,6 +244,8 @@
         mounted:function () {
             //初始化调用查询方法
             this.queryClick();
+            this.loadAllYlCard();
+            this.loadAllName();
         },
         computed: {
             // 上传是带的参数
@@ -240,6 +258,52 @@
         methods: {
             handleChange(file, fileList) {
               this.fileList = fileList
+            },
+            querySearch(queryString, cb) {
+                var ylCardNoes = this.ylCardNoes;
+                var results = queryString ? ylCardNoes.filter(this.createFilter(queryString)) : ylCardNoes;
+                // 调用 callback 返回建议列表的数据
+                cb(results);
+            },
+            querySearch1(queryString, cb) {
+                var nameList = this.nameList;
+                var results = queryString ? nameList.filter(this.createFilter(queryString)) : nameList;
+                // 调用 callback 返回建议列表的数据
+                cb(results);
+            },
+            loadAllName(){
+                // 调用后端
+                httpGet("/user/getNameList").then(result => {
+                    if (result.code == '0000') {
+                        this.nameList=result.obj;
+                    }else{
+                        this.$message.error(result.msg);
+                    }
+                });
+            },
+            loadAllYlCard(){
+                //this.ylCardNoes=[{"value": "4306210136010361"}]
+                // 调用后端--查询今日报销信息接口
+                httpGet("/ylCard/getYlCardNoList").then(result => {
+                    if (result.code == '0000') {
+                        this.ylCardNoes=result.obj;
+                    }else{
+                        this.$message.error(result.msg);
+                    }
+                });
+            },
+            createFilter(queryString) {
+                return (restaurant) => {
+                  return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                };
+            },
+            handleSelect(item) {
+                console.log(item.value);
+                this.queryClick();
+            },
+            clearBtnClick(){
+                this.queryParam.ylCard=''
+                this.queryParam.name=''
             },
             tableRowClassName(row,rowIndex) {
                 if (row.row.remibTotal >= 200  )  {

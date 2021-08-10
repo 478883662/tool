@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.zhangb.family.common.module.ViewData;
 import com.zhangb.family.common.util.ViewDataUtil;
 import com.zhangb.family.doctor.dto.YlCardDTO;
+import com.zhangb.family.doctor.dto.ValueDTO;
 import com.zhangb.family.doctor.entity.ReimbUserInfo;
 import com.zhangb.family.doctor.entity.ReimbYlCard;
 import com.zhangb.family.doctor.remote.service.ICxnhRemoteService;
@@ -48,6 +49,18 @@ public class ReimbYlCardController {
     public ViewData getYlCardList(@RequestBody YlCardDTO ylCardDTO) {
         Page<ReimbYlCard> ylCardList = reimbYlCardService.getYlCardByPage(ylCardDTO);
         return ViewDataUtil.success(ylCardList.toPageInfo());
+    }
+
+    /**
+     * 查询所有的医疗账号
+     * http://localhost:8086/doctor/ylCard/getYlCardNoList
+     *
+     * @return
+     */
+    @RequestMapping("/getYlCardNoList")
+    public ViewData getYlCardNoList() {
+        List<ValueDTO> ylCardList = reimbYlCardService.getYlCardNoList();
+        return ViewDataUtil.success(ylCardList);
     }
 
     /**

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,8 +90,7 @@ public class ReimbUserController {
     @ResponseBody
     public void upload(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) throws Exception {
         String ylCard = request.getParameter("ylCardNo");
-        String name = request.getParameter("name");
-        String fileName = ylCard + name;
+
         if (file.isEmpty()) {
             throw new Exception("上传文件为空");
         }
@@ -102,16 +102,31 @@ public class ReimbUserController {
         }
         ReimbUserInfo reimbUserInfo = new ReimbUserInfo();
         reimbUserInfo.setEnableFlag(GlobalConstants.ENABLE_FLAG_T);
-        reimbUserInfo.setName(name);
         reimbUserInfo.setYlCard(ylCard);
         List<ReimbUserInfo> userList = reimbUserService.getAllUserInfo(reimbUserInfo);
         if (CollectionUtil.isEmpty(userList)) {
             throw new Exception("用户不存在或已失效，无法上传图片");
         }
+
+        for (ReimbUserInfo userInfo:userList){
+            addUserImg(file, fileType, userInfo);
+        }
+
+    }
+
+    /**
+     * 给医疗账户下的所有人都添加相同的证件
+     * @param file
+     * @param fileType
+     * @param userInfo
+     * @throws IOException
+     */
+    private void addUserImg(MultipartFile file, String fileType, ReimbUserInfo userInfo) throws IOException {
         InputStream is = file.getInputStream();
+        String fileName = userInfo.getYlCard() + userInfo.getName();
         byte[] pic = new byte[(int) file.getSize()];
         is.read(pic);
-        String pkOid = userList.get(0).getIdCard();
+        String pkOid = userInfo.getIdCard();
         FamilyFile familyFile = new FamilyFile();
         familyFile.setFileName(fileName + "." + fileType);
         familyFile.setPkOid(pkOid);
@@ -121,9 +136,9 @@ public class ReimbUserController {
         int count = familyFileService.getFamilyFileCount(familyFileDto);
         if (count > 0) {
             familyFileService.updateFile(familyFile);
-            return;
+        }else {
+            familyFileService.addFile(familyFile);
         }
-        familyFileService.addFile(familyFile);
     }
 
 }

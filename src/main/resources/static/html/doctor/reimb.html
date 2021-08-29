@@ -39,7 +39,7 @@
 
 <body>
 <div id="app" v-cloak>
-    <div>
+    <div v-loading="loading">
         <div>
             <el-form :inline="true" :model="queryParam" class="demo-form-inline">
                 <el-form-item label="医疗账号">
@@ -76,7 +76,7 @@
                         :visible.sync="drawer"
                         direction="rtl"
                         size="550px">
-                    <el-table :data="todayReimbList">
+                    <el-table :data="todayReimbList"  >
                         <el-table-column property="ylCard" label="医疗账号" width="160"></el-table-column>
                         <el-table-column property="name" label="姓名" width="80"></el-table-column>
                         <el-table-column property="remibTotal" label="报销金额" width="80"></el-table-column>
@@ -85,27 +85,26 @@
                 </el-drawer>
             </el-form>
             <el-table ref="multipleTable" :data="reimbUserBoList"
-                      v-loading="loading" :border=true
+                       :border=true
                       element-loading-text="拼命加载中"
                       element-loading-spinner="el-icon-loading"
                       element-loading-background="rgba(0, 0, 0, 0.8)"
                       :row-class-name="tableRowClassName"
-                      max-height="2000"
                       border
-                      style="width: 100%;">
-                <el-table-column type="selection" width="50" :selectable="selectable"></el-table-column>
-                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="180">
+                      style="width: 100%;overflow-y:hidden;">
+                <el-table-column type="selection" width="40" :selectable="selectable"></el-table-column>
+                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="150">
                 </el-table-column>
-                <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="100">
+                <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="75">
                 </el-table-column>
-                <el-table-column prop="name" label="姓名" show-overflow-tooltip width="100">
+                <el-table-column prop="name" label="姓名" show-overflow-tooltip width="75">
                 </el-table-column>
-                <el-table-column prop="remibTotal" label="今年已报销金额" show-overflow-tooltip width="150">
+                <el-table-column prop="remibTotal" label="今年已报销金额" show-overflow-tooltip width="120">
                 </el-table-column>
                 <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip sortable width="50"
                                  :formatter="enableFlagFormat">
                 </el-table-column>
-                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="180">
+                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="160">
                 </el-table-column>
                 <el-table-column prop="dealResult" label="最近报销结果" show-overflow-tooltip width="300">
                 </el-table-column>
@@ -236,8 +235,8 @@
                 createDate: '',
                 currentPage: 1,
                 total: 0,
-                currentPageSize: 20,
-                pageSizes: [20, 100, 200, 400,800],
+                currentPageSize: 10000,
+                pageSizes: [10000, 100, 200, 400,800],
                 loading: false
             }
         },
@@ -309,8 +308,6 @@
                 if (row.row.remibTotal >= 200  )  {
                     return 'failure-row';
 
-                } else if (row.row.remibTotal >=100 && row.row.remibTotal <200) {
-                    return 'warning-row';
                 }
                 return '';
               },

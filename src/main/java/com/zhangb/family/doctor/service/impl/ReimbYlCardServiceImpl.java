@@ -44,11 +44,10 @@ public class ReimbYlCardServiceImpl  implements IReimbYlCardService {
         ReimbYlCard where = new ReimbYlCard();
         where.setYlCard(reimbYlCard.getYlCard());
         int count = BaseDao.count(where);
+        reimbYlCard.setCreatedDate(new Date());
         if(count>0){
             BaseDao.updateForValue(reimbYlCard,where);
         }else{
-            //设置创建时间为当前时间
-            reimbYlCard.setCreatedDate(new Date());
             BaseDao.insert(reimbYlCard);
         }
     }

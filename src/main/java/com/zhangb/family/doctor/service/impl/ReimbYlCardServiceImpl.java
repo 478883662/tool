@@ -57,4 +57,12 @@ public class ReimbYlCardServiceImpl  implements IReimbYlCardService {
         return reimbYlCardDao.getYlCardNoList();
     }
 
+    @Override
+    public Boolean deleteYlCard(String ylCard) {
+        
+
+
+        return true;
+    }
+
 }

@@ -36,4 +36,6 @@ public interface IReimbYlCardService {
      * @return
      */
     List<ValueDTO> getYlCardNoList();
+
+    Boolean deleteYlCard(String ylCard);
 }

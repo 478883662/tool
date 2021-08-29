@@ -49,12 +49,12 @@
     </select>
 
     <select id="getMasterNameList" resultType="com.zhangb.family.doctor.dto.ValueDTO">
+
         select distinct t1.MASTER_NAME value
         from
-        tool_patient_t t1
-        where 1=1
-        order by
-        t1.enable_flag desc,t1.`NAME`
+        tool_yl_card_t t1
+        where 1=1  and t1.MASTER_NAME &lt;&gt; ''
+        order by t1.`MASTER_NAME`
     </select>
 
     <select id="getNameList" resultType="com.zhangb.family.doctor.dto.ValueDTO">

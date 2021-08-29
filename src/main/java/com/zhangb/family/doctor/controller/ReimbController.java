@@ -56,10 +56,10 @@ public class ReimbController {
      * @return /image/getImg?oid=2&t=1626969600000
      * @throws Exception
      */
-    @RequestMapping("/getTodayReimbInfo")
+    @RequestMapping("/reimbTotal")
     @ResponseBody
-    public ViewData getTodayReimbInfo() throws Exception {
-        DoctorReimbDetailInfo doctorTodayReimbInfo = reimbService.getTodayReimbInfo(DateUtil.today());
+    public ViewData getReimbTotal(@RequestParam("totalDate") String totalDate) throws Exception {
+        DoctorReimbDetailInfo doctorTodayReimbInfo = reimbService.getTodayReimbInfo(totalDate);
         return ViewDataUtil.success(doctorTodayReimbInfo);
     }
 

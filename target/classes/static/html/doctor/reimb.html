@@ -39,7 +39,7 @@
 
 <body>
 <div id="app" v-cloak>
-    <div>
+    <div v-loading="loading">
         <div>
             <el-form :inline="true" :model="queryParam" class="demo-form-inline">
                 <el-form-item label="医疗账号">
@@ -68,44 +68,28 @@
                 <el-button type="primary" @click="batchReimbClick" :disabled="isDisabledForBatchReimbBtn">批量报销
                 </el-button>
                 <el-button type="primary" @click="clearBtnClick">清除</el-button>
-                <el-button @click="todayReimbDetailClick" type="primary" style="margin-left: 16px;">
-                    查询今日报销情况
-                </el-button>
-                <el-drawer
-                        :title="todayTotalStr"
-                        :visible.sync="drawer"
-                        direction="rtl"
-                        size="550px">
-                    <el-table :data="todayReimbList">
-                        <el-table-column property="ylCard" label="医疗账号" width="160"></el-table-column>
-                        <el-table-column property="name" label="姓名" width="80"></el-table-column>
-                        <el-table-column property="remibTotal" label="报销金额" width="80"></el-table-column>
-                        <el-table-column property="dealResult" label="报销结果" show-overflow-tooltip width="230"></el-table-column>
-                    </el-table>
-                </el-drawer>
             </el-form>
             <el-table ref="multipleTable" :data="reimbUserBoList"
-                      v-loading="loading" :border=true
+                       :border=true
                       element-loading-text="拼命加载中"
                       element-loading-spinner="el-icon-loading"
                       element-loading-background="rgba(0, 0, 0, 0.8)"
                       :row-class-name="tableRowClassName"
-                      max-height="2000"
                       border
-                      style="width: 100%;">
-                <el-table-column type="selection" width="50" :selectable="selectable"></el-table-column>
-                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="180">
+                      style="width: 100%;overflow-y:hidden;">
+                <el-table-column type="selection" width="40" :selectable="selectable"></el-table-column>
+                <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="170">
                 </el-table-column>
-                <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="100">
+                <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="75">
                 </el-table-column>
-                <el-table-column prop="name" label="姓名" show-overflow-tooltip width="100">
+                <el-table-column prop="name" label="姓名" show-overflow-tooltip width="75">
                 </el-table-column>
-                <el-table-column prop="remibTotal" label="今年已报销金额" show-overflow-tooltip width="150">
+                <el-table-column prop="remibTotal" label="今年已报销金额" show-overflow-tooltip width="120">
                 </el-table-column>
                 <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip sortable width="50"
                                  :formatter="enableFlagFormat">
                 </el-table-column>
-                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="180">
+                <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="160">
                 </el-table-column>
                 <el-table-column prop="dealResult" label="最近报销结果" show-overflow-tooltip width="300">
                 </el-table-column>
@@ -120,7 +104,7 @@
                 <el-table-column
                         fixed="right"
                         label="操作"
-                        width="200">
+                        width="180">
                     <template slot-scope="scope">
                         <!—使用 v-if 来判断，如果当前行的冻结状态值 为0（未冻结），就显示按钮，否则不显示-->
                         <el-button
@@ -215,9 +199,6 @@
                     ylCard: '',
                     name: ''
                 },
-                todayTotalStr:'',
-                todayReimbList:[],
-                drawer:false,
                 formLabelWidth: '120px',
                 uploadVisible: false,
                 form: {
@@ -236,8 +217,8 @@
                 createDate: '',
                 currentPage: 1,
                 total: 0,
-                currentPageSize: 20,
-                pageSizes: [20, 100, 200, 400,800],
+                currentPageSize: 10000,
+                pageSizes: [10000, 100, 200, 400,800],
                 loading: false
             }
         },
@@ -309,23 +290,9 @@
                 if (row.row.remibTotal >= 200  )  {
                     return 'failure-row';
 
-                } else if (row.row.remibTotal >=100 && row.row.remibTotal <200) {
-                    return 'warning-row';
                 }
                 return '';
               },
-            todayReimbDetailClick(){
-                this.drawer = true
-                // 调用后端--查询今日报销信息接口
-                httpGet("/reimb/getTodayReimbInfo").then(result => {
-                    if (result.code == '0000') {
-                        this.todayTotalStr=result.obj.totalStr;
-                        this.todayReimbList=result.obj.list;
-                    }else{
-                        this.$message.error(result.msg);
-                    }
-                });
-            },
             selectable(row, index) {
                 if(row.enableFlag == 'T'){
                     return true

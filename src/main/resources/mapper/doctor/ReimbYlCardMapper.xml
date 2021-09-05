@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhangb.family.doctor.dao.ReimbYlCardDao">
+<mapper namespace="com.zhangb.family.doctor.operate.dao.ReimbYlCardDao">
 
-    <resultMap id="baseMap" type="com.zhangb.family.doctor.entity.ReimbYlCard">
+    <resultMap id="baseMap" type="com.zhangb.family.doctor.basedata.entity.ReimbYlCardPO">
         <result column="oid" property="oid"/>
         <result column="yl_card" jdbcType="VARCHAR" property="ylCard"/>
         <result column="master_name" jdbcType="VARCHAR" property="masterName"/>
@@ -20,14 +20,14 @@
         </if>
     </sql>
 
-    <select id="getAllYlCard" resultMap="baseMap" parameterType="com.zhangb.family.doctor.dto.YlCardDTO">
+    <select id="getAllYlCard" resultMap="baseMap" parameterType="com.zhangb.family.doctor.basedata.remote.dto.YlCardDTO">
         select oid,yl_card,master_name,created_date
          from tool_yl_card_t
         <include refid="where_sql"></include>
         order by created_date desc
     </select>
 
-    <select id="getYlCardNoList" resultType="com.zhangb.family.doctor.dto.ValueDTO">
+    <select id="getYlCardNoList" resultType="com.zhangb.family.doctor.basedata.remote.dto.ValueDTO">
         select distinct yl_card value
         from tool_yl_card_t
         order by yl_card

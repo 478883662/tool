@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangb.family.doctor.basedata.dao.ReimbDealRecordDao">
+
+    <resultMap id="baseMap" type="com.zhangb.family.doctor.basedata.entity.ReimbDealRecordPO">
+        <result column="BIZ_ID" property="bizId"/>
+        <result column="yl_card" jdbcType="VARCHAR" property="ylCard"/>
+    </resultMap>
+    
+
+    <select id="getNewDealRecord" resultMap="baseMap">
+        select BIZ_ID,yl_card from tool_deal_record_t t where t.ILLNESS_NO = #{illNessNo}
+        order by t.REIMB_DATE desc limit 0,1
+    </select>
+
+</mapper>

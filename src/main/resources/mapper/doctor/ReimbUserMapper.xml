@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhangb.family.doctor.dao.ReimbUserDao">
+<mapper namespace="com.zhangb.family.doctor.operate.dao.ReimbUserDao">
 
 
-    <resultMap id="getUserBoList_Map" type="com.zhangb.family.doctor.bo.ReimbUserBo">
+    <resultMap id="getUserBoList_Map" type="com.zhangb.family.doctor.operate.bo.ReimbUserBo">
         <result column="yl_card" jdbcType="VARCHAR" property="ylCard"/>
         <result column="NAME" jdbcType="VARCHAR" property="name"/>
         <result column="master_name" jdbcType="VARCHAR" property="masterName"/>
@@ -15,7 +15,7 @@
         <result column="fileOid" property="fileOid"/>
     </resultMap>
 
-    <select id="getUserBoList" resultMap="getUserBoList_Map" parameterType="com.zhangb.family.doctor.dto.ReimbUserDTO">
+    <select id="getUserBoList" resultMap="getUserBoList_Map" parameterType="com.zhangb.family.doctor.basedata.remote.dto.ReimbUserDTO">
         select
             t1.YL_CARD,
             t1.`NAME`,
@@ -48,7 +48,7 @@
         t1.enable_flag desc,t4.deal_time desc ,t1.yl_card,t1.`NAME`
     </select>
 
-    <select id="getMasterNameList" resultType="com.zhangb.family.doctor.dto.ValueDTO">
+    <select id="getMasterNameList" resultType="com.zhangb.family.doctor.basedata.remote.dto.ValueDTO">
 
         select distinct t1.MASTER_NAME value
         from
@@ -57,7 +57,7 @@
         order by t1.`MASTER_NAME`
     </select>
 
-    <select id="getNameList" resultType="com.zhangb.family.doctor.dto.ValueDTO">
+    <select id="getNameList" resultType="com.zhangb.family.doctor.basedata.remote.dto.ValueDTO">
         select distinct t1.`NAME` value
         from
         tool_patient_t t1

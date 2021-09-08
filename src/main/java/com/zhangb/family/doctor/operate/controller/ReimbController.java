@@ -6,15 +6,16 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhangb.family.common.module.ViewData;
 import com.zhangb.family.common.util.ViewDataUtil;
+import com.zhangb.family.doctor.basedata.remote.service.ICxnhRemoteService;
+import com.zhangb.family.doctor.common.constants.RemoteConstants;
+import com.zhangb.family.doctor.common.enums.DoctorReimbResultEnum;
+import com.zhangb.family.doctor.common.util.DoctorRespMsgUtil;
 import com.zhangb.family.doctor.operate.bo.DoctorReimbDetailInfo;
 import com.zhangb.family.doctor.operate.bo.DoctorReimbResultBo;
 import com.zhangb.family.doctor.operate.bo.ReimbUserBo;
 import com.zhangb.family.doctor.operate.bo.ReimbYearTotalBo;
-import com.zhangb.family.doctor.common.constants.RemoteConstants;
-import com.zhangb.family.doctor.common.enums.DoctorReimbResultEnum;
 import com.zhangb.family.doctor.operate.service.IReimbRecordService;
 import com.zhangb.family.doctor.operate.service.IReimbService;
-import com.zhangb.family.doctor.common.util.DoctorRespMsgUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,8 @@ public class ReimbController {
     private IReimbRecordService recordService;
     @Autowired
     private IReimbService reimbService;
-
+    @Autowired
+    private ICxnhRemoteService remoteService;
 
     /**
      * 查询年度累计报销金额

@@ -10,26 +10,6 @@ import java.util.List;
  */
 public interface IReimbSyncOperateService {
 
-    /**
-     * 同步报销记录信息
-     * @param ylCard
-     * @param name
-     */
-    void syncRecordInfo(String ylCard, String name) throws Exception;
-
-    /**
-     * 同步医疗账户下的所有人
-     * @param ylCard
-     * @return
-     */
-    String syncAllByYlCard(String ylCard);
-
-    /**
-     * 全量同步
-     * @return
-     * @throws Exception
-     */
-    String syncAll() throws Exception;
 
     /**
      * 同步报销用户信息，并返回远端最新的报销用户信息

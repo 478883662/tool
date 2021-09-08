@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -44,27 +43,21 @@ public class ReimbSyncServiceImpl implements IReimbSyncService {
     }
 
     @Override
-    public synchronized ReimbDealRecordPO syncRemoteRecord(String selfNo) throws Exception {
+    public synchronized void syncRemoteRecord(String selfNo) throws Exception {
         //同步农合报销记录
-        List<ReimbDealRecordPO> resultList = remoteService.execute(ReimbRemoteStrategyKeyConstants.REIMB_GET_RECORD_STRATEGY, selfNo);
+        List<ReimbDealRecordPO> resultList
+                = remoteService.execute(ReimbRemoteStrategyKeyConstants.REIMB_GET_RECORD_STRATEGY, selfNo);
         //保存报销记录到本地记录表
         reimbBaseDataService.saveDealRecord(resultList);
+    }
 
-        //
-
-        //获取最后一次报销的bizid
-        if (resultList.size() > 1) {
-            //取最近报销的记录
-            return resultList.stream().max(new Comparator<ReimbDealRecordPO>() {
-                @Override
-                public int compare(ReimbDealRecordPO o1, ReimbDealRecordPO o2) {
-                    return o1.getReimbDate().compareTo(o2.getReimbDate());
-                }
-            }).get();
-        } else {
-            return null;
-        }
-
+    @Override
+    public void syncRemoteRecord(String selfNo, String bizId) throws Exception {
+        //同步农合报销记录
+        List<ReimbDealRecordPO> resultList
+                = remoteService.execute(ReimbRemoteStrategyKeyConstants.REIMB_GET_RECORD_STRATEGY, bizId,bizId,selfNo);
+        //保存报销记录到本地记录表
+        reimbBaseDataService.saveDealRecord(resultList);
     }
 
     @Override

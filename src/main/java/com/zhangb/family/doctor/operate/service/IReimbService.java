@@ -1,10 +1,9 @@
 package com.zhangb.family.doctor.operate.service;
 
 
-import com.zhangb.family.doctor.operate.bo.*;
-import com.zhangb.family.doctor.common.enums.DoctorReimbResultEnum;
 import com.zhangb.family.doctor.basedata.entity.ReimbPrintInfoPO;
 import com.zhangb.family.doctor.basedata.entity.ReimbUserInfoPO;
+import com.zhangb.family.doctor.operate.bo.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -58,7 +57,7 @@ public interface IReimbService {
      * @param reimbIllnessBo
      * @return
      */
-    DoctorReimbResultEnum reimb(ReimbIllnessBo reimbIllnessBo) throws Exception;
+    String reimb(ReimbIllnessBo reimbIllnessBo) throws Exception;
 
     /**
      * 获取打印信息

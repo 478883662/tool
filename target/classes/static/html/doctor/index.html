@@ -40,6 +40,7 @@
                 <template slot="title">医疗报销系统</template>
                 <el-menu-item index="2-1">添加账户</el-menu-item>
                 <el-menu-item index="2-2">报销</el-menu-item>
+                <el-menu-item index="2-3">报销统计</el-menu-item>
                 <!--<el-submenu index="2-3">-->
                     <!--<template slot="title">选项3</template>-->
                     <!--<el-menu-item index="2-3-1">选项1</el-menu-item>-->
@@ -88,6 +89,10 @@
                     title: '报销',
                     name: '2-2',
                     content: './reimb.html'
+                }, {
+                    title: '报销统计',
+                    name: '2-3',
+                    content: './reimbTotal.html'
                 }],
                 tabIndex: 2
             }

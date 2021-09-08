@@ -179,7 +179,7 @@ public class ReimbServiceImpl implements IReimbService {
     }
 
     @Override
-    public DoctorReimbResultEnum reimb(ReimbIllnessBo reimbIllnessBo) throws Exception {
+    public String reimb(ReimbIllnessBo reimbIllnessBo) throws Exception {
         List<ReimbDrugBo> reimbDrugBoList = reimbIllnessBo.getReimbDrugBoList();
         //获取远端的业务id
         String bizId = getBizId();
@@ -251,7 +251,7 @@ public class ReimbServiceImpl implements IReimbService {
             String result = remoteService.executeRemote(ReimbRemoteStrategyKeyConstants.REIMB_STRATEGY,
                     bizId);
             if(StrUtil.equals("0@!@!0@!0@!0@!0@!0@!0@!0@!0@!0@$@$",result)){
-                return DoctorReimbResultEnum.SUCCESS;
+                return bizId;
             }
             throw new Exception("正式补偿失败:"+result);
         }else if(tryResult.compareTo(BigDecimal.ZERO) == 0){
@@ -319,8 +319,6 @@ public class ReimbServiceImpl implements IReimbService {
                 resultList.add(new DoctorReimbResultBo(ylCard,name,DoctorReimbResultEnum.EMPTY_YL_CARD));
                 return resultList;
             }
-            //报销前先同步医疗账号下的所有人
-            reimbSyncOperateService.syncAllByYlCard(ylCard);
 
             //获取医疗账户下要报销的人
             List<ReimbUserInfoPO> userList = reimbUserService.getAllUserInfo(new ReimbUserInfoPO(ylCard,name));
@@ -357,7 +355,6 @@ public class ReimbServiceImpl implements IReimbService {
         reimbDealResultPO.setYlCard(user.getYlCard());
         reimbDealResultPO.setName(user.getName());
         reimbDealResultPO.setDealTime(DateUtil.now());
-        DoctorReimbResultEnum result = null;
         try{
             //获取这次报销的病例
             ReimbIllnessBo reimbIllnessBo = getNextIllness(user);
@@ -365,22 +362,13 @@ public class ReimbServiceImpl implements IReimbService {
                 return doctorReimbResultBo.setCodeMsg(DoctorReimbResultEnum.NO_DRUG);
             }
             //报销处理
-            result = reimb(reimbIllnessBo);
-            reimbDealResultPO.setDealResult(result.getMsg());
-            reimbDealResultPO.setDealCode(result.getCode());
-            if (!result.getCode().equals(DoctorReimbResultEnum.SUCCESS.getCode())){
-                //报销失败处理
-                return doctorReimbResultBo.setCodeMsg(result.getCode(),result.getMsg());
-            }
+            String bizId = reimb(reimbIllnessBo);
+
+            reimbDealResultPO.setDealResult(DoctorReimbResultEnum.SUCCESS.getMsg());
+            reimbDealResultPO.setDealCode(DoctorReimbResultEnum.SUCCESS.getCode());
             //可能报销成功：报销结束了就同步一次远端报销记录到本地库
-            ReimbDealRecordPO reimbDealRecordPO = reimbSyncService.syncRemoteRecord(user.getSelfNo());
+            reimbSyncService.syncRemoteRecord(user.getSelfNo(),bizId);
 
-            if (reimbDealRecordPO ==null || reimbDealRecordPO.getBizId()==null){
-                //没有报销记录，说明报销失败了。
-                return doctorReimbResultBo.setCodeMsg(DoctorReimbResultEnum.REIMB_FAIL);
-            }
-
-            String bizId = reimbDealRecordPO.getBizId();
             //保存待打印记录
             ReimbPrintInfoPO reimbPrintInfoPO = new ReimbPrintInfoPO();
             reimbPrintInfoPO.setBizId(bizId);
@@ -393,13 +381,8 @@ public class ReimbServiceImpl implements IReimbService {
             doctorPrintService.printOne(reimbUnPrintRecordBo);
         }catch (Exception e){
             e.printStackTrace();
-            if (result!=null){
-                reimbDealResultPO.setDealResult(result.getMsg());
-                reimbDealResultPO.setDealCode(result.getCode());
-            }else {
-                reimbDealResultPO.setDealResult(e.getMessage());
-                reimbDealResultPO.setDealCode("9999");
-            }
+            reimbDealResultPO.setDealResult(e.getMessage());
+            reimbDealResultPO.setDealCode("9999");
         }finally {
             dealResultService.saveDealResult(reimbDealResultPO);
         }

@@ -4,7 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.Page;
 import com.zhangb.family.common.module.ViewData;
 import com.zhangb.family.common.util.ViewDataUtil;
-import com.zhangb.family.doctor.basedata.entity.ReimbUserInfoPO;
 import com.zhangb.family.doctor.basedata.entity.ReimbYlCardPO;
 import com.zhangb.family.doctor.basedata.remote.dto.ValueDTO;
 import com.zhangb.family.doctor.basedata.remote.dto.YlCardDTO;
@@ -38,6 +37,9 @@ public class ReimbYlCardController {
     private ICxnhRemoteService remoteService;
     @Autowired
     private IReimbSyncService reimbSyncService;
+
+
+
     /**
      * 分页查询医疗账号信息
      * http://localhost:8086/doctor/ylCard/getYlCardList
@@ -81,19 +83,7 @@ public class ReimbYlCardController {
         if (StrUtil.hasBlank(ylCardDTO.getYlCard())) {
             return ViewDataUtil.bizError("FAIL:医疗账号不能为空");
         }
-        //从远端获取医疗账号下的所有人员
-        List<ReimbUserInfoPO> userInfoList = reimbSyncOperateService.syncUserByYlCard(ylCardDTO.getYlCard());
-
-        for (ReimbUserInfoPO reimbUserInfoPO : userInfoList) {
-            //2、同步报销记录
-            reimbSyncService.syncRemoteRecord(reimbUserInfoPO.getSelfNo());
-        }
-
-        //只要不是FAIL开头就是正常业务返回
-        ReimbYlCardPO reimbYlCardPO = new ReimbYlCardPO();
-        reimbYlCardPO.setYlCard(ylCardDTO.getYlCard());
-        reimbYlCardPO.setMasterName(userInfoList.get(0).getMasterName());
-        reimbYlCardService.addYlCard(reimbYlCardPO);
+        reimbSyncOperateService.syncAllByYlCard(ylCardDTO.getYlCard());
         return ViewDataUtil.success("保存医疗账户成功");
     }
 }

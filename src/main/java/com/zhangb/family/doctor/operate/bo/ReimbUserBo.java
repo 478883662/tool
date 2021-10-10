@@ -31,4 +31,8 @@ public class ReimbUserBo {
     private Date fileCreateDate;
     /**是否有效*/
     private String enableFlag;
+    /**打印记录oid*/
+    private String printOid;
+    /**打印状态*/
+    private String printState;
 }

@@ -33,6 +33,12 @@ public interface IReimbAddBaseDataService {
 
 
     /**
+     * 删除所有农合报销记录
+     * @param resultList
+     */
+    void deleteAllDealRecord(List<ReimbDealRecordPO> resultList) throws Exception;
+
+    /**
      * 保存农合报销记录
      * @param resultList
      */

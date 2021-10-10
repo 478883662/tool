@@ -4,7 +4,7 @@ function getMenu(index) {
     }else if (index == '2-2'){
         return new Menu('2-2','报销','./reimb.html');
     }else if (index == '2-3'){
-         return new Menu('2-3','报销统计','./reimbTotal.html');
+         return new Menu('2-3','今日报销情况汇总','./reimbTotal.html');
     }
     
 }

@@ -298,12 +298,28 @@ public class ReimbServiceImpl implements IReimbService {
     public ReimbUnPrintRecordBo getUnPrintInfo(String bizId,String state) throws SQLException {
         List<ReimbUnPrintRecordBo> reimbPrintInfoList = Db.use().query("select t1.BIZ_ID," +
                         "t1.`NAME`,t2.created_date,t1.ILLNESS_NAME,t1.MONEY ," +
-                        "t3.family_location,t1.yl_card,t1.yl_location,t3.ID_CARD\n" +
+                        "t3.family_location,t1.yl_card,t1.yl_location,t3.ID_CARD " +
                         "from tool_reimb_print_t t2 left join tool_deal_record_t t1 on (t1.BIZ_ID = t2.biz_id)" +
-                        "left join tool_patient_t t3 on (  t1.SELF_NO = t3.SELF_NO) WHERE\n" +
-                        "    t2.print_state=? and t1.MONEY>0 \n" +
+                        "left join tool_patient_t t3 on (  t1.SELF_NO = t3.SELF_NO) WHERE " +
+                        "    t2.print_state=? and t1.MONEY>0  " +
                         "and t1.biz_id = ? ",
                 ReimbUnPrintRecordBo.class,state,bizId);
+        if (CollectionUtil.isEmpty(reimbPrintInfoList)){
+            return null;
+        }
+        return reimbPrintInfoList.get(0);
+    }
+
+    @Override
+    public ReimbUnPrintRecordBo getPrintInfoByOid(String printOid) throws SQLException {
+        List<ReimbUnPrintRecordBo> reimbPrintInfoList = Db.use().query("select t1.BIZ_ID," +
+                        "t1.`NAME`,t2.created_date,t1.ILLNESS_NAME,t1.MONEY ," +
+                        "t3.family_location,t1.yl_card,t1.yl_location,t3.ID_CARD " +
+                        "from tool_reimb_print_t t2 left join tool_deal_record_t t1 on (t1.BIZ_ID = t2.biz_id)" +
+                        "left join tool_patient_t t3 on (  t1.SELF_NO = t3.SELF_NO) WHERE " +
+                        "  t1.MONEY>0  " +
+                        "and t2.oid = ? ",
+                ReimbUnPrintRecordBo.class,printOid);
         if (CollectionUtil.isEmpty(reimbPrintInfoList)){
             return null;
         }
@@ -333,11 +349,12 @@ public class ReimbServiceImpl implements IReimbService {
     }
 
     @Override
-    public DoctorReimbDetailInfo getTodayReimbInfo(String today) {
+    public DoctorReimbDetailInfo getTodayReimbInfo(String today) throws SQLException {
         List<ReimbUserBo> reimbUserBoList = doctorReimbDao.getTodayReimbInfo(today) ;
         BigDecimal total = doctorReimbDao.getTodayTotalReimb(today);
         DoctorReimbDetailInfo doctorTodayReimbInfo = new DoctorReimbDetailInfo();
-        doctorTodayReimbInfo.setTotalStr("今日累计成功报销金额："+total.setScale(0, RoundingMode.HALF_UP));
+        doctorTodayReimbInfo.setTodayTotalStr(String.format("今日累计成功报销金额：%s元",total.setScale(0, RoundingMode.HALF_UP)));
+        doctorTodayReimbInfo.setToYearTotalStr(String.format("今年累计成功报销金额：%s元",recordService.getYlReimbTotal(RemoteConstants.YL_LOCATION_NO, DateUtil.thisYear())));
         doctorTodayReimbInfo.setList(reimbUserBoList);
         return doctorTodayReimbInfo;
     }

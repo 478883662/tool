@@ -80,26 +80,21 @@
                 <el-table-column type="selection" width="40" :selectable="selectable"></el-table-column>
                 <el-table-column prop="ylCard" label="医疗账号" show-overflow-tooltip width="170">
                 </el-table-column>
-                <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="75">
+                <el-table-column prop="masterName" label="户主姓名" show-overflow-tooltip width="90">
                 </el-table-column>
                 <el-table-column prop="name" label="姓名" show-overflow-tooltip width="75">
                 </el-table-column>
                 <el-table-column prop="remibTotal" label="今年已报销金额" show-overflow-tooltip width="120">
                 </el-table-column>
-                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip sortable width="50"
+                <el-table-column prop="enableFlag" label="状态" show-overflow-tooltip sortable width="80"
                                  :formatter="enableFlagFormat">
                 </el-table-column>
                 <el-table-column prop="reimbDate" label="最近报销时间" show-overflow-tooltip sortable width="160">
                 </el-table-column>
                 <el-table-column prop="dealResult" label="最近报销结果" show-overflow-tooltip width="300">
                 </el-table-column>
-                <el-table-column label="证件照" width="100">
-                    <template scope="scope">
-                        <el-image :src="scope.row.filePath"
-                                  :preview-src-list="scope.row.preFilePath"
-                                  style="width: 60px; height: 40px" class="head_pic">
-                        </el-image>
-                    </template>
+                <el-table-column prop="filePath" label="证件照" show-overflow-tooltip sortable width="100"
+                                 :formatter="filePathFormat">
                 </el-table-column>
                 <el-table-column
                         fixed="right"
@@ -159,6 +154,13 @@
                         <el-form-item label="医疗账号">
                             <el-input v-model="form.ylCardNo"></el-input>
                         </el-form-item>
+                        <el-form-item label="医疗账号">
+                            <el-image :src="form.filePath"
+                                      :preview-src-list="form.preFilePath"
+                                      style="width: 60px; height: 40px" class="head_pic">
+                            </el-image>
+                        </el-form-item>
+
                         <el-form-item label="上传文件">
                             <el-upload
                                     ref="upload"
@@ -204,6 +206,8 @@
                 form: {
                   ylCardNo: '',
                   name: '',
+                  filePath:'',
+                  preFilePath:''
                 },
                 fileList: [],
                 dialogImageUrl: '',
@@ -374,6 +378,8 @@
                 this.uploadVisible=true
                 this.form.ylCardNo=row.ylCard
                 this.form.name=row.name
+                this.form.filePath=row.filePath
+                this.form.preFilePath=row.preFilePath
             },
             resumeClick(row){
                 console.log(row)
@@ -447,6 +453,12 @@
                 if(data.enableFlag == 'F'){
                       return '无效'
                 }
+            },
+            filePathFormat(data){
+                if(data.filePath != ''){
+                      return '已上传'
+                }
+                return '未上传'
             },
             queryClick() {
                 this.loading = true;

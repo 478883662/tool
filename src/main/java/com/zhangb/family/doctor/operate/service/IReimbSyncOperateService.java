@@ -19,4 +19,12 @@ public interface IReimbSyncOperateService {
      */
     List<ReimbUserInfoPO> syncUserByYlCard(String ylCard) throws Exception;
 
+    /**
+     * 同步医疗账户下的所有信息
+     * @param ylCard
+     * @return
+     * @throws Exception
+     */
+    void syncAllByYlCard(String ylCard) throws Exception;
+
 }

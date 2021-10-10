@@ -9,6 +9,8 @@
         <result column="NAME" jdbcType="VARCHAR" property="name"/>
         <result column="deal_result" property="dealResult"/>
         <result column="remib_total" property="remibTotal"/>
+        <result column="printOid" property="printOid"/>
+        <result column="print_state" property="printState"/>
     </resultMap>
 
     <select id="getTodayReimbInfo" resultMap="getTodayReimbInfo_Map" parameterType="string">
@@ -16,15 +18,19 @@
             t1.YL_CARD,
             t1.`NAME`,
             t4.deal_result,
-            (select IFNULL(sum(IFNULL(t10.MONEY,0)),0) from tool_deal_record_t t10
-            where t10.self_no = t1.SELF_NO and t10.YL_CARD=t1.YL_CARD
-            AND t10.REIMB_TYPE='1101' and t10.reimb_date=#{today}) remib_total
+            IFNULL(sum(IFNULL(t10.MONEY,0)),0)  remib_total,
+            t2.oid printOid,
+            t2.print_state
         from
             tool_patient_t t1
-            left join tool_deal_result_t t4  on (
-                t1.yl_card = t4.yl_card
-                and t1.name = t4.name
-                )
+        left join tool_deal_result_t t4  on (
+            t1.yl_card = t4.yl_card
+            and t1.name = t4.name
+        )
+        left join tool_deal_record_t t10
+            on t10.self_no = t1.SELF_NO and t10.YL_CARD=t1.YL_CARD
+                AND t10.REIMB_TYPE='1101' and t10.reimb_date=#{today}
+        left join tool_reimb_print_t t2 on (t10.biz_id = t2.biz_id)
         where  DATE_FORMAT(t4.deal_time,'%Y-%m-%d')  = #{today}
     </select>
 

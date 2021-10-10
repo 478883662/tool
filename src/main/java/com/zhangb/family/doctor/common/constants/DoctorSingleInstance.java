@@ -16,8 +16,8 @@ public enum DoctorSingleInstance {
     public synchronized boolean isNewChufang(String filePath){
         if (chufangFileSet.add(filePath)){
             //存在说明同步过
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 }

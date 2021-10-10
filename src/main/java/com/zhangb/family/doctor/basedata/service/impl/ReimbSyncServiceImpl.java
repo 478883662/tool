@@ -47,6 +47,8 @@ public class ReimbSyncServiceImpl implements IReimbSyncService {
         //同步农合报销记录
         List<ReimbDealRecordPO> resultList
                 = remoteService.execute(ReimbRemoteStrategyKeyConstants.REIMB_GET_RECORD_STRATEGY, selfNo);
+        //全量同步前先删除之前所有记录
+        reimbBaseDataService.deleteAllDealRecord(resultList);
         //保存报销记录到本地记录表
         reimbBaseDataService.saveDealRecord(resultList);
     }

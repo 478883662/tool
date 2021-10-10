@@ -77,6 +77,7 @@ public interface IReimbService {
      */
     ReimbUnPrintRecordBo getUnPrintInfo(String bizId, String state) throws SQLException;
 
+    ReimbUnPrintRecordBo getPrintInfoByOid(String printOid) throws SQLException;
     /**
      * 报销单人
      * @param ylCard
@@ -90,5 +91,5 @@ public interface IReimbService {
      * @param today
      * @return
      */
-    DoctorReimbDetailInfo getTodayReimbInfo(String today);
+    DoctorReimbDetailInfo getTodayReimbInfo(String today) throws SQLException;
 }

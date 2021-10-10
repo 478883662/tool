@@ -47,8 +47,15 @@
                 <el-form-item>
                     <el-button type="primary" @click="queryClick">查询</el-button>
                 </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="syncAllClick">全量同步</el-button>
+                </el-form-item>
+                <el-form-item>
+                    <el-tag type="warning">{{todayTotalStr}}</el-tag>
+                    <el-tag type="danger">{{toYearTotalStr}}</el-tag>
+                </el-form-item>
                 <el-button @click="allReimbTotalClick" type="primary" style="margin-left: 16px;">
-                    查询年度报销金额
+                    查询历年报销金额
                 </el-button>
                 <el-drawer
                         title="历年报销金额汇总"
@@ -66,6 +73,20 @@
                 <el-table-column property="name" label="姓名" width="100"></el-table-column>
                 <el-table-column property="remibTotal" label="报销金额" width="100"></el-table-column>
                 <el-table-column property="dealResult" label="报销结果" show-overflow-tooltip width="500"></el-table-column>
+                <el-table-column
+                        fixed="right"
+                        label="操作"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-button
+                                size="mini"
+                                type="text"
+                                @click="printClick(scope.row)"
+                        >重新打印
+                        </el-button>
+
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
     </div>
@@ -85,6 +106,8 @@
                 drawer:false,
                 reimbTotalList:[],
                 todayReimbList:[],
+                todayTotalStr:'',
+                toYearTotalStr:'',
                 loading: false,
                 queryParam: {
                     inputValue1: '',
@@ -106,6 +129,39 @@
                 httpGet("/reimb/reimbTotal?totalDate="+this.queryParam.totalDate).then(result => {
                     if (result.code == '0000') {
                         this.todayReimbList=result.obj.list;
+                        this.todayTotalStr = result.obj.todayTotalStr
+                        this.toYearTotalStr = result.obj.toYearTotalStr
+                    }else{
+                        this.$message.error(result.msg);
+                    }
+                    this.loading=false;
+                });
+            },
+            syncAllClick(){
+                this.loading=true;
+                // 调用后端--查询今日报销信息接口
+                httpGet("/sync/syncAll").then(result => {
+                    if (result.code == '0000') {
+                        this.$message({
+                          message: '全量同步完成',
+                          type: 'success'
+                        });
+                    }else{
+                        this.$message.error(result.msg);
+                    }
+                    this.loading=false;
+                });
+                queryClick();
+            },
+            printClick(row){
+                this.loading=true;
+                // 调用后端--查询今日报销信息接口
+                httpGet("/print/printOne?printOid="+row.printOid).then(result => {
+                    if (result.code == '0000') {
+                        this.$message({
+                          message: '打印成功',
+                          type: 'success'
+                        });
                     }else{
                         this.$message.error(result.msg);
                     }

@@ -60,13 +60,20 @@ public class ReimbAddBaseDataServiceImpl implements IReimbAddBaseDataService {
     }
 
     @Override
-    public void saveDealRecord(List<ReimbDealRecordPO> resultList) throws Exception{
+    public void deleteAllDealRecord(List<ReimbDealRecordPO> resultList) throws Exception {
         if (CollectionUtil.isEmpty(resultList)){
             return;
         }
         ReimbDealRecordPO where = new ReimbDealRecordPO();
         where.setSelfNo(resultList.get(0).getSelfNo());
         BaseDao.delete(where);
+    }
+
+    @Override
+    public void saveDealRecord(List<ReimbDealRecordPO> resultList) throws Exception{
+        if (CollectionUtil.isEmpty(resultList)){
+            return;
+        }
         //先删除此人的所有记录，重新全量同步到db
         for(ReimbDealRecordPO reimbDealRecordPO :resultList){
             BaseDao.insert(reimbDealRecordPO);

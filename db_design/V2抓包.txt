@@ -5143,6 +5143,7 @@ Content-Length: 336
     </soap:Body>
 </soap:Envelope>
 
+//---------------------------------------试算2---------------------------------------------
 请求头1：
 POST /isp-api/powercsb/2201 HTTP/1.1
 Content-Type: application/json
@@ -5228,6 +5229,9 @@ Expires: 0
 	"respond_time": "20211226211339796",
 	"inf_refmsgid": "430000202112262113390468481699"
 }
+
+
+//---------------------------------------试算3---------------------------------------------
 请求头1：
 POST /his_interface/jfxt_interface.asmx HTTP/1.1
 Host: 49.234.46.221
@@ -5263,8 +5267,22 @@ Date: Sun, 26 Dec 2021 13:13:39 GMT
 Content-Length: 331
 
 响应体1：
-<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><execResponse xmlns="http://tempuri.org/"><execResult>0@!</execResult></execResponse></soap:Body></soap:Envelope>
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <soap:Body>
+        <execResponse
+            xmlns="http://tempuri.org/">
+            <execResult>0@!</execResult>
+        </execResponse>
+    </soap:Body>
+</soap:Envelope>
 
+
+
+//---------------------------------------试算4---------------------------------------------
 请求头1：
 POST /isp-api/powercsb/2203 HTTP/1.1
 Content-Type: application/json
@@ -5279,7 +5297,52 @@ Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
 Connection: keep-alive
 Content-Length: 915
 请求体1：
-{"infno":"2203","msgid":"H43062100453202112262113382065","mdtrtarea_admvs":"430621","insuplc_admdvs":"430621","recer_sys_code":"HIS","dev_no":"1","dev_safe_info":"1","cainfo":"","signtype":"SM3","infver":"V1.0","opter_type":"1","opter":"H43062100453-03","opter_name":"刘庆团","inf_time":"2021-12-26 21:13:38","fixmedins_code":"H43062100453","fixmedins_name":"荣家湾镇城北居委会卫生室","sign_no":"278251820","input":{"mdtrtinfo":{"mdtrt_id":"53006572","psn_no":"43000050621722721870","med_type":"11","begntime":"2021-12-10 00:00:00","main_cond_dscr":"女性盆腔炎","dise_codg":"N73.902","dise_name":"女性盆腔炎","birctrl_type":"","birctrl_matn_date":""},"diseinfo":[{"diag_type":"1","diag_srt_no":"1","diag_code":"N73.902","diag_name":"女性盆腔炎","diag_dept":"全科门诊","dise_dor_no":"H43062100453-03","dise_dor_name":"刘庆团","diag_time":"2021-12-10 00:00:00","vali_flag":"1"}]}}
+{
+    "infno":"2203",
+    "msgid":"H43062100453202112262113382065",
+    "mdtrtarea_admvs":"430621",
+    "insuplc_admdvs":"430621",
+    "recer_sys_code":"HIS",
+    "dev_no":"1",
+    "dev_safe_info":"1",
+    "cainfo":"",
+    "signtype":"SM3",
+    "infver":"V1.0",
+    "opter_type":"1",
+    "opter":"H43062100453-03",
+    "opter_name":"刘庆团",
+    "inf_time":"2021-12-26 21:13:38",
+    "fixmedins_code":"H43062100453",
+    "fixmedins_name":"荣家湾镇城北居委会卫生室",
+    "sign_no":"278251820",
+    "input":{
+        "mdtrtinfo":{
+            "mdtrt_id":"53006572",
+            "psn_no":"43000050621722721870",
+            "med_type":"11",
+            "begntime":"2021-12-10 00:00:00",
+            "main_cond_dscr":"女性盆腔炎",
+            "dise_codg":"N73.902",
+            "dise_name":"女性盆腔炎",
+            "birctrl_type":"",
+            "birctrl_matn_date":""
+        },
+        "diseinfo":[
+            {
+                "diag_type":"1",
+                "diag_srt_no":"1",
+                "diag_code":"N73.902",
+                "diag_name":"女性盆腔炎",
+                "diag_dept":"全科门诊",
+                "dise_dor_no":"H43062100453-03",
+                "dise_dor_name":"刘庆团",
+                "diag_time":"2021-12-10 00:00:00",
+                "vali_flag":"1"
+            }
+        ]
+    }
+}
+
 响应头1：
 HTTP/1.1 200
 Server: Tengine
@@ -5298,6 +5361,8 @@ Expires: 0
 响应体1：
 {"output":null,"infcode":0,"warn_msg":null,"cainfo":null,"err_msg":null,"refmsg_time":"20211226211340069","signtype":null,"respond_time":"20211226211340107","inf_refmsgid":"430000202112262113400468481700"}
 
+
+//---------------------------------------试算5---------------------------------------------
 请求头1：
 POST /isp-api/powercsb/2204 HTTP/1.1
 Content-Type: application/json
